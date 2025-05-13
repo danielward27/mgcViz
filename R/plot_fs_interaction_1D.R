@@ -20,12 +20,18 @@
 #' ## simulate data...
 #' f0 <- function(x) 2 * sin(pi * x)
 #' f1 <- function(x, a = 2, b = -1) exp(a * x) + b
-#' f2 <- function(x) 0.2 * x^11 * (10 * (1 - x))^6 + 10 *
-#'   (10 * x)^3 * (1 - x)^10
-#' n <- 500; nf <- 25
+#' f2 <- function(x) {
+#'   0.2 * x^11 * (10 * (1 - x))^6 + 10 *
+#'     (10 * x)^3 * (1 - x)^10
+#' }
+#' n <- 500
+#' nf <- 25
 #' fac <- sample(1:nf, n, replace = TRUE)
-#' x0 <- runif(n); x1 <- runif(n); x2 <- runif(n)
-#' a <- rnorm(nf) * .2 + 2; b <- rnorm(nf) * .5
+#' x0 <- runif(n)
+#' x1 <- runif(n)
+#' x2 <- runif(n)
+#' a <- rnorm(nf) * .2 + 2
+#' b <- rnorm(nf) * .5
 #' f <- f0(x0) + f1(x1, a[fac], b[fac]) + f2(x2)
 #' fac <- factor(fac)
 #' y <- f + rnorm(n) * 2
@@ -34,7 +40,7 @@
 #'
 #' ## fit model (note p-values not available when fit
 #' ## using gamm)...
-#' bm <- gamm(y ~ s(x0)+ s(x1, fac, bs = "fs", k = 5) + s(x2, k = 20))
+#' bm <- gamm(y ~ s(x0) + s(x1, fac, bs = "fs", k = 5) + s(x2, k = 20))
 #' v <- getViz(bm$gam)
 #'
 #' # Plot with fitted effects and changing title
@@ -44,24 +50,23 @@
 #' plot(sm(v, 2)) + l_fitLine() + ylim(-0.5, 0.5) + xlim(0.25, 0.75)
 #'
 #' # Change line type and remove legend
-#' plot(sm(v, 2)) + l_fitLine(size = 1.3, linetype="dotted") +
-#'                  theme(legend.position="none")
+#' plot(sm(v, 2)) + l_fitLine(size = 1.3, linetype = "dotted") +
+#'   theme(legend.position = "none")
 #'
 #' # Clustering smooth effects in 3 groups
 #' plot(sm(v, 2)) + l_fitLine(colour = "grey") +
-#'                  l_clusterLine(centers = 3, a.clu = list(nstart = 100))
+#'   l_clusterLine(centers = 3, a.clu = list(nstart = 100))
 #' @importFrom mgcv PredictMat
 #' @rdname plot.fs.interaction.1D
 #' @export plot.fs.interaction.1D
 #' @export
 #'
 plot.fs.interaction.1D <- function(
-  x,
-  n = 100,
-  xlim = NULL,
-  trans = identity,
-  ...
-) {
+    x,
+    n = 100,
+    xlim = NULL,
+    trans = identity,
+    ...) {
   # 1) Prepare data
   P <- prepareP(
     o = x,
@@ -83,9 +88,6 @@ plot.fs.interaction.1D <- function(
 
   # 2) Produce output object
   out <- .plot.fs.interaction.1D(x = P$smooth, P = P, trans = trans)
-
-  class(out) <- c("plotSmooth", "gg")
-
   return(out)
 }
 
@@ -101,17 +103,5 @@ plot.fs.interaction.1D <- function(
     "id" = as.factor(rep(x$flev, each = P$n))
   )
   .dat$misc <- list("trans" = trans)
-
-  .pl <- ggplot(
-    data = .dat$fit,
-    aes("x" = x, "y" = ty, "colour" = id, "group" = id)
-  ) +
-    labs(title = P$main, x = P$xlab, y = P$ylab) +
-    theme_bw() +
-    theme(
-      panel.grid.major = element_blank(),
-      panel.grid.minor = element_blank()
-    )
-
-  return(list("ggObj" = .pl, "data" = .dat, "type" = c("fs", "1D")))
+  return(.dat)
 } ## end .plot.fs.interaction.1D

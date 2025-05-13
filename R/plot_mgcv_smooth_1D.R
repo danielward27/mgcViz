@@ -117,7 +117,6 @@ plot.mgcv.smooth.1D <- function(
 #' @noRd
 .plot.mgcv.smooth.1D <- function(x, P, trans, maxpo) {
   .dat <- list()
-
   if (!is.null(P$raw)) {
     # Construct data.frame of partial residuals
     res <- data.frame("x" = as.vector(P$raw))

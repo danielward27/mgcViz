@@ -62,17 +62,16 @@
 #' @export
 #'
 plot.mgcv.smooth.2D <- function(
-  x,
-  n = 40,
-  xlim = NULL,
-  ylim = NULL,
-  maxpo = 1e4,
-  too.far = 0.1,
-  trans = identity,
-  seWithMean = FALSE,
-  unconditional = FALSE,
-  ...
-) {
+    x,
+    n = 40,
+    xlim = NULL,
+    ylim = NULL,
+    maxpo = 1e4,
+    too.far = 0.1,
+    trans = identity,
+    seWithMean = FALSE,
+    unconditional = FALSE,
+    ...) {
   # 1) Prepare data
   P <- prepareP(
     o = x,
@@ -94,9 +93,6 @@ plot.mgcv.smooth.2D <- function(
 
   # 2) Produce output object
   out <- .plot.mgcv.smooth.2D(x = P$smooth, P = P, trans = trans, maxpo = maxpo)
-
-  class(out) <- c("plotSmooth", "gg")
-
   return(out)
 }
 
@@ -127,8 +123,7 @@ plot.mgcv.smooth.2D <- function(
       P$raw$x >= P$xlim[1] &
         P$raw$x <= P$xlim[2] &
         P$raw$y >= P$ylim[1] &
-        P$raw$y <= P$ylim[2],
-      ,
+        P$raw$y <= P$ylim[2], ,
       drop = FALSE
     ]
 
@@ -155,13 +150,5 @@ plot.mgcv.smooth.2D <- function(
     P$ylab <- tmp
   }
 
-  .pl <- ggplot(data = .dat$fit, aes(x = x, y = y, z = z)) +
-    labs(title = P$main, x = P$xlab, y = P$ylab) +
-    theme_bw() +
-    theme(
-      panel.grid.major = element_blank(),
-      panel.grid.minor = element_blank()
-    )
-
-  return(list("ggObj" = .pl, "data" = .dat, "type" = "2D"))
+  return(.dat)
 }

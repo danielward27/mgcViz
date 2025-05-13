@@ -33,12 +33,12 @@ This is the plotting method for Markov random field smooths.
 \examples{
 library(mgcViz)
 ## Load Columbus Ohio crime data (see ?columbus for details and credits)
-data(columb)       ## data frame
+data(columb) ## data frame
 data(columb.polys) ## district shapes list
-xt <- list(polys=columb.polys) ## neighbourhood structure info for MRF
-par(mfrow=c(2,2))
+xt <- list(polys = columb.polys) ## neighbourhood structure info for MRF
+par(mfrow = c(2, 2))
 ## First a full rank MRF...
-b <- gam(crime ~ s(district,bs="mrf",xt=xt),data=columb,method="REML")
+b <- gam(crime ~ s(district, bs = "mrf", xt = xt), data = columb, method = "REML")
 b <- getViz(b)
 
 # Manual plot

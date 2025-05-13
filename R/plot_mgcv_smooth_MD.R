@@ -38,26 +38,31 @@
 #' ## 3D example
 #' library(mgcViz)
 #' n <- 1e3
-#' x <- rnorm(n); y <- rnorm(n); z <- rnorm(n)
+#' x <- rnorm(n)
+#' y <- rnorm(n)
+#' z <- rnorm(n)
 #'
-#' ob <- (x-z)^2 + (y-z)^2 + rnorm(n)
+#' ob <- (x - z)^2 + (y - z)^2 + rnorm(n)
 #' b <- gam(ob ~ s(x, y, z))
 #' b <- getViz(b)
 #'
 #' # Plot one 2D slice
-#' plot( sm(b, 1), fix = c("z"=0) ) + l_fitRaster(noiseup = TRUE, mul = 3) +
-#'   l_fitContour(linetype = 2) + l_points(shape =  2)
+#' plot(sm(b, 1), fix = c("z" = 0)) + l_fitRaster(noiseup = TRUE, mul = 3) +
+#'   l_fitContour(linetype = 2) + l_points(shape = 2)
 #'
 #' ## 4D
 #' n <- 5e3
-#' x <- rnorm(n); y <- rnorm(n); z <- rnorm(n); z2 <- rnorm(n)
+#' x <- rnorm(n)
+#' y <- rnorm(n)
+#' z <- rnorm(n)
+#' z2 <- rnorm(n)
 #'
-#' ob <- (x-z)^2 + (y-z)^2 + z2^3 + rnorm(n)
+#' ob <- (x - z)^2 + (y - z)^2 + z2^3 + rnorm(n)
 #' b1 <- bam(ob ~ s(x, y, z, z2), discrete = TRUE)
 #' b1 <- getViz(b1)
 #'
 #' # Plot one 2D slice
-#' plot(sm(b1, 1), fix = c("z"=0, "z2"=1)) + l_fitRaster() + l_fitContour()
+#' plot(sm(b1, 1), fix = c("z" = 0, "z2" = 1)) + l_fitRaster() + l_fitContour()
 #'
 #' @rdname plot.mgcv.smooth.MD
 #' @importFrom stats cov quantile mahalanobis
@@ -65,18 +70,17 @@
 #' @export
 #'
 plot.mgcv.smooth.MD <- function(
-  x,
-  fix,
-  n = 40,
-  xlim = NULL,
-  ylim = NULL,
-  maxpo = 1e4,
-  too.far = c(0.1, NA),
-  trans = identity,
-  seWithMean = FALSE,
-  unconditional = FALSE,
-  ...
-) {
+    x,
+    fix,
+    n = 40,
+    xlim = NULL,
+    ylim = NULL,
+    maxpo = 1e4,
+    too.far = c(0.1, NA),
+    trans = identity,
+    seWithMean = FALSE,
+    unconditional = FALSE,
+    ...) {
   if (length(too.far) == 1) {
     too.far <- c(too.far, NA)
   }
@@ -103,8 +107,5 @@ plot.mgcv.smooth.MD <- function(
 
   # 2) Produce output object
   out <- .plot.mgcv.smooth.2D(x = P$smooth, P = P, trans = trans, maxpo = maxpo)
-
-  class(out) <- c("plotSmooth", "gg")
-
   return(out)
 }

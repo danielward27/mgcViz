@@ -3,16 +3,15 @@
 #' @export
 #'
 plot.multi.mgcv.smooth.1D <- function(
-  x,
-  n = 100,
-  xlim = NULL,
-  maxpo = 1e4,
-  trans = identity,
-  unconditional = FALSE,
-  seWithMean = FALSE,
-  asFact = NULL,
-  ...
-) {
+    x,
+    n = 100,
+    xlim = NULL,
+    maxpo = 1e4,
+    trans = identity,
+    unconditional = FALSE,
+    seWithMean = FALSE,
+    asFact = NULL,
+    ...) {
   if (inherits(x, "multi.fs.interaction.1D")) {
     stop("Don't know how to plot effects of class \"multi.fs.interaction.1D\"")
   }
@@ -20,7 +19,7 @@ plot.multi.mgcv.smooth.1D <- function(
   # 1) Prepare data
   tmp <- lapply(
     x,
-    function(.inp)
+    function(.inp) {
       plot(
         .inp,
         n = n,
@@ -31,6 +30,7 @@ plot.multi.mgcv.smooth.1D <- function(
         seWithMean = seWithMean,
         ...
       )
+    }
   )
 
   P <- list(
