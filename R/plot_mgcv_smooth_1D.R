@@ -34,34 +34,36 @@
 #'             Generalized Additive Model Components. Scandinavian Journal of Statistics.
 #' @examples
 #' library(mgcViz)
-#' n  <- 1e3
+#' n <- 1e3
 #' x1 <- rnorm(n)
 #' x2 <- rnorm(n)
-#' dat <- data.frame("x1" = x1, "x2" = x2,
-#'                   "y" = sin(x1) + 0.5 * x2^2 + pmax(x2, 0.2) * rnorm(n))
-#' b <- bamV(y ~ s(x1)+s(x2), data = dat, method = "fREML", aGam = list(discrete = TRUE))
+#' dat <- data.frame(
+#'   "x1" = x1, "x2" = x2,
+#'   "y" = sin(x1) + 0.5 * x2^2 + pmax(x2, 0.2) * rnorm(n)
+#' )
+#' b <- bamV(y ~ s(x1) + s(x2), data = dat, method = "fREML", aGam = list(discrete = TRUE))
 #'
 #' o <- plot(sm(b, 1), nsim = 50) # 50 posterior simulations
 #'
 #' # Plot with fitted effect + posterior simulations + rug on x axis
-#' ( o <- o + l_simLine() + l_fitLine(colour = "red") +
-#'        l_rug(alpha = 0.8) )
+#' (o <- o + l_simLine() + l_fitLine(colour = "red") +
+#'   l_rug(alpha = 0.8))
 #'
 #' # Add CI lines at 1*sigma and 5*sigma
-#' ( o <- o + l_ciLine(mul = 1) + l_ciLine(mul = 5, colour = "blue", linetype = 2) )
+#' (o <- o + l_ciLine(mul = 1) + l_ciLine(mul = 5, colour = "blue", linetype = 2))
 #'
 #' # Add partial residuals and change theme
-#' ( o + l_points(shape = 19, size = 1, alpha = 0.2) + theme_classic() )
+#' (o + l_points(shape = 19, size = 1, alpha = 0.2) + theme_classic())
 #'
 #' # Get second effect plot
-#' o2 <- plot( sm(b, 2) )
+#' o2 <- plot(sm(b, 2))
 #'
 #' # Plot it with polygon for partial residuals
 #' o2 + l_ciPoly(mul = 5, fill = "light blue") +
 #'   l_fitLine(linetype = 2, colour = "red")
 #'
 #' # Plot is with conditional density of partial residuals
-#' o2 + l_dens(type = "cond", alpha = 0.9)  +
+#' o2 + l_dens(type = "cond", alpha = 0.9) +
 #'   l_fitLine(linetype = 2, colour = "red")
 #'
 #' ########
@@ -77,16 +79,15 @@
 #' @export
 #'
 plot.mgcv.smooth.1D <- function(
-  x,
-  n = 100,
-  xlim = NULL,
-  maxpo = 1e4,
-  trans = identity,
-  unconditional = FALSE,
-  seWithMean = FALSE,
-  nsim = 0,
-  ...
-) {
+    x,
+    n = 100,
+    xlim = NULL,
+    maxpo = 1e4,
+    trans = identity,
+    unconditional = FALSE,
+    seWithMean = FALSE,
+    nsim = 0,
+    ...) {
   # 1) Prepare data
   P <- prepareP(
     o = x,
@@ -109,9 +110,6 @@ plot.mgcv.smooth.1D <- function(
 
   # 2) Produce output object
   out <- .plot.mgcv.smooth.1D(x = P$smooth, P = P, trans = trans, maxpo = maxpo)
-
-  class(out) <- c("plotSmooth", "gg")
-
   return(out)
 }
 
@@ -156,14 +154,5 @@ plot.mgcv.smooth.1D <- function(
   }
 
   .dat$misc <- list("trans" = trans)
-
-  .pl <- ggplot(data = .dat$fit, mapping = aes(x = x, y = y)) +
-    labs(title = P$main, x = P$xlab, y = P$ylab) +
-    theme_bw() +
-    theme(
-      panel.grid.major = element_blank(),
-      panel.grid.minor = element_blank()
-    )
-
-  return(list("ggObj" = .pl, "data" = .dat, "type" = "1D"))
+  return(.dat)
 }

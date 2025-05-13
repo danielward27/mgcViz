@@ -1,5 +1,3 @@
-options(error = browser)
-
 library(testthat)
 
 test_that("dataframe_extract", {
@@ -7,10 +5,7 @@ test_that("dataframe_extract", {
   set.seed(2) ## simulate some data...
   dat <- gamSim(1, n = 200, dist = "normal", scale = 2)
   fit <- gam(y ~ s(x0) + s(x1) + s(x2) + s(x3), data = dat)
-  prep <- prepareP(sm(getViz(fit), 1))
-
-  browser()
-  for (df in p["data"]) {
-    expect_true(is.data.frame(df))
-  }
+  p <- plot(sm(getViz(fit), 1)) # TODO currently highjacking plot :D
+  expect_true(is.data.frame(p$fit))
+  expect_true(is.data.frame(p$res))
 })
