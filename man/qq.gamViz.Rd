@@ -110,14 +110,14 @@ lr.fit <- getViz(lr.fit)
 qq(lr.fit, method = "simul2")
 
 # Same, but changing points share and type of reference list
-qq(lr.fit, method = "simul2", 
+qq(lr.fit, method = "simul2",
        a.qqpoi = list("shape" = 1), a.ablin = list("linetype" = 2))
 
-# Simulation based QQ-plot with reference bands 
+# Simulation based QQ-plot with reference bands
 qq(lr.fit, rep = 100, level = .9, CI = "quantile")
 
-# Simulation based QQ-plot, Pearson resids, all simulations lines shown 
-qq(lr.fit, rep = 100, CI = "none", showReps = TRUE, type = "pearson", 
+# Simulation based QQ-plot, Pearson resids, all simulations lines shown
+qq(lr.fit, rep = 100, CI = "none", showReps = TRUE, type = "pearson",
        a.qqpoi = list(shape=19, size = 0.5))
 
 ### Now fit the wrong model and check
@@ -129,17 +129,17 @@ qq(pif, method = "simul2")
 
 qq(pif, rep = 100, level = .9, CI = "quantile")
 
-qq(pif, rep = 100, type = "pearson", CI = "none", showReps = TRUE, 
+qq(pif, rep = 100, type = "pearson", CI = "none", showReps = TRUE,
                a.qqpoi = list(shape=19, size = 0.5))
 
-######## Example: binary data model violation so gross that you see a problem 
+######## Example: binary data model violation so gross that you see a problem
 ######## on the QQ plot
 y <- c(rep(1, 10), rep(0, 20), rep(1, 40), rep(0, 10), rep(1, 40), rep(0, 40))
 x <- 1:160
 b <- glm(y ~ x, family = binomial)
 class(b) <- c("gamViz", class(b)) # Tricking qq.gamViz to use it on a glm
 
-# Note that the next two are not necessarily similar under gross 
+# Note that the next two are not necessarily similar under gross
 # model violation...
 qq(b, method = "simul2")
 qq(b, rep = 50, CI = "none", showReps = TRUE)
@@ -152,7 +152,7 @@ qq(b, method = "simul2")
 qq(b, rep = 50, showReps = TRUE, CI = "none", shape = 19)
 
 \dontrun{
-########  "Big Data" example: 
+########  "Big Data" example:
 set.seed(0)
 n.samp <- 50000
 dat <- gamSim(1,n=n.samp,dist="binary",scale=.33)
@@ -167,13 +167,13 @@ lr.fit <- getViz(lr.fit)
 
 # Turning discretization off (on by default for large datasets).
 set.seed(414) # Setting the seed because qq.gamViz is doing simulations
-o <- qq(lr.fit, rep = 10, method = "simul1", CI = "normal", showReps = TRUE, 
+o <- qq(lr.fit, rep = 10, method = "simul1", CI = "normal", showReps = TRUE,
             discrete = F, a.replin = list(alpha = 0.1))
 o # This might take some time!
 
 # Using default discretization
 set.seed(414)
-o <- qq(lr.fit, rep = 10, method = "simul1", CI = "normal", showReps = TRUE, 
+o <- qq(lr.fit, rep = 10, method = "simul1", CI = "normal", showReps = TRUE,
             a.replin = list(alpha = 0.1))
 o # Much faster plotting!
 
@@ -181,7 +181,7 @@ o # Much faster plotting!
 set.seed(414)
 o <- qq(lr.fit, rep = 10, method = "simul1", CI = "normal", showReps = TRUE,
             ngr = 1e2, a.replin = list(alpha = 0.1), a.qqpoi = list(shape = 19))
-o 
+o
 
 # We can also zoom in at no extra costs (most work already done by qq.gamViz)
 zoom(o, xlim = c(-0.25, 0.25), showReps = TRUE, discrete = TRUE, a.replin = list(alpha = 0.2))

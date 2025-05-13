@@ -39,13 +39,13 @@ xt <- list(polys=columb.polys) ## neighbourhood structure info for MRF
 par(mfrow=c(2,2))
 ## First a full rank MRF...
 b <- gam(crime ~ s(district,bs="mrf",xt=xt),data=columb,method="REML")
-b <- getViz(b) 
+b <- getViz(b)
 
 # Manual plot
-plot(sm(b, 1)) + l_poly(colour = 2) + 
+plot(sm(b, 1)) + l_poly(colour = 2) +
   scale_fill_gradientn(colours = heat.colors(50))
 
-# Default plot 
+# Default plot
 plot(b)
 
 }

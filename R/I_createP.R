@@ -17,8 +17,8 @@
 #' @param w.resid  XXX
 #' @param resDen  XXX
 #' @param ...  XXX
-#' @noRd 
-#' @examples 
+#' @noRd
+#' @examples
 #' library(mgcViz)
 #' n  <- 1e3
 #' x1 <- rnorm(n)
@@ -47,40 +47,67 @@
 #' b <- ylab <- xlim <- ylim <- main <- NULL
 #' resDen = "none"
 #' @noRd
-.createP <- function(sm, x, partial.resids, 
-                     se, n, n2,
-                     xlab, ylab, main, 
-                     ylim, xlim, too.far,
-                     se1.mult, se2.mult,
-                     seWithMean, fitSmooth, w.resid,
-                     resDen, nsim, ...) {
+.createP <- function(
+  sm,
+  x,
+  partial.resids,
+  se,
+  n,
+  n2,
+  xlab,
+  ylab,
+  main,
+  ylim,
+  xlim,
+  too.far,
+  se1.mult,
+  se2.mult,
+  seWithMean,
+  fitSmooth,
+  w.resid,
+  resDen,
+  nsim,
+  ...
+) {
   first <- sm$first.para
-  last  <- sm$last.para
-  edf   <- sum(x$edf[first:last]) ## Effective DoF for this term
+  last <- sm$last.para
+  edf <- sum(x$edf[first:last]) ## Effective DoF for this term
   term.lab <- .subEDF(sm$label, edf)
   attr(sm, "coefficients") <- x$coefficients[first:last] # Relevant coeffs for i-th smooth
-  P <- .prepare(x = sm, data = x$model, 
-                se1.mult = se1.mult, se2.mult = se2.mult,
-                n = n, n2 = n2,  xlab = xlab, ylab = ylab, 
-                main = main, label = term.lab,
-                ylim = ylim, xlim = xlim, too.far = too.far, ...)
+  P <- .prepare(
+    x = sm,
+    data = x$model,
+    se1.mult = se1.mult,
+    se2.mult = se2.mult,
+    n = n,
+    n2 = n2,
+    xlab = xlab,
+    ylab = ylab,
+    main = main,
+    label = term.lab,
+    ylim = ylim,
+    xlim = xlim,
+    too.far = too.far,
+    ...
+  )
   if (is.null(P)) {
-    P <- list(plot.me = FALSE) 
+    P <- list(plot.me = FALSE)
   } else {
     P$smooth <- sm
-    if (is.null(P$fit)) { 
-      p <- x$coefficients[first:last]   ## relevant coefficients 
-      offset <- attr(P$X, "offset")      ## any term specific offset
+    if (is.null(P$fit)) {
+      p <- x$coefficients[first:last] ## relevant coefficients
+      offset <- attr(P$X, "offset") ## any term specific offset
       ## get fitted values ....
       if (is.null(offset)) {
         P$fit <- P$X %*% p
       } else {
-        P$fit <- P$X %*% p + offset 
+        P$fit <- P$X %*% p + offset
       }
       if (!is.null(P$exclude)) {
         P$fit[P$exclude] <- NA
       }
-      if (se && P$se) { ## get standard errors for fit
+      if (se && P$se) {
+        ## get standard errors for fit
         ## test whether mean variability to be added to variability (only for centred terms)
         if (seWithMean && attr(sm, "nCons") > 0) {
           if (length(x$cmX) < ncol(x$Vp)) {
@@ -92,29 +119,45 @@
             X1 <- X1 / meanL1
           }
           X1[, first:last] <- P$X
-          if( nsim > 0 ){ P$simF <- drop(P$fit) + X1 %*% t(rmvn(nsim, numeric(ncol(x$Vp)), x$Vp)) }
+          if (nsim > 0) {
+            P$simF <- drop(P$fit) +
+              X1 %*% t(rmvn(nsim, numeric(ncol(x$Vp)), x$Vp))
+          }
           se.fit <- sqrt(pmax(0, rowSums((X1 %*% x$Vp) * X1)))
-        } else { ## se in centred (or anyway unconstrained) space only
-          if( nsim > 0 ){ P$simF <- drop(P$fit) + P$X %*% t(rmvn(nsim, numeric(length(p)), x$Vp[first:last, first:last, drop = FALSE])) }
-          se.fit <- sqrt(pmax(0, rowSums((P$X %*% x$Vp[first:last, first:last, drop = FALSE]) * P$X)))
+        } else {
+          ## se in centred (or anyway unconstrained) space only
+          if (nsim > 0) {
+            P$simF <- drop(P$fit) +
+              P$X %*%
+                t(rmvn(
+                  nsim,
+                  numeric(length(p)),
+                  x$Vp[first:last, first:last, drop = FALSE]
+                ))
+          }
+          se.fit <- sqrt(pmax(
+            0,
+            rowSums((P$X %*% x$Vp[first:last, first:last, drop = FALSE]) * P$X)
+          ))
         }
         if (!is.null(P$exclude)) {
           P$se.fit[P$exclude] <- NA
         }
       } ## standard errors for fit completed
       if (partial.resids || (resDen != "none")) {
-        P$p.resid <- fitSmooth + w.resid 
+        P$p.resid <- fitSmooth + w.resid
       }
       if (se && P$se) {
         P$se <- se.fit * P$se.mult
-      }  # Note multiplier
+      } # Note multiplier
       P$X <- NULL
-    } else { ## P$fit created directly
+    } else {
+      ## P$fit created directly
       if (partial.resids || (resDen != "none")) {
-        P$p.resid <- fitSmooth + w.resid 
+        P$p.resid <- fitSmooth + w.resid
       }
     }
     P$plot.me <- TRUE
   }
-  return( P ) 
+  return(P)
 }

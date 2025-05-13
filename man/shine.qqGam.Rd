@@ -38,7 +38,7 @@ lr.fit <- gam(y/n ~ s(x0) + s(x1) + s(x2) + s(x3)
 lr.fit <- getViz(lr.fit)
 # launch shiny gagdet
 shine(qq(lr.fit))
- 
+
 }
 
 }

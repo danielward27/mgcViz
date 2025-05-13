@@ -61,8 +61,8 @@ check(b)
 
 # Change some algorithmic and graphical parameters
 check(b,
-      a.qq = list(method = "tnorm", 
-                  a.cipoly = list(fill = "light blue")), 
-      a.respoi = list(size = 0.2), 
+      a.qq = list(method = "tnorm",
+                  a.cipoly = list(fill = "light blue")),
+      a.respoi = list(size = 0.2),
       a.hist = list(bins = 10))
 }

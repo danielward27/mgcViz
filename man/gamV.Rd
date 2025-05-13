@@ -46,7 +46,7 @@ set.seed(2) ## simulate some data...
 dat <- gamSim(1,n=1000,dist="normal",scale=2)
 
 # Fit GAM and get gamViz object
-b <- gamV(y~s(x0)+s(x1, x2)+s(x3), data = dat, 
+b <- gamV(y~s(x0)+s(x1, x2)+s(x3), data = dat,
           aGam = list(scale = 2), aViz = list("nsim" = 20))
 
 # This is equivalent to doing
@@ -65,9 +65,9 @@ set.seed(2) ## simulate some data...
 dat <- gamSim(1,n=2000,dist="normal",scale=2)
 
 # Fit using bam() and get gamViz object
-b <- bamV(y~s(x0)+s(x1, x2)+s(x3), data = dat, 
+b <- bamV(y~s(x0)+s(x1, x2)+s(x3), data = dat,
           aGam = list(discrete = TRUE), aViz = list("nsim" = 0))
-          
+
 # Either way, we plot first and third effects by doing
 print(plot(b, select = c(2)), pages = 1)
 }

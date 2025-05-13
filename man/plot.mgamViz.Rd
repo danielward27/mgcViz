@@ -44,14 +44,14 @@ dat$logi <- as.logical( sample(c(TRUE, FALSE), nrow(dat), replace = TRUE) )
 dat$fac <- as.factor( sample(c("A1", "A2", "A3"), nrow(dat), replace = TRUE) )
 
 # Fit GAM and get gamViz object
-fit <- mqgamV(y ~ fac + s(x0) + s(x1, x2) + x3 + logi, data = dat, 
+fit <- mqgamV(y ~ fac + s(x0) + s(x1, x2) + x3 + logi, data = dat,
               qu = c(0.2, 0.4, 0.6, 0.8))
 
 print(plot(fit, select = 1:4, allTerms = T), pages = 1)
 
 \dontrun{
 # Example where we are fitting the same model to different datasets, but
-# plotting the estimate effects together 
+# plotting the estimate effects together
 dat <- list()
 for(ii in 1:4){
   # Simulate 4 datasets, we are adding 2 factor variables "fac" and "ref" just
@@ -68,7 +68,7 @@ for(ii in 1:4){
   mods[[ii]] <- gamV(y~s(x0)+s(x1, x2)+x3+fac+s(ref, bs = "re"), data = dat[[ii]])
 }
 
-# Names will be used to identify the four models we have fitted 
+# Names will be used to identify the four models we have fitted
 names(mods) <- c("M1", "M2", "M3", "M4")
 # Plotting on the same plots
 print(plot.mgamViz(mods, allTerms = TRUE), pages = 1)

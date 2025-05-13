@@ -89,7 +89,7 @@ This method plots an interactive 3D representation of a 2-dimensional
 slice of a multi-dimensional smooth effect, using the rgl package.
 }
 \examples{
-# Example 1: taken from ?mgcv::te, shows how tensor pruduct deals nicely with 
+# Example 1: taken from ?mgcv::te, shows how tensor pruduct deals nicely with
 # badly scaled covariates (range of x 5\% of range of z )
 library(mgcViz)
 n <- 1e3

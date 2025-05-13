@@ -3,3 +3,11 @@
 .RData
 .Ruserdata
 mgcViz.Rproj
+
+# pixi environments
+.pixi
+*.egg-info
+pixi.lock
+pixi.toml
+
+.vscode

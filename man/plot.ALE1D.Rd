@@ -29,7 +29,7 @@ Plot 1D Accumulated Local Effects (ALE)
 \examples{
 
 library(mgcViz)
-# Here x1 and x2 are very correlated, but only 
+# Here x1 and x2 are very correlated, but only
 # x1 has influence of the response
 set.seed(4141)
 n <- 1000
@@ -46,9 +46,9 @@ plot(dat$x2, fit$fitted.values)
 plot(ALE(fit, "x2")) + l_ciPoly() + l_fitLine() + l_rug()
 
 # ... while ALE effect of x1 is strong.
-plot(ALE(fit, "x1", center = 2), nsim = 20) + 
+plot(ALE(fit, "x1", center = 2), nsim = 20) +
   l_simLine() + l_fitLine()
-  
+
 }
 \references{
 Apley, D.W., and Zhu, J, 2016. Visualizing the effects of predictor variables in black

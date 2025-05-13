@@ -1,6 +1,6 @@
 #'
 #' Plotting parametric interactions
-#' 
+#'
 #' @description This function is here only to deal with parametric interactions (eg x0:fact), which
 #'              cannot be plotted at the moment.
 #' @name plot.ptermInteraction
@@ -10,11 +10,8 @@
 #' @rdname plot.ptermInteraction
 #' @export plot.ptermInteraction
 #' @export
-#' 
-plot.ptermInteraction <- function(x, ...){
-  
+#'
+plot.ptermInteraction <- function(x, ...) {
   message("mgcViz does not know how to plot interactions. Returning NULL.")
-  return( invisible(NULL) ) 
-  
+  return(invisible(NULL))
 }
-

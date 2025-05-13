@@ -64,6 +64,7 @@ the coefficients of s1 and s2. To get the confidence intervals we need only diag
 which here is calculated efficiently (without computing the whole of Cov(sd)).
 }
 \examples{
+\dontrun{
 #### 1) Simulate data and add factors uncorrelated to the response
 library(mgcViz)
 set.seed(0)
@@ -73,7 +74,7 @@ f <- function(la,lo) { ## a test function...
   sin(lo)*cos(la-.3)
 }
 
-## generate with uniform density on sphere...  
+## generate with uniform density on sphere...
 lo <- runif(n)*2*pi-pi ## longitude
 la <- runif(3*n)*pi-pi/2
 ind <- runif(3*n)<=cos(la)
@@ -91,14 +92,14 @@ fz <- f(gr$la,gr$lo)
 zm <- matrix(fz,30,60)
 
 dat <- data.frame(la = la *180/pi,lo = lo *180/pi,y=y)
-dat$fac <- as.factor( sample(c("A1", "A2", "A3"), nrow(dat), replace = TRUE) ) 
+dat$fac <- as.factor( sample(c("A1", "A2", "A3"), nrow(dat), replace = TRUE) )
 
 #### 2) fit spline on sphere model...
 bp <- gam(y~s(la,lo,bs="sos",k=60, by = fac),data=dat)
 bp <- getViz(bp)
 
 # Extract the smooths correspoding to "A1" and "A3" and plot their difference
-# Using scheme = 0 
+# Using scheme = 0
 pl0 <- plotDiff(s1 = sm(bp, 1), s2 = sm(bp, 3))
 pl0 + l_fitRaster() + l_fitContour() + l_coordContour() + l_bound()
 
@@ -106,11 +107,12 @@ pl0 + l_fitRaster() + l_fitContour() + l_coordContour() + l_bound()
 pl0 + l_pvRaster() + l_pvContour(breaks=c(0.05, 0.1, 0.2, 0.3, 0.5))
 
 # Using scheme = 1
-pl1 <- plotDiff(s1 = sm(bp, 1), s2 = sm(bp, 2), scheme = 1) 
+pl1 <- plotDiff(s1 = sm(bp, 1), s2 = sm(bp, 2), scheme = 1)
 pl1 + l_fitRaster() + l_fitContour()
 
 # Plot p-values for significance of differences
 pl1 + l_pvRaster() + l_pvContour(breaks=c(0.05, 0.1, 0.2, 0.3, 0.5))
+}
 }
 \references{
 Marra, G and S.N. Wood (2012) Coverage Properties of Confidence Intervals for

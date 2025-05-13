@@ -27,8 +27,8 @@ dat <- data.frame("x1" = x1, "x2" = x2,
 b <- bam(y ~ s(x1)+s(x2), data = dat, method = "fREML", discrete = TRUE)
 b <- getViz(b)
 
-o1 <- plot( sm(b, 1) ) + l_fitLine() + l_ciLine() 
-o2 <- plot( sm(b, 2) ) + l_fitLine() + l_ciLine() 
+o1 <- plot( sm(b, 1) ) + l_fitLine() + l_ciLine()
+o2 <- plot( sm(b, 2) ) + l_fitLine() + l_ciLine()
 qpl <- qq(b)
 
 # All on one page, method 1:

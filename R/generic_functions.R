@@ -1,4 +1,3 @@
-
 #'
 #' Generic zooming function
 #'
@@ -34,7 +33,7 @@ shine <- function(o, ...) UseMethod("shine")
 plotRGL <- function(x, ...) UseMethod("plotRGL")
 
 #'
-#' Generic plotting of differences 
+#' Generic plotting of differences
 #'
 #' @description Generic function for plotting differences between objects. Useful
 #'              mainly for plotting the differences between two smooth effects.
@@ -46,7 +45,7 @@ plotRGL <- function(x, ...) UseMethod("plotRGL")
 plotDiff <- function(...) UseMethod("plotDiff")
 
 #'
-#' Generic QQ plots 
+#' Generic QQ plots
 #'
 #' @description Generic function for producing QQ-plots.
 #' @param ... arguments to be passed to methods. This first one will determine which
@@ -62,7 +61,7 @@ qq <- function(...) UseMethod("qq")
 #' @description Generic function for producing ALE effects, to be plottied using the \code{plot} generic.
 #' @param o the model we want to use to produce the ALE effect.
 #' @param ... arguments to be passed to methods.
-#' @references Apley, D.W., and Zhu, J, 2016. Visualizing the effects of predictor variables in black 
+#' @references Apley, D.W., and Zhu, J, 2016. Visualizing the effects of predictor variables in black
 #'             box supervised learning models. arXiv preprint arXiv:1612.08468.
 #' @seealso ALE.gam
 #' @rdname ALE

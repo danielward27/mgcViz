@@ -58,8 +58,8 @@ which here is calculated efficiently (without computing the whole of Cov(sd)).
 library(mgcViz)
 set.seed(235)
 dat <- gamSim(1,n=1500,dist="normal",scale=20)
-dat$fac <- as.factor( sample(c("A1", "A2", "A3"), nrow(dat), replace = TRUE) ) 
-dat$logi <- as.logical( sample(c(TRUE, FALSE), nrow(dat), replace = TRUE) ) 
+dat$fac <- as.factor( sample(c("A1", "A2", "A3"), nrow(dat), replace = TRUE) )
+dat$logi <- as.logical( sample(c(TRUE, FALSE), nrow(dat), replace = TRUE) )
 bs <- "cr"; k <- 12
 b <- gam(y ~ s(x2, x1, by = fac), data=dat)
 o <- getViz(b, nsim = 0)

@@ -1,5 +1,5 @@
 #' Efficiently zooming on GAM QQ-plots
-#' 
+#'
 #' @description This function allows to zoom into a QQ-plot produced by [qq.gamViz],
 #'              in a computationally efficient manner.
 #' @param o the output of \code{mgcViz::qq.gamViz}.
@@ -23,7 +23,7 @@
 #'                 QQ-plot.
 #' @param ... currently unused.
 #' @name zoom.qqGam
-#' @examples 
+#' @examples
 #' library(mgcViz);
 #' set.seed(0)
 #' n.samp <- 500
@@ -36,50 +36,73 @@
 #'               , family = binomial, data = dat,
 #'               weights = n, method = "REML")
 #' lr.fit <- getViz(lr.fit)
-#' 
+#'
 #' set.seed(414)
 #' o <- qq(lr.fit, rep = 50, method = "simul1", CI = "normal")
 #' o # This is the whole qqplot
-#' 
+#'
 #' # We can zoom in along x at little extra costs (most computation already done by qq.gamViz)
-#' zoom(o, xlim = c(0, 1), showReps = TRUE, 
+#' zoom(o, xlim = c(0, 1), showReps = TRUE,
 #'      a.replin = list(alpha = 0.1), a.qqpoi =  list(shape = 19))
 #' @rdname zoom.qqGam
 #' @export zoom.qqGam
 #' @export
-#' 
-zoom.qqGam <- function(o, xlim = NULL, ylim = NULL, discrete = NULL, ngr = 1e3,
-                       adGrid = TRUE, CI = FALSE, 
-                       worm = FALSE, showReps = FALSE, 
-                       a.qqpoi = list(), a.ablin = list(), a.cipoly = list(), 
-                       a.replin = list(), ...) {
-  
+#'
+zoom.qqGam <- function(
+  o,
+  xlim = NULL,
+  ylim = NULL,
+  discrete = NULL,
+  ngr = 1e3,
+  adGrid = TRUE,
+  CI = FALSE,
+  worm = FALSE,
+  showReps = FALSE,
+  a.qqpoi = list(),
+  a.ablin = list(),
+  a.cipoly = list(),
+  a.replin = list(),
+  ...
+) {
   arg <- list(...)
-  if( !is.null(arg$show.reps) ){ # Here for compatibility (on old mgcViz versions the argument name was show.reps)
-    message("Pedantic message from zoom.qqGam(): argument \"show.reps\" is deprecated, please use \"showReps\".")
+  if (!is.null(arg$show.reps)) {
+    # Here for compatibility (on old mgcViz versions the argument name was show.reps)
+    message(
+      "Pedantic message from zoom.qqGam(): argument \"show.reps\" is deprecated, please use \"showReps\"."
+    )
     showReps <- arg$show.reps
   }
-  
+
   a.all <- .argMaster("zoom.qqGam")
-  for(nam in names(a.all)){
+  for (nam in names(a.all)) {
     a.all[[nam]] <- .argSetup(a.all[[nam]], get(nam), nam, verbose = FALSE)
   }
-  
+
   P <- o$store
   # Subset data according to xlim
   if (!is.null(xlim) && adGrid) {
     good <- which(P$Dq > xlim[1] & P$Dq < xlim[2])
     P$Dq <- P$Dq[good]
-    P$D  <- P$D[good]
+    P$D <- P$D[good]
     P$dm <- P$dm[good, ]
     P$conf <- P$conf[, good]
   }
-  if(is.null(discrete)) discrete <- length(P$Dq) > 1e4 
-  P <- .discretize.qq.gam(P = P, discrete = discrete, ngr = ngr,
-                          CI = CI, showReps = showReps)
-  .pl <- .plot.qq.gam(P = P, CI = CI, worm = worm, showReps = showReps,
-                      xlimit = xlim, ylimit = ylim, a.all = a.all)
+  if (is.null(discrete)) discrete <- length(P$Dq) > 1e4
+  P <- .discretize.qq.gam(
+    P = P,
+    discrete = discrete,
+    ngr = ngr,
+    CI = CI,
+    showReps = showReps
+  )
+  .pl <- .plot.qq.gam(
+    P = P,
+    CI = CI,
+    worm = worm,
+    showReps = showReps,
+    xlimit = xlim,
+    ylimit = ylim,
+    a.all = a.all
+  )
   return(.pl)
 }
-
-

@@ -77,7 +77,7 @@ f <- function(la,lo) { ## a test function...
   sin(lo)*cos(la-.3)
 }
 
-## generate with uniform density on sphere...  
+## generate with uniform density on sphere...
 lo <- runif(n)*2*pi-pi ## longitude
 la <- runif(3*n)*pi-pi/2
 ind <- runif(3*n)<=cos(la)
@@ -102,11 +102,11 @@ bp <- gam(y~s(la,lo,bs="sos",k=60),data=dat)
 bp <- getViz(bp)
 
 # Plot on sphere
-plot(sm(bp, 1), scheme=0) + l_fitRaster() + l_fitContour() + 
-   l_points(shape = 19) + l_rug() + l_coordContour() + l_bound() 
- 
+plot(sm(bp, 1), scheme=0) + l_fitRaster() + l_fitContour() +
+   l_points(shape = 19) + l_rug() + l_coordContour() + l_bound()
+
 # Plotting as in standard 2D plots
-plot(sm(bp, 1), scheme=1) + l_fitRaster() + l_fitContour() + 
+plot(sm(bp, 1), scheme=1) + l_fitRaster() + l_fitContour() +
            l_points(shape = 19) + l_rug()
 }
 \references{

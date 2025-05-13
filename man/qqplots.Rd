@@ -78,7 +78,7 @@ y <- rt(300, df = 5)
 stats::qqplot(x, y)
 qqplot(x, y)
 # add a qqline()
-ggplot2::last_plot() + qqline(y = rt(500, df = 4.8), col = "green") 
+ggplot2::last_plot() + qqline(y = rt(500, df = 4.8), col = "green")
 
 ## "QQ-Chisquare" : --------------------------
 y <- rchisq(500, df = 3)

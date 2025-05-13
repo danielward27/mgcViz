@@ -28,7 +28,7 @@ This is the plotting method for random effects (simple random intercepts).
 library(mgcViz)
 b <- gam(travel~s(Rail,bs="re"), data=Rail, method="REML")
 b <- getViz(b)
-plot(sm(b, 1)) + l_fitLine(colour = 2, linetype = 2) + l_points() + 
+plot(sm(b, 1)) + l_fitLine(colour = 2, linetype = 2) + l_points() +
   l_ciLine(colour = 4, linetype = 3)
 
 plot(sm(b, 1)) + l_ciPoly() + l_points()

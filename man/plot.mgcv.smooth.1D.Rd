@@ -82,10 +82,10 @@ dat <- data.frame("x1" = x1, "x2" = x2,
                   "y" = sin(x1) + 0.5 * x2^2 + pmax(x2, 0.2) * rnorm(n))
 b <- bamV(y ~ s(x1)+s(x2), data = dat, method = "fREML", aGam = list(discrete = TRUE))
 
-o <- plot(sm(b, 1), nsim = 50) # 50 posterior simulations 
+o <- plot(sm(b, 1), nsim = 50) # 50 posterior simulations
 
 # Plot with fitted effect + posterior simulations + rug on x axis
-( o <- o + l_simLine() + l_fitLine(colour = "red") + 
+( o <- o + l_simLine() + l_fitLine(colour = "red") +
        l_rug(alpha = 0.8) )
 
 # Add CI lines at 1*sigma and 5*sigma
@@ -98,13 +98,13 @@ o <- plot(sm(b, 1), nsim = 50) # 50 posterior simulations
 o2 <- plot( sm(b, 2) )
 
 # Plot it with polygon for partial residuals
-o2 + l_ciPoly(mul = 5, fill = "light blue") + 
+o2 + l_ciPoly(mul = 5, fill = "light blue") +
   l_fitLine(linetype = 2, colour = "red")
 
 # Plot is with conditional density of partial residuals
-o2 + l_dens(type = "cond", alpha = 0.9)  + 
+o2 + l_dens(type = "cond", alpha = 0.9)  +
   l_fitLine(linetype = 2, colour = "red")
-  
+
 ########
 # Quantile GAM example
 ########

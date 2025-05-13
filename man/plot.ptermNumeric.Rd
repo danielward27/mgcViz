@@ -40,7 +40,7 @@ This is the plotting method for parametric numerical effects.
 set.seed(3)
 dat <- gamSim(1,n=2000,dist="normal",scale=20)
 bs <- "cr"; k <- 12
-b <- gam(y ~  x0 + x1 + I(x1^2) + s(x2,bs=bs,k=k) + 
+b <- gam(y ~  x0 + x1 + I(x1^2) + s(x2,bs=bs,k=k) +
               I(x1*x2) + s(x3, bs=bs), data=dat)
 o <- getViz(b, nsim = 0)
 

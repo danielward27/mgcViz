@@ -39,7 +39,7 @@ library(mgcViz)
 
 ######## Basic example
 # Simulate some data and fit model
-set.seed(2)  
+set.seed(2)
 dat <- gamSim(1,n=1e3,dist="normal",scale=2)
 b <- bam(y~s(x0)+s(x1, x2)+s(x3), data=dat)
 b <- getViz(b)
@@ -48,25 +48,24 @@ b <- getViz(b)
 print(plot(b), ask = FALSE)
 
 # Now on one page and with out title on the second plot
-print(plot(b) + labs(title = NULL), pages = 1) 
+print(plot(b) + labs(title = NULL), pages = 1)
 
 # So far we used default layers, added in the printing phase, but
 # we might want to specify our own layers. Here we is how to do it
-pl <- plot(b) + l_points() + l_fitLine(linetype = 3) + l_fitContour() + 
+pl <- plot(b) + l_points() + l_fitLine(linetype = 3) + l_fitContour() +
   l_ciLine(colour = 2) + theme_get() + labs(title = NULL)
 print(pl, pages = 1)
 
 # We might want to plot only the first smooth
 plot(b, select = 1) + l_dens(type = "cond") + l_fitLine() + l_ciLine()
 
-\dontrun{
 ######## Example with "by variable" smooth effect
 # Simulate data and fit model
 dat <- gamSim(4)
 b <- gam(y ~ fac+s(x2,by=fac)+s(x0),data=dat)
 b <- getViz(b)
 # print() only needed because we want to plot on a single page
-print(plot(b), pages = 1) 
+print(plot(b), pages = 1)
 print(plot(b, allTerms = TRUE), pages = 1) # Including also parametric effect
 
 ######## Example with 3D smooth effect which cannot be plotted
@@ -82,15 +81,15 @@ b1 <- getViz(b1)
 plot(b1)
 # In fact this does not plot anything
 plot(b1, select = 1)
-# For plotting effects with more than 2D, one we need specific method. 
+# For plotting effects with more than 2D, one we need specific method.
 # See ?plot.mgcv.smooth.MD
 
 ######## Examples about plotting parametric effects
 # 1 Gaussian GAM
 set.seed(3)
 dat <- gamSim(1,n=2500,dist="normal",scale=20)
-dat$fac <- as.factor( sample(c("A1", "A2", "A3"), nrow(dat), replace = TRUE) ) 
-dat$logi <- as.logical( sample(c(TRUE, FALSE), nrow(dat), replace = TRUE) ) 
+dat$fac <- as.factor( sample(c("A1", "A2", "A3"), nrow(dat), replace = TRUE) )
+dat$logi <- as.logical( sample(c(TRUE, FALSE), nrow(dat), replace = TRUE) )
 bs <- "cr"; k <- 12
 b <- bam(y ~ x0 + x1 + I(x1^2) + s(x2,bs=bs,k=k) + fac + x3:fac + I(x1*x2) + logi +
             s(x3, bs=bs),data=dat, discrete = TRUE)
@@ -105,13 +104,12 @@ print(plot(b, select = 3:9), pages = 1)
 
 # 2 GAMLSS Gaussian model
 library(mgcv);library(MASS)
-mcycle$fac <- as.factor( sample(c("z", "k", "a", "f"), nrow(mcycle), replace = TRUE) ) 
+mcycle$fac <- as.factor( sample(c("z", "k", "a", "f"), nrow(mcycle), replace = TRUE) )
 b <- gam(list(accel~times + I(times^2) + s(times,k=10), ~ times + fac + s(times)),
           data=mcycle,family=gaulss())
 b <- getViz(b)
 
 # All effects on one page: effect of second linear predictor end with '.1'
 print(plot(b, allTerms = TRUE), pages = 1)
-}
 
 }

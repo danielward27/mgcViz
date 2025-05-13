@@ -67,7 +67,7 @@ b <- gam(list(y~s(x0)+s(x1)+s(x2)+s(x3),~1,~1), family=twlss(), data=dat)
 plot(ALE(b, "x2", type = "response", oind = 1))
 
 # With manually chosen bins
-plot(ALE(b, "x2", type = "response", oind = 1, 
+plot(ALE(b, "x2", type = "response", oind = 1,
          bins = c(0.1, 0.25, 0.5, 0.6, 0.9, 0.95, 0.99, 1)))
 
 }

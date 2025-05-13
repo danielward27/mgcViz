@@ -38,13 +38,13 @@ b <- gam(ob ~ s(x, y, z))
 v <- getViz(b)
 
 # Get plot of slices and add layers
-pl <- plotSlice(x = sm(v, 1), 
+pl <- plotSlice(x = sm(v, 1),
                 fix = list("z" = seq(-2, 2, length.out = 9)))
 pl + l_fitRaster() + l_fitContour() + l_points() + l_rug()
 
 # Over-ride default layout
-pl <- plotSlice(x = sm(v, 1), 
-                fix = list("z" = seq(-2, 2, length.out = 9)), 
+pl <- plotSlice(x = sm(v, 1),
+                fix = list("z" = seq(-2, 2, length.out = 9)),
                 a.facet = list(nrow = 2))
 pl + l_fitRaster() + l_fitContour() + theme(panel.spacing = unit(0.5, "lines"))
 
@@ -57,12 +57,12 @@ b <- bam(ob ~ s(x, y, z, z2), discrete = TRUE)
 v <- getViz(b)
 
 # Plot slices across "z" and "x"
-pl <- plotSlice(x = sm(v, 1), 
+pl <- plotSlice(x = sm(v, 1),
                 fix = list("z" = seq(-2, 2, length.out = 3), "x" = c(-1, 0, 1)))
 pl + l_fitRaster() + l_fitContour() + l_points() + l_rug()
 
 # Plot slices across "x", keeping "z" fixed
-pl <- plotSlice(x = sm(v, 1), 
+pl <- plotSlice(x = sm(v, 1),
                 fix = list("z" = 0, "x" = seq(-3, 3, length.out = 9)))
 pl + l_fitRaster() + l_fitContour() + l_points() + l_rug()
 

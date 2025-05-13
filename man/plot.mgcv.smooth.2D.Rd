@@ -84,15 +84,15 @@ dat <- gamSim(1, n = 700, dist = "normal", scale = 2)
 b <- gam(y ~ s(x0) + s(x1, x2) + s(x3), data = dat, method = "REML")
 b <- getViz(b)
 
-# Plot 2D effect with noised-up raster, contour and rug for design points 
+# Plot 2D effect with noised-up raster, contour and rug for design points
 # Opacity is proportional to the significance of the effect
-plot(sm(b, 2)) + l_fitRaster(pTrans = zto1(0.05, 2, 0.1), noiseup = TRUE) + 
-  l_rug() + l_fitContour()  
+plot(sm(b, 2)) + l_fitRaster(pTrans = zto1(0.05, 2, 0.1), noiseup = TRUE) +
+  l_rug() + l_fitContour()
 
 # Plot contour of effect joint density of design points
-plot(sm(b, 2)) + l_dens(type = "joint") + l_points() + l_fitContour() + 
+plot(sm(b, 2)) + l_dens(type = "joint") + l_points() + l_fitContour() +
   coord_cartesian(expand = FALSE) # Fill the plot
-  
+
 ###
 # Quantile GAM example
 ###

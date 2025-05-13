@@ -86,14 +86,14 @@ b <- getViz(b, nsim = 50)
 
 # Check standard deviation of residuals along covariates "x1" and "fac"
 a <- check2D(b, x1 = "x2", x2 = "fac")
-a + l_gridCheck2D(gridFun = sd) + l_rug() + l_points() 
+a + l_gridCheck2D(gridFun = sd) + l_rug() + l_points()
 
 # Points and rug are jittered by default, but we can over-ride this
-a + l_rug(position = position_jitter(width = 0, height = 0)) + 
-  l_points(position = position_jitter(width = 0, height = 0)) 
+a + l_rug(position = position_jitter(width = 0, height = 0)) +
+  l_points(position = position_jitter(width = 0, height = 0))
 
 # Check standard deviation of residuals along the two factor variables
 a <- check2D(b, x1 = "fac", x2 = "fac2")
-a + l_gridCheck2D(gridFun = sd, bw = c(1, 4)) + l_rug() + l_points() 
+a + l_gridCheck2D(gridFun = sd, bw = c(1, 4)) + l_rug() + l_points()
 
 }

@@ -80,13 +80,13 @@ b <- bam(ob ~ s(x,k=30) + s(y, k=30) + fac + logi, discrete = TRUE)
 b <- getViz(b, nsim = 50)
 
 # Look along "fac"
-ck <- check1D(b, "fac") 
-ck + l_points() + l_rug() 
+ck <- check1D(b, "fac")
+ck + l_points() + l_rug()
 ck + l_gridCheck1D(gridFun = sd)
 
 # Look along "logi"
-ck <- check1D(b, "logi") 
-ck + l_points() + l_rug() 
+ck <- check1D(b, "logi")
+ck + l_points() + l_rug()
 ck + l_gridCheck1D(gridFun = sd)
 
 }

@@ -79,6 +79,6 @@ o <- qq(lr.fit, rep = 50, method = "simul1", CI = "normal")
 o # This is the whole qqplot
 
 # We can zoom in along x at little extra costs (most computation already done by qq.gamViz)
-zoom(o, xlim = c(0, 1), showReps = TRUE, 
+zoom(o, xlim = c(0, 1), showReps = TRUE,
      a.replin = list(alpha = 0.1), a.qqpoi =  list(shape = 19))
 }

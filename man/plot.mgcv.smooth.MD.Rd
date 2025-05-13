@@ -76,7 +76,7 @@ b <- gam(ob ~ s(x, y, z))
 b <- getViz(b)
 
 # Plot one 2D slice
-plot( sm(b, 1), fix = c("z"=0) ) + l_fitRaster(noiseup = TRUE, mul = 3) + 
+plot( sm(b, 1), fix = c("z"=0) ) + l_fitRaster(noiseup = TRUE, mul = 3) +
   l_fitContour(linetype = 2) + l_points(shape =  2)
 
 ## 4D

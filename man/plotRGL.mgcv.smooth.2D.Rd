@@ -82,12 +82,12 @@ This method plots an interactive 3D representation of a 2D smooth effect, using
 the rgl package.
 }
 \examples{
-# Example 1: taken from ?mgcv::te, shows how tensor pruduct deals nicely with 
+# Example 1: taken from ?mgcv::te, shows how tensor pruduct deals nicely with
 # badly scaled covariates (range of x 5\% of range of z )
 library(mgcViz)
 
 # Simulate some data
-test1 <- function(x,z,sx=0.3,sz=0.4) { 
+test1 <- function(x,z,sx=0.3,sz=0.4) {
   x <- x*20
   (pi**sx*sz)*(1.2*exp(-(x-0.2)^2/sx^2-(z-0.3)^2/sz^2)+
                  0.8*exp(-(x-0.7)^2/sx^2-(z-0.8)^2/sz^2))

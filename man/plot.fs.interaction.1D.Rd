@@ -51,17 +51,17 @@ y <- f + rnorm(n) * 2
 bm <- gamm(y ~ s(x0)+ s(x1, fac, bs = "fs", k = 5) + s(x2, k = 20))
 v <- getViz(bm$gam)
 
-# Plot with fitted effects and changing title 
+# Plot with fitted effects and changing title
 plot(sm(v, 2)) + l_fitLine(alpha = 0.6) + labs(title = "Smooth factor interactions")
 
 # Changing plotting limits
 plot(sm(v, 2)) + l_fitLine() + ylim(-0.5, 0.5) + xlim(0.25, 0.75)
 
 # Change line type and remove legend
-plot(sm(v, 2)) + l_fitLine(size = 1.3, linetype="dotted") + 
+plot(sm(v, 2)) + l_fitLine(size = 1.3, linetype="dotted") +
                  theme(legend.position="none")
-                 
+
 # Clustering smooth effects in 3 groups
-plot(sm(v, 2)) + l_fitLine(colour = "grey") + 
+plot(sm(v, 2)) + l_fitLine(colour = "grey") +
                  l_clusterLine(centers = 3, a.clu = list(nstart = 100))
 }

@@ -5,18 +5,18 @@
 ##     'coefficients' containg the coefs for the smooth, but usually these
 ##     are not needed.
 ## Output is a list of plot data containing:
-##     * fit - the values for plotting 
+##     * fit - the values for plotting
 ##     * se.fit - standard errors of fit (can be NULL)
 ##     * the values against which to plot
 ##     * any raw data information
-##     * any partial.residuals 
+##     * any partial.residuals
 
-#' @description Default plot preparation method for smooth objects `x' 
+#' @description Default plot preparation method for smooth objects `x'
 #' inheriting from "mgcv.smooth".
 #' @param x Is a smooth object, usually part of a `gam' fit. It has an attribute
 #' `coefficients` containg the coefs for the smooth, but usually these
 #' are not needed.
-#' @param data 
+#' @param data
 #' @param n Number of points used for each 1-d plot - for a nice smooth plot
 #'   this needs to be several times the estimated degrees of freedom for the
 #'   smooth. Default value 100.
@@ -35,33 +35,74 @@
 #'   into the unit square before deciding what to exclude, and too.far <- <-  is a
 #'   distance within the unit square. Setting to zero can make plotting faster
 #'   for large datasets, but care then needed with interpretation of plots.
-#' @param ... Other graphics parameters to pass on to plotting commands. 
+#' @param ... Other graphics parameters to pass on to plotting commands.
 #' See details for smooth plot specific options.
 #' @noRd
 #' @export
-.prepare.mgcv.smooth <- function(x, data = NULL, label = "", se1.mult = 1, se2.mult = 2,
-                                 n = 100, n2 = 40,  xlab = NULL, ylab = NULL, 
-                                 main = NULL, ylim = NULL, xlim = NULL, 
-                                 too.far = 0.1, ...) {
+.prepare.mgcv.smooth <- function(
+  x,
+  data = NULL,
+  label = "",
+  se1.mult = 1,
+  se2.mult = 2,
+  n = 100,
+  n2 = 40,
+  xlab = NULL,
+  ylab = NULL,
+  main = NULL,
+  ylim = NULL,
+  xlim = NULL,
+  too.far = 0.1,
+  ...
+) {
+  if (x$dim == 1) {
+    out <- .preparePlotSmooth1D(
+      x = x,
+      data = data,
+      label = label,
+      se.mult = se1.mult,
+      n = n,
+      xlim = xlim,
+      xlab = xlab,
+      ylab = ylab,
+      main = main,
+      ...
+    )
+  }
 
-  if(x$dim == 1) {
-    out <- .preparePlotSmooth1D(x = x, data = data, label = label, se.mult = se1.mult,
-                                n = n, xlim = xlim, xlab = xlab, 
-                                ylab = ylab, main = main, ...)
+  if (x$dim == 2) {
+    out <- .preparePlotSmooth2D(
+      x = x,
+      data = data,
+      se.mult = se2.mult,
+      n2 = n2,
+      label = label,
+      xlab = xlab,
+      ylab = ylab,
+      main = main,
+      ylim = ylim,
+      xlim = xlim,
+      too.far = too.far,
+      ...
+    )
   }
-  
-  if(x$dim == 2) {
-    out <- .preparePlotSmooth2D(x = x, data = data, se.mult = se2.mult, n2 = n2, label = label,
-                                xlab = xlab, ylab = ylab, main = main,
-                                ylim = ylim, xlim = xlim, too.far = too.far, ...) 
+
+  if (x$dim > 2) {
+    out <- .preparePlotSmoothMD(
+      x = x,
+      data = data,
+      se.mult = se2.mult,
+      n2 = n2,
+      label = label,
+      xlab = xlab,
+      ylab = ylab,
+      main = main,
+      ylim = ylim,
+      xlim = xlim,
+      too.far = too.far,
+      ...
+    )
   }
-  
-  if(x$dim > 2) {
-    out <- .preparePlotSmoothMD(x = x, data = data, se.mult = se2.mult, n2 = n2, label = label,
-                                xlab = xlab, ylab = ylab, main = main,
-                                ylim = ylim, xlim = xlim, too.far = too.far, ...) 
-  }
-  
+
   return(out)
-} 
-
+}

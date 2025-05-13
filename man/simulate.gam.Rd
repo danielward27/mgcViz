@@ -29,7 +29,7 @@ will be used, if available. If set to "qf" then \code{o$family$qf()} (which is
 the inverse cdf of the response distribution) will be used to transform some
 uniform variates.}
 
-\item{newdata}{Optional new data frame or list to be passed to \link{predict.gam}.}
+\item{newdata}{Optional new data frame or list to be passed to \link[mgcv]{predict.gam}.}
 
 \item{u}{a matrix where each row is a vector of uniform random variables in (0, 1).
 This will be used to simulate responses only if \code{method = "qf"}.}
@@ -37,7 +37,7 @@ This will be used to simulate responses only if \code{method = "qf"}.}
 \item{w}{vector of prior weights to be used in the simulations. If \code{newdata==NULL} then
 \code{w} is set to \code{object$prior.weights} otherwise it is a vector of ones.}
 
-\item{offset}{numeric vector of offsets. For GAMs with multiple linear predictor (see eg \link{gaulss}) it
+\item{offset}{numeric vector of offsets. For GAMs with multiple linear predictor (see eg \link[mgcv]{gaulss}) it
 must be a list of vectors. NB: if \code{newdata!=NULL} the offsets will be assumed to be zero,
 unless their are explicitly provided. If \code{newdata==NULL} then simulations will use the
 offsets used during model fitting, and \code{offset} argument will be ignored.}
@@ -59,11 +59,11 @@ This method can be used to simulate vectors of responses from a gamObject.
 \examples{
 library(mgcViz)
 
-set.seed(2) ## simulate some data... 
+set.seed(2) ## simulate some data...
 dat <- gamSim(1,n=400,dist="normal",scale=2)
 b <- gam(y~s(x0)+s(x1)+s(x2)+s(x3),data=dat)
 
 # Simulate three vectors of responses
-matplot(simulate(b, nsim = 3), pch = 19, col = c(1, 3, 4)) 
+matplot(simulate(b, nsim = 3), pch = 19, col = c(1, 3, 4))
 
 }

@@ -12,10 +12,15 @@
     oNam <- names(oArg)
     iNam <- names(iArg)
     if (verbose && length(noNms <- oNam[!oNam %in% iNam])) {
-      warning("unknown names in argument list '", aNam, "': ",
-              paste(noNms, collapse = ", "), sep = '')
+      warning(
+        "unknown names in argument list '",
+        aNam,
+        "': ",
+        paste(noNms, collapse = ", "),
+        sep = ''
+      )
     }
-    iArg[oNam] <- if(length(oArg)) oArg 
+    iArg[oNam] <- if (length(oArg)) oArg
   }
   return(iArg)
 }

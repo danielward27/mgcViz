@@ -32,7 +32,7 @@ b <- mqgamV(y~s(x) + s(z) + I(x*z), data = dat, qu = c(0.25, 0.5, 0.75),
 
 # This is equivalent to doing
 # 1. Fit QGAM
-# b <- mqgam(y~s(x) + s(z) + I(x*z), data=dat, 
+# b <- mqgam(y~s(x) + s(z) + I(x*z), data=dat,
 #            qu = c(0.25, 0.5, 0.75), argGam = list(select = TRUE))
 # 2. Convert to gamViz object
 # b <- getViz(b, nsim = 0)
