@@ -2,9 +2,10 @@
 % Please edit documentation in R/get_data_smooth_MD.R
 \name{plot.mgcv.smooth.MD}
 \alias{plot.mgcv.smooth.MD}
+\alias{get_data.mgcv.smooth.MD}
 \title{Plotting slice of higher-dimensional smooth effects}
 \usage{
-\method{plot}{mgcv.smooth.MD}(
+\method{get_data}{mgcv.smooth.MD}(
   x,
   fix,
   n = 40,

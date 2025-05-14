@@ -74,10 +74,10 @@
 #' plot(sm(bp, 1), scheme = 1) + l_fitRaster() + l_fitContour() +
 #'   l_points(shape = 19) + l_rug()
 #' @rdname plot.sos.smooth
-#' @export plot.sos.smooth
+#' @export get_data.sos.smooth
 #' @export
 #'
-plot.sos.smooth <- function(
+get_data.sos.smooth <- function(
     x,
     n = 40,
     xlim = NULL,

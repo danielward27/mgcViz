@@ -66,10 +66,10 @@
 #'
 #' @rdname plot.mgcv.smooth.MD
 #' @importFrom stats cov quantile mahalanobis
-#' @export plot.mgcv.smooth.MD
+#' @export get_data.mgcv.smooth.MD
 #' @export
 #'
-plot.mgcv.smooth.MD <- function(
+get_data.mgcv.smooth.MD <- function(
     x,
     fix,
     n = 40,

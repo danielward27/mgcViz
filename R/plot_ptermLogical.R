@@ -1,5 +1,5 @@
 #' @rdname plot.ptermFactor
-#' @export plot.ptermLogical
+#' @export get_data.ptermLogical
 #' @export
 #'
 plot.ptermLogical <- function(x, maxpo = 1e4, trans = identity, ...) {

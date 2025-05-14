@@ -19,11 +19,12 @@
 #' @examples
 #' # Simulate data and fit GAM
 #' set.seed(3)
-#' dat <- gamSim(1,n=2000,dist="normal",scale=20)
-#' dat$fac <- as.factor( sample(c("A1", "A2", "A3"), nrow(dat), replace = TRUE) )
-#' dat$logi <- as.logical( sample(c(TRUE, FALSE), nrow(dat), replace = TRUE) )
-#' bs <- "cr"; k <- 12
-#' b <- gam(y~fac + s(x0) + s(x1) + s(x2) + s(x3) + logi, data=dat)
+#' dat <- gamSim(1, n = 2000, dist = "normal", scale = 20)
+#' dat$fac <- as.factor(sample(c("A1", "A2", "A3"), nrow(dat), replace = TRUE))
+#' dat$logi <- as.logical(sample(c(TRUE, FALSE), nrow(dat), replace = TRUE))
+#' bs <- "cr"
+#' k <- 12
+#' b <- gam(y ~ fac + s(x0) + s(x1) + s(x2) + s(x3) + logi, data = dat)
 #' o <- getViz(b, nsim = 0)
 #'
 #' # Extract factor terms and plot it
@@ -39,7 +40,7 @@
 #' plot(pt) + l_fitPoints() + l_ciBar()
 #'
 #' @rdname plot.ptermFactor
-#' @export plot.ptermFactor
+#' @export get_data.ptermFactor
 #' @export
 #'
 plot.ptermFactor <- function(x, maxpo = 1e4, trans = identity, ...) {
@@ -111,7 +112,7 @@ plot.ptermFactor <- function(x, maxpo = 1e4, trans = identity, ...) {
   }
 
   .pl <- ggplot(data = .dat$fit, aes("x" = x, "y" = ty)) +
-    labs(title = NULL, x = x$nam, y = paste("f(", x$nam, ")", sep = '')) +
+    labs(title = NULL, x = x$nam, y = paste("f(", x$nam, ")", sep = "")) +
     scale_x_discrete() +
     theme_bw() +
     theme(

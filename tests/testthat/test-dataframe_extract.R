@@ -5,7 +5,7 @@ test_that("1D", {
   set.seed(2) ## simulate some data...
   dat <- gamSim(1, n = 200)
   fit <- gam(y ~ s(x0), data = dat)
-  p <- plot(sm(getViz(fit), 1)) # TODO currently highjacking plot :D
+  p <- get_data(sm(getViz(fit), 1)) # TODO currently highjacking plot :D
   expect_true(is.data.frame(p$fit))
   expect_true(is.data.frame(p$res))
 })
@@ -16,7 +16,7 @@ test_that("2D", {
   set.seed(2) ## simulate some data...
   dat <- gamSim(2, n = 200, verbose = FALSE)$data
   fit <- gam(y ~ s(x, z), data = dat)
-  p <- plot(sm(getViz(fit), 1)) # TODO currently highjacking plot :D
+  p <- get_data(sm(getViz(fit), 1)) # TODO currently highjacking plot :D
   expect_true(is.data.frame(p$fit))
   expect_true(is.data.frame(p$res))
 })
@@ -31,7 +31,7 @@ test_that("MD", {
   z <- rnorm(n)
   y <- (x - z)^2 + (y - z)^2 + rnorm(n)
   fit <- gam(y ~ s(x, y, z))
-  p <- plot(sm(getViz(fit), 1), fix = c("z" = 0)) # TODO currently highjacking plot :D
+  p <- get_data(sm(getViz(fit), 1), fix = c("z" = 0)) # TODO currently highjacking plot :D
   expect_true(is.data.frame(p$fit))
   expect_true(is.data.frame(p$res))
 })
@@ -47,7 +47,7 @@ test_that("MRF", {
     crime ~ s(district, bs = "mrf", xt = xt),
     data = columb,
   )
-  p <- plot(sm(getViz(fit), 1)) # TODO currently highjacking plot :D
+  p <- get_data(sm(getViz(fit), 1)) # TODO currently highjacking plot :D
   expect_true(is.data.frame(p$fit))
   # TODO no residuals in mrf. To be expected?
 })
@@ -65,7 +65,7 @@ test_that("FS Interaction 1D", {
     y ~ s(x, group, bs = "fs", k = 5),
     data = data.frame(y, x, group),
   )
-  p <- plot(sm(getViz(fit), 1)) # TODO currently highjacking plot :D
+  p <- get_data(sm(getViz(fit), 1)) # TODO currently highjacking plot :D
   expect_true(is.data.frame(p$fit))
   # TODO No residuals in FS interaction 1D. To be expected?
 })
@@ -91,7 +91,7 @@ test_that("SOS", {
 
   dat <- data.frame(la = la * 180 / pi, lo = lo * 180 / pi, y = y)
   fit <- gam(y ~ s(la, lo, bs = "sos", k = 60), data = dat)
-  p <- plot(sm(getViz(fit), 1))
+  p <- get_data(sm(getViz(fit), 1))
 
   expect_true(is.data.frame(p$fit))
   expect_true(is.data.frame(p$res))

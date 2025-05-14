@@ -2,9 +2,10 @@
 % Please edit documentation in R/get_data_smooth_2D.R
 \name{plot.mgcv.smooth.2D}
 \alias{plot.mgcv.smooth.2D}
+\alias{get_data.mgcv.smooth.2D}
 \title{Plotting two dimensional smooth effects}
 \usage{
-\method{plot}{mgcv.smooth.2D}(
+\method{get_data}{mgcv.smooth.2D}(
   x,
   n = 40,
   xlim = NULL,

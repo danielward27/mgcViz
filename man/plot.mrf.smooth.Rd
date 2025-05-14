@@ -2,9 +2,10 @@
 % Please edit documentation in R/get_data_mrf.R
 \name{plot.mrf.smooth}
 \alias{plot.mrf.smooth}
+\alias{get_data.mrf.smooth}
 \title{Plotting Markov random field smooths}
 \usage{
-\method{plot}{mrf.smooth}(x, trans = identity, se_with_mean = FALSE, unconditional = FALSE, ...)
+\method{get_data}{mrf.smooth}(x, trans = identity, se_with_mean = FALSE, unconditional = FALSE, ...)
 }
 \arguments{
 \item{x}{a smooth effect object, extracted using \link{sm}.}

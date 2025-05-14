@@ -2,9 +2,10 @@
 % Please edit documentation in R/get_data_fs_interaction_1D.R
 \name{plot.fs.interaction.1D}
 \alias{plot.fs.interaction.1D}
+\alias{get_data.fs.interaction.1D}
 \title{Plotting one dimensional smooth factor interactions}
 \usage{
-\method{plot}{fs.interaction.1D}(x, n = 100, xlim = NULL, trans = identity, ...)
+\method{get_data}{fs.interaction.1D}(x, n = 100, xlim = NULL, trans = identity, ...)
 }
 \arguments{
 \item{x}{a smooth effect object.}

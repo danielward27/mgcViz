@@ -16,10 +16,11 @@
 #' @examples
 #' # Simulate data and fit GAM
 #' set.seed(3)
-#' dat <- gamSim(1,n=2000,dist="normal",scale=20)
-#' bs <- "cr"; k <- 12
-#' b <- gam(y ~  x0 + x1 + I(x1^2) + s(x2,bs=bs,k=k) +
-#'               I(x1*x2) + s(x3, bs=bs), data=dat)
+#' dat <- gamSim(1, n = 2000, dist = "normal", scale = 20)
+#' bs <- "cr"
+#' k <- 12
+#' b <- gam(y ~ x0 + x1 + I(x1^2) + s(x2, bs = bs, k = k) +
+#'   I(x1 * x2) + s(x3, bs = bs), data = dat)
 #' o <- getViz(b, nsim = 0)
 #'
 #' # Extract first terms and plot it
@@ -32,17 +33,16 @@
 #'
 #' @importFrom mgcv predict.gam
 #' @rdname plot.ptermNumeric
-#' @export plot.ptermNumeric
+#' @export get_data.ptermNumeric
 #' @export
 #'
 plot.ptermNumeric <- function(
-  x,
-  n = 100,
-  xlim = NULL,
-  maxpo = 1e4,
-  trans = identity,
-  ...
-) {
+    x,
+    n = 100,
+    xlim = NULL,
+    maxpo = 1e4,
+    trans = identity,
+    ...) {
   if (x$order > 1) {
     message("mgcViz does not know how to plot this effect. Returning NULL.")
     return(invisible(NULL))
@@ -110,8 +110,7 @@ plot.ptermNumeric <- function(
 
   # Exclude residuals falling outside boundaries
   .dat$res <- .dat$res[
-    .dat$res$x >= xlim[1] & .dat$res$x <= xlim[2],
-    ,
+    .dat$res$x >= xlim[1] & .dat$res$x <= xlim[2], ,
     drop = FALSE
   ]
 
@@ -127,7 +126,7 @@ plot.ptermNumeric <- function(
   .dat$misc <- list("trans" = trans)
 
   .pl <- ggplot(data = .dat$fit, aes("x" = x, "y" = ty)) +
-    labs(title = NULL, x = x$nam, y = paste("f(", x$nam, ")", sep = '')) +
+    labs(title = NULL, x = x$nam, y = paste("f(", x$nam, ")", sep = "")) +
     theme_bw() +
     theme(
       panel.grid.major = element_blank(),

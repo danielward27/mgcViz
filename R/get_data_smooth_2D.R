@@ -58,10 +58,10 @@
 #'
 #' @importFrom mgcv exclude.too.far
 #' @rdname plot.mgcv.smooth.2D
-#' @export plot.mgcv.smooth.2D
+#' @export get_data.mgcv.smooth.2D
 #' @export
 #'
-plot.mgcv.smooth.2D <- function(
+get_data.mgcv.smooth.2D <- function(
     x,
     n = 40,
     xlim = NULL,

@@ -2,9 +2,10 @@
 % Please edit documentation in R/get_data_smooth_1D.R
 \name{plot.mgcv.smooth.1D}
 \alias{plot.mgcv.smooth.1D}
+\alias{get_data.mgcv.smooth.1D}
 \title{Plotting one dimensional smooth effects}
 \usage{
-\method{plot}{mgcv.smooth.1D}(
+\method{get_data}{mgcv.smooth.1D}(
   x,
   n = 100,
   xlim = NULL,

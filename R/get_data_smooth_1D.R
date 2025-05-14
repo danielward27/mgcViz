@@ -75,10 +75,10 @@
 #' plot(sm(b, 1)) + l_fitLine(linetype = 2) + l_rug(colour = "blue")
 #'
 #' @rdname plot.mgcv.smooth.1D
-#' @export plot.mgcv.smooth.1D
+#' @export get_data.mgcv.smooth.1D
 #' @export
 #'
-plot.mgcv.smooth.1D <- function(
+get_data.mgcv.smooth.1D <- function(
     x,
     n = 100,
     xlim = NULL,

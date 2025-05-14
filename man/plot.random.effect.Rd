@@ -22,7 +22,7 @@ This is the plotting method for random effects (simple random intercepts).
 }
 \examples{
 library(mgcViz)
-b <- gam(travel~s(Rail,bs="re"), data=Rail, method="REML")
+b <- gam(travel ~ s(Rail, bs = "re"), data = Rail, method = "REML")
 b <- getViz(b)
 plot(sm(b, 1)) + l_fitLine(colour = 2, linetype = 2) + l_points() +
   l_ciLine(colour = 4, linetype = 3)
@@ -35,7 +35,7 @@ plot(b)
 ###
 # Quantile GAM version
 ###
-b <- mqgamV(travel~s(Rail,bs="re"), data=as.data.frame(Rail), qu = c(0.2, 0.4, 0.6, 0.8))
+b <- mqgamV(travel ~ s(Rail, bs = "re"), data = as.data.frame(Rail), qu = c(0.2, 0.4, 0.6, 0.8))
 
 plot(sm(b, 1)) + l_ciPoly() + l_points()
 

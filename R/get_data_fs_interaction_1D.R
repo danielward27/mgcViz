@@ -58,10 +58,10 @@
 #'   l_clusterLine(centers = 3, a.clu = list(nstart = 100))
 #' @importFrom mgcv PredictMat
 #' @rdname plot.fs.interaction.1D
-#' @export plot.fs.interaction.1D
+#' @export get_data.fs.interaction.1D
 #' @export
 #'
-plot.fs.interaction.1D <- function(
+get_data.fs.interaction.1D <- function(
     x,
     n = 100,
     xlim = NULL,

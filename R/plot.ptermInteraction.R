@@ -8,7 +8,7 @@
 #' @param ... currently unused.
 #' @return Currently it returns \code{NULL}.
 #' @rdname plot.ptermInteraction
-#' @export plot.ptermInteraction
+#' @export get_data.ptermInteraction
 #' @export
 #'
 plot.ptermInteraction <- function(x, ...) {

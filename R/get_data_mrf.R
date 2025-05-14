@@ -37,10 +37,10 @@
 #' plot(b)
 #'
 #' @rdname plot.mrf.smooth
-#' @export plot.mrf.smooth
+#' @export get_data.mrf.smooth
 #' @export
 #'
-plot.mrf.smooth <- function(
+get_data.mrf.smooth <- function(
     x,
     trans = identity,
     se_with_mean = FALSE,

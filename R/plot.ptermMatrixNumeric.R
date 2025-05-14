@@ -1,5 +1,5 @@
 #' @rdname plot.ptermNumeric
-#' @export plot.ptermMatrixNumeric
+#' @export get_data.ptermMatrixNumeric
 #' @export
 #'
 plot.ptermMatrixNumeric <- function(

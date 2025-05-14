@@ -40,8 +40,8 @@ library(mgcViz)
 ######## Basic example
 # Simulate some data and fit model
 set.seed(2)
-dat <- gamSim(1,n=1e3,dist="normal",scale=2)
-b <- bam(y~s(x0)+s(x1, x2)+s(x3), data=dat)
+dat <- gamSim(1, n = 1e3, dist = "normal", scale = 2)
+b <- bam(y ~ s(x0) + s(x1, x2) + s(x3), data = dat)
 b <- getViz(b)
 
 # Default smooth effect plotting
@@ -62,7 +62,7 @@ plot(b, select = 1) + l_dens(type = "cond") + l_fitLine() + l_ciLine()
 ######## Example with "by variable" smooth effect
 # Simulate data and fit model
 dat <- gamSim(4)
-b <- gam(y ~ fac+s(x2,by=fac)+s(x0),data=dat)
+b <- gam(y ~ fac + s(x2, by = fac) + s(x0), data = dat)
 b <- getViz(b)
 # print() only needed because we want to plot on a single page
 print(plot(b), pages = 1)
@@ -71,9 +71,12 @@ print(plot(b, allTerms = TRUE), pages = 1) # Including also parametric effect
 ######## Example with 3D smooth effect which cannot be plotted
 # Simulate data and fit model
 n <- 5e3
-x <- rnorm(n); y <- rnorm(n); z <- rnorm(n); z2 <- rnorm(n)
+x <- rnorm(n)
+y <- rnorm(n)
+z <- rnorm(n)
+z2 <- rnorm(n)
 
-ob <- (x-z)^2 + (y-z)^2 + z2^3 + rnorm(n)
+ob <- (x - z)^2 + (y - z)^2 + z2^3 + rnorm(n)
 b1 <- bam(ob ~ s(x, y, z) + s(z2), discrete = TRUE)
 b1 <- getViz(b1)
 
@@ -87,12 +90,13 @@ plot(b1, select = 1)
 ######## Examples about plotting parametric effects
 # 1 Gaussian GAM
 set.seed(3)
-dat <- gamSim(1,n=2500,dist="normal",scale=20)
-dat$fac <- as.factor( sample(c("A1", "A2", "A3"), nrow(dat), replace = TRUE) )
-dat$logi <- as.logical( sample(c(TRUE, FALSE), nrow(dat), replace = TRUE) )
-bs <- "cr"; k <- 12
-b <- bam(y ~ x0 + x1 + I(x1^2) + s(x2,bs=bs,k=k) + fac + x3:fac + I(x1*x2) + logi +
-            s(x3, bs=bs),data=dat, discrete = TRUE)
+dat <- gamSim(1, n = 2500, dist = "normal", scale = 20)
+dat$fac <- as.factor(sample(c("A1", "A2", "A3"), nrow(dat), replace = TRUE))
+dat$logi <- as.logical(sample(c(TRUE, FALSE), nrow(dat), replace = TRUE))
+bs <- "cr"
+k <- 12
+b <- bam(y ~ x0 + x1 + I(x1^2) + s(x2, bs = bs, k = k) + fac + x3:fac + I(x1 * x2) + logi +
+  s(x3, bs = bs), data = dat, discrete = TRUE)
 b <- getViz(b)
 
 # All effects in one page. Notably 'x3:fac' is missing: we have no methods
@@ -103,10 +107,12 @@ print(plot(b, allTerms = TRUE), pages = 1)
 print(plot(b, select = 3:9), pages = 1)
 
 # 2 GAMLSS Gaussian model
-library(mgcv);library(MASS)
-mcycle$fac <- as.factor( sample(c("z", "k", "a", "f"), nrow(mcycle), replace = TRUE) )
-b <- gam(list(accel~times + I(times^2) + s(times,k=10), ~ times + fac + s(times)),
-          data=mcycle,family=gaulss())
+library(mgcv)
+library(MASS)
+mcycle$fac <- as.factor(sample(c("z", "k", "a", "f"), nrow(mcycle), replace = TRUE))
+b <- gam(list(accel ~ times + I(times^2) + s(times, k = 10), ~ times + fac + s(times)),
+  data = mcycle, family = gaulss()
+)
 b <- getViz(b)
 
 # All effects on one page: effect of second linear predictor end with '.1'

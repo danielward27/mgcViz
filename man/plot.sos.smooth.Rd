@@ -2,9 +2,10 @@
 % Please edit documentation in R/get_data_sos.R
 \name{plot.sos.smooth}
 \alias{plot.sos.smooth}
+\alias{get_data.sos.smooth}
 \title{Plotting smooths on the sphere}
 \usage{
-\method{plot}{sos.smooth}(
+\method{get_data}{sos.smooth}(
   x,
   n = 40,
   xlim = NULL,
