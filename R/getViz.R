@@ -19,15 +19,14 @@
 #' @examples
 #' library(mgcViz)
 #' set.seed(2) ## simulate some data...
-#' dat <- gamSim(1,n=1000,dist="normal",scale=2)
-#' b <- gam(y~s(x0)+s(x1, x2)+s(x3), data=dat, method="REML")
+#' dat <- gamSim(1, n = 1000, dist = "normal", scale = 2)
+#' b <- gam(y ~ s(x0) + s(x1, x2) + s(x3), data = dat, method = "REML")
 #' b <- getViz(b, nsim = 20)
 #' str(b$store$sim) # Simulated responses now stored here
 #'
-#' plot(sm(b,1)) + l_fitLine() + l_ciLine() + l_rug() + l_points()
-#' plot(sm(b,2)) + l_rug() + l_fitRaster() + l_fitContour()
+#' plot(sm(b, 1)) + l_fitLine() + l_ciLine() + l_rug() + l_points()
+#' plot(sm(b, 2)) + l_rug() + l_fitRaster() + l_fitContour()
 #' @importFrom stats simulate
-#' @importFrom qgam qdo
 #' @rdname getViz
 #' @export getViz
 getViz <- function(o, nsim = 0, post = FALSE, newdata, ...) {
@@ -36,31 +35,12 @@ getViz <- function(o, nsim = 0, post = FALSE, newdata, ...) {
     # lapply does not handle missing arguments in the "...", need to pass it explictly
     o <- lapply(
       o,
-      function(.x, newdata, ...)
-        getViz(.x, nsim = nsim, post = post, newdata = newdata, ...),
+      function(.x, newdata, ...) {
+        getViz(.x, nsim = nsim, post = post, newdata = newdata, ...)
+      },
       newdata = newdata
     )
     if (is.null(tmp)) names(o) <- 1:length(o)
-    class(o) <- "mgamViz"
-    return(o)
-  }
-
-  if (inherits(o, "mqgam")) {
-    qus <- as.numeric(names(o$fit))
-    cal <- o$calibr
-    o <- qdo(o, qus, getViz, nsim = 0, post = post, newdata = newdata, ...)
-    names(o) <- qus
-    # Need to add calibration information for each QGAM
-    for (ii in 1:length(qus)) {
-      o[[ii]]$calibr <- list(
-        "lsig" = cal$lsig[ii],
-        "err" = cal$err[ii],
-        "ranges" = matrix(cal$ranges[ii, ], nrow = 1),
-        "store" = cal$store[ii]
-      )
-      attr(o[[ii]]$calibr, "class") <- attr(cal, "class")
-    }
-    class(o) <- c("mqgamViz", "mgamViz")
     return(o)
   }
 
@@ -91,7 +71,7 @@ getViz <- function(o, nsim = 0, post = FALSE, newdata, ...) {
         0,
         nrow(terms),
         nmis,
-        dimnames = list(c(), paste(".fakVar", 1:nmis, sep = ''))
+        dimnames = list(c(), paste(".fakVar", 1:nmis, sep = ""))
       )
       M3 <- if (ns) {
         terms[, (ncol(terms) - ns + 1):ncol(terms)]

@@ -11,25 +11,12 @@ Description: Extension of the 'mgcv' package, providing visual tools for General
 Depends:
     R (>= 4.0),
     mgcv (>= 1.9),
-    qgam (>= 1.2.3),
-    ggplot2
 Imports:
-    gamm4,
-    matrixStats,
-    viridis,
-    GGally,
-    KernSmooth,
-    gridExtra,
     plyr,
-    shiny,
-    miniUI
 Suggests:
-    rgl,
     knitr,
     rmarkdown,
     testthat,
-    MASS, 
-    webshot2
 License: GPL-3
 Encoding: UTF-8
 LazyData: true

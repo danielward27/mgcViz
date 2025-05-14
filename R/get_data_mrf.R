@@ -64,15 +64,15 @@ get_data.mrf.smooth <- function(
     seWithMean = se_with_mean
   )
 
-  .dat <- list()
+  data <- list()
   .npb <- sapply(p$smooth$xt$polys, nrow)
-  .dat$fit <- as.data.frame(do.call("rbind", p$smooth$xt$polys))
-  names(.dat$fit) <- c("x", "y")
-  .dat$fit$z <- rep(p$fit, .npb)
-  .dat$fit$tz <- trans(.dat$fit$z)
-  .dat$fit$id <- rep(p$raw, .npb)
-  .dat$misc <- list("trans" = trans)
-  return(.dat)
+  data$fit <- as.data.frame(do.call("rbind", p$smooth$xt$polys))
+  names(data$fit) <- c("x", "y")
+  data$fit$z <- rep(p$fit, .npb)
+  data$fit$tz <- trans(data$fit$z)
+  data$fit$id <- rep(p$raw, .npb)
+  data$misc <- list("trans" = trans)
+  return(data)
 }
 
 

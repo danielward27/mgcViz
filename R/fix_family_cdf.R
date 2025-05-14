@@ -18,8 +18,7 @@ fix.family.cdf <- function(fam) {
   }
 
   if (is.null(fam$cdf)) {
-    fam$cdf <- switch(
-      fam$family,
+    fam$cdf <- switch(fam$family,
       poisson = function(q, mu, wt, scale, logp = FALSE) {
         ppois(q, mu, log.p = logp)
       },
