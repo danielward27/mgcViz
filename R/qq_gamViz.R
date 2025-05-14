@@ -56,41 +56,49 @@
 #' library(mgcViz)
 #' set.seed(0)
 #' n.samp <- 400
-#' dat <- gamSim(1,n = n.samp, dist = "binary", scale = .33)
+#' dat <- gamSim(1, n = n.samp, dist = "binary", scale = .33)
 #' p <- binomial()$linkinv(dat$f) ## binomial p
 #' n <- sample(c(1, 3), n.samp, replace = TRUE) ## binomial n
 #' dat$y <- rbinom(n, n, p)
 #' dat$n <- n
-#' lr.fit <- gam(y/n ~ s(x0) + s(x1) + s(x2) + s(x3)
-#'               , family = binomial, data = dat,
-#'               weights = n, method = "REML")
+#' lr.fit <- gam(y / n ~ s(x0) + s(x1) + s(x2) + s(x3),
+#'   family = binomial, data = dat,
+#'   weights = n, method = "REML"
+#' )
 #' lr.fit <- getViz(lr.fit)
 #'
 #' # Quick QQ-plot of deviance residuals
 #' qq(lr.fit, method = "simul2")
 #'
 #' # Same, but changing points share and type of reference list
-#' qq(lr.fit, method = "simul2",
-#'        a.qqpoi = list("shape" = 1), a.ablin = list("linetype" = 2))
+#' qq(lr.fit,
+#'   method = "simul2",
+#'   a.qqpoi = list("shape" = 1), a.ablin = list("linetype" = 2)
+#' )
 #'
 #' # Simulation based QQ-plot with reference bands
 #' qq(lr.fit, rep = 100, level = .9, CI = "quantile")
 #'
 #' # Simulation based QQ-plot, Pearson resids, all simulations lines shown
-#' qq(lr.fit, rep = 100, CI = "none", showReps = TRUE, type = "pearson",
-#'        a.qqpoi = list(shape=19, size = 0.5))
+#' qq(lr.fit,
+#'   rep = 100, CI = "none", showReps = TRUE, type = "pearson",
+#'   a.qqpoi = list(shape = 19, size = 0.5)
+#' )
 #'
 #' ### Now fit the wrong model and check
-#' pif <- gam(y ~ s(x0) + s(x1) + s(x2) + s(x3)
-#'            , family = poisson, data = dat, method = "REML")
+#' pif <- gam(y ~ s(x0) + s(x1) + s(x2) + s(x3),
+#'   family = poisson, data = dat, method = "REML"
+#' )
 #' pif <- getViz(pif)
 #'
 #' qq(pif, method = "simul2")
 #'
 #' qq(pif, rep = 100, level = .9, CI = "quantile")
 #'
-#' qq(pif, rep = 100, type = "pearson", CI = "none", showReps = TRUE,
-#'                a.qqpoi = list(shape=19, size = 0.5))
+#' qq(pif,
+#'   rep = 100, type = "pearson", CI = "none", showReps = TRUE,
+#'   a.qqpoi = list(shape = 19, size = 0.5)
+#' )
 #'
 #' ######## Example: binary data model violation so gross that you see a problem
 #' ######## on the QQ plot
@@ -115,32 +123,39 @@
 #' ########  "Big Data" example:
 #' set.seed(0)
 #' n.samp <- 50000
-#' dat <- gamSim(1,n=n.samp,dist="binary",scale=.33)
+#' dat <- gamSim(1, n = n.samp, dist = "binary", scale = .33)
 #' p <- binomial()$linkinv(dat$f) ## binomial p
-#' n <- sample(c(1,3),n.samp,replace=TRUE) ## binomial n
-#' dat$y <- rbinom(n,n,p)
+#' n <- sample(c(1, 3), n.samp, replace = TRUE) ## binomial n
+#' dat$y <- rbinom(n, n, p)
 #' dat$n <- n
-#' lr.fit <- bam(y/n ~ s(x0) + s(x1) + s(x2) + s(x3)
-#'               , family = binomial, data = dat,
-#'               weights = n, method = "fREML", discrete = TRUE)
+#' lr.fit <- bam(y / n ~ s(x0) + s(x1) + s(x2) + s(x3),
+#'   family = binomial, data = dat,
+#'   weights = n, method = "fREML", discrete = TRUE
+#' )
 #' lr.fit <- getViz(lr.fit)
 #'
 #' # Turning discretization off (on by default for large datasets).
 #' set.seed(414) # Setting the seed because qq.gamViz is doing simulations
-#' o <- qq(lr.fit, rep = 10, method = "simul1", CI = "normal", showReps = TRUE,
-#'             discrete = F, a.replin = list(alpha = 0.1))
+#' o <- qq(lr.fit,
+#'   rep = 10, method = "simul1", CI = "normal", showReps = TRUE,
+#'   discrete = F, a.replin = list(alpha = 0.1)
+#' )
 #' o # This might take some time!
 #'
 #' # Using default discretization
 #' set.seed(414)
-#' o <- qq(lr.fit, rep = 10, method = "simul1", CI = "normal", showReps = TRUE,
-#'             a.replin = list(alpha = 0.1))
+#' o <- qq(lr.fit,
+#'   rep = 10, method = "simul1", CI = "normal", showReps = TRUE,
+#'   a.replin = list(alpha = 0.1)
+#' )
 #' o # Much faster plotting!
 #'
 #' # Very coarse discretization
 #' set.seed(414)
-#' o <- qq(lr.fit, rep = 10, method = "simul1", CI = "normal", showReps = TRUE,
-#'             ngr = 1e2, a.replin = list(alpha = 0.1), a.qqpoi = list(shape = 19))
+#' o <- qq(lr.fit,
+#'   rep = 10, method = "simul1", CI = "normal", showReps = TRUE,
+#'   ngr = 1e2, a.replin = list(alpha = 0.1), a.qqpoi = list(shape = 19)
+#' )
 #' o
 #'
 #' # We can also zoom in at no extra costs (most work already done by qq.gamViz)
@@ -148,37 +163,29 @@
 #' }
 #'
 qq.gamViz <- function(
-  o,
-  rep = 10,
-  level = 0.8,
-  method = "auto",
-  type = "auto",
-  CI = "none",
-  worm = FALSE,
-  showReps = FALSE,
-  sortFun = NULL,
-  discrete = NULL,
-  ngr = 1e3,
-  xlim = NULL,
-  ylim = NULL,
-  a.qqpoi = list(),
-  a.ablin = list(),
-  a.cipoly = list(),
-  a.replin = list(),
-  ...
-) {
+    o,
+    rep = 10,
+    level = 0.8,
+    method = "auto",
+    type = "auto",
+    CI = "none",
+    worm = FALSE,
+    showReps = FALSE,
+    sortFun = NULL,
+    discrete = NULL,
+    ngr = 1e3,
+    xlim = NULL,
+    ylim = NULL,
+    a.qqpoi = list(),
+    a.ablin = list(),
+    a.cipoly = list(),
+    a.replin = list(),
+    ...) {
   if (!inherits(o, "gamViz")) {
     stop("Argument 'o' should be of class 'gamViz'. See ?getViz")
   }
 
   arg <- list(...)
-  if (!is.null(arg$show.reps)) {
-    # Here for compatibility (on old mgcViz versions the argument name was show.reps)
-    message(
-      "Pedantic message from qq.gamViz(): argument \"show.reps\" is deprecated, please use \"showReps\"."
-    )
-    showReps <- arg$show.reps
-  }
 
   a.all <- .argMaster("qq.gamViz")
   for (nam in names(a.all)) {
@@ -196,10 +203,10 @@ qq.gamViz <- function(
   )
   tmp <- .getResTypeAndMethod(o$family)
   if (method == "auto") {
-    method = tmp$method
+    method <- tmp$method
   }
   if (type == "auto") {
-    type = tmp$type
+    type <- tmp$type
   }
   if (level < 0 || level > 1) {
     stop("`level' should be between 0 and 1")

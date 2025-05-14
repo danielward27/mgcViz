@@ -3,11 +3,11 @@ library(testthat)
 test_that("1D", {
   library(mgcViz)
   set.seed(2) ## simulate some data...
-  dat <- gamSim(1, n = 200)
+  dat <- gamSim(1, n = 200, verbose = FALSE)
   fit <- gam(y ~ s(x0), data = dat)
-  p <- get_data(sm(getViz(fit), 1)) # TODO currently highjacking plot :D
-  expect_true(is.data.frame(p$fit))
-  expect_true(is.data.frame(p$res))
+  data <- get_data(sm(getViz(fit), 1))
+  expect_true(is.data.frame(data$fit))
+  expect_true(is.data.frame(data$res))
 })
 
 
@@ -16,9 +16,9 @@ test_that("2D", {
   set.seed(2) ## simulate some data...
   dat <- gamSim(2, n = 200, verbose = FALSE)$data
   fit <- gam(y ~ s(x, z), data = dat)
-  p <- get_data(sm(getViz(fit), 1)) # TODO currently highjacking plot :D
-  expect_true(is.data.frame(p$fit))
-  expect_true(is.data.frame(p$res))
+  data <- get_data(sm(getViz(fit), 1))
+  expect_true(is.data.frame(data$fit))
+  expect_true(is.data.frame(data$res))
 })
 
 
@@ -31,24 +31,23 @@ test_that("MD", {
   z <- rnorm(n)
   y <- (x - z)^2 + (y - z)^2 + rnorm(n)
   fit <- gam(y ~ s(x, y, z))
-  p <- get_data(sm(getViz(fit), 1), fix = c("z" = 0)) # TODO currently highjacking plot :D
-  expect_true(is.data.frame(p$fit))
-  expect_true(is.data.frame(p$res))
+  data <- get_data(sm(getViz(fit), 1), fix = c("z" = 0))
+  expect_true(is.data.frame(data$fit))
+  expect_true(is.data.frame(data$res))
 })
 
 
 test_that("MRF", {
   library(mgcv)
-  ## Load Columbus Ohio crime data (see ?columbus for details and credits)
-  data(columb) ## data frame
-  data(columb.polys) ## district shapes list
+  data(columb)
+  data(columb.polys)
   xt <- list(polys = columb.polys) ## neighbourhood structure info for MRF
   fit <- gam(
     crime ~ s(district, bs = "mrf", xt = xt),
     data = columb,
   )
-  p <- get_data(sm(getViz(fit), 1)) # TODO currently highjacking plot :D
-  expect_true(is.data.frame(p$fit))
+  data <- get_data(sm(getViz(fit), 1))
+  expect_true(is.data.frame(data$fit))
   # TODO no residuals in mrf. To be expected?
 })
 
@@ -65,8 +64,8 @@ test_that("FS Interaction 1D", {
     y ~ s(x, group, bs = "fs", k = 5),
     data = data.frame(y, x, group),
   )
-  p <- get_data(sm(getViz(fit), 1)) # TODO currently highjacking plot :D
-  expect_true(is.data.frame(p$fit))
+  data <- get_data(sm(getViz(fit), 1))
+  expect_true(is.data.frame(data$fit))
   # TODO No residuals in FS interaction 1D. To be expected?
 })
 
@@ -91,14 +90,60 @@ test_that("SOS", {
 
   dat <- data.frame(la = la * 180 / pi, lo = lo * 180 / pi, y = y)
   fit <- gam(y ~ s(la, lo, bs = "sos", k = 60), data = dat)
-  p <- get_data(sm(getViz(fit), 1))
+  data <- get_data(sm(getViz(fit), 1))
 
-  expect_true(is.data.frame(p$fit))
-  expect_true(is.data.frame(p$res))
+  expect_true(is.data.frame(data$fit))
+  expect_true(is.data.frame(data$res))
+})
+
+
+test_that("P Term Factor", {
+  library(mgcv)
+  set.seed(2)
+  dat <- gamSim(1, n = 200, dist = "normal", scale = 10, verbose = FALSE)
+  dat$fac <- as.factor(sample(c("A1", "A2", "A3"), nrow(dat), replace = TRUE))
+  fit <- gam(y ~ fac, data = dat)
+  data <- get_data(pterm(getViz(fit), 1)) # Note parametric terms have to use pterm.
+  expect_true(is.data.frame(data$fit))
+  expect_true(is.data.frame(data$res))
 })
 
 
 
+test_that("P Term Logical", {
+  library(mgcv)
+  set.seed(2)
+  dat <- gamSim(1, n = 200, dist = "normal", scale = 10, verbose = FALSE)
+  dat$logical <- as.logical(sample(c(TRUE, FALSE), nrow(dat), replace = TRUE))
+  fit <- gam(y ~ logical, data = dat)
+  data <- get_data(pterm(getViz(fit), 1)) # Note parametric terms have to use pterm.
+  expect_true(is.data.frame(data$fit))
+  expect_true(is.data.frame(data$res))
+})
+
+
+
+test_that("P Term Numeric", {
+  library(mgcv)
+  set.seed(2)
+  dat <- gamSim(1, n = 200, dist = "normal", scale = 10, verbose = FALSE)
+  dat$numeric <- rnorm(200)
+  fit <- gam(y ~ numeric, data = dat)
+  data <- get_data(pterm(getViz(fit), 1)) # Note parametric terms have to use pterm.
+  expect_true(is.data.frame(data$fit))
+  expect_true(is.data.frame(data$res))
+})
+
+
+test_that("Random effect", {
+  library(mgcViz)
+  set.seed(2)
+  fit <- gam(travel ~ s(Rail, bs = "re"), data = Rail, method = "REML")
+
+  data <- get_data(sm(getViz(fit), 1))
+  expect_true(is.data.frame(data$fit))
+  # TODO No residuals for random effects. Expected?
+})
 
 
 # TODO just remove trans from all of them?

@@ -106,7 +106,7 @@
 #' print(plot(b, allTerms = TRUE), pages = 1)
 #'
 #' @rdname plot.gamViz
-#' @export get_data.gamViz
+#' @export plot.gamviz
 #' @export
 #'
 plot.gamViz <- function(

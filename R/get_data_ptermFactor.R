@@ -1,48 +1,49 @@
 #'
-#' Plotting numeric parametric effects
+#' Plotting factor or logical parametric effects
 #'
-#' @description This is the plotting method for parametric numerical effects.
-#' @name plot.ptermNumeric
-#' @param x a numerical parametric effect object, extracted using [mgcViz::pterm].
-#' @param n number of grid points used to compute main effect and c.i. lines.
-#' @param xlim if supplied then this pair of numbers are used as the x limits for the plot.
+#' @description These are the plotting methods for parametric factor or logical effects.
+#' @name get_data.ptermFactor
+#' @param x a factor or logical parametric effect object, extracted using [mgcViz::pterm].
 #' @param maxpo maximum number of residuals points that will be used by layers such as
 #'              \code{resRug()} and \code{resPoints()}. If number of datapoints > \code{maxpo},
 #'              then a subsample of \code{maxpo} points will be taken.
 #' @param trans monotonic function to apply to the fit, confidence intervals and residuals,
 #'              before plotting. Monotonicity is not checked.
+#' @param a.facet arguments to be passed to [ggplot2::facet_wrap] or [ggplot2::facet_grid]. The former gets
+#'                called when \code{fix} contains one vector, the latter when \code{fix} contains two vectors.
+#' @param asFact relevant only when working with models fitted with \link{mqgamV}. If
+#'               \code{FALSE} quantile of interest (qu) is treated as a continuous variable, otherwise as
+#'               a factor.
 #' @param ... currently unused.
 #' @return An object of class \code{plotSmooth}.
 #' @examples
 #' # Simulate data and fit GAM
 #' set.seed(3)
 #' dat <- gamSim(1, n = 2000, dist = "normal", scale = 20)
+#' dat$fac <- as.factor(sample(c("A1", "A2", "A3"), nrow(dat), replace = TRUE))
+#' dat$logi <- as.logical(sample(c(TRUE, FALSE), nrow(dat), replace = TRUE))
 #' bs <- "cr"
 #' k <- 12
-#' b <- gam(y ~ x0 + x1 + I(x1^2) + s(x2, bs = bs, k = k) +
-#'   I(x1 * x2) + s(x3, bs = bs), data = dat)
+#' b <- gam(y ~ fac + s(x0) + s(x1) + s(x2) + s(x3) + logi, data = dat)
 #' o <- getViz(b, nsim = 0)
 #'
-#' # Extract first terms and plot it
+#' # Extract factor terms and plot it
 #' pt <- pterm(o, 1)
-#' plot(pt, n = 60) + l_ciPoly() + l_fitLine() + l_ciLine()
+#' plot(pt) + l_ciBar() + l_fitPoints(colour = 2) + l_rug(alpha = 0.2)
 #'
-#' # Extract I(x1^2) terms and plot it with partial residuals
-#' pt <- pterm(o, 3)
-#' plot(pt, n = 60) + l_ciPoly() + l_fitLine() + l_ciLine() + l_points()
+#' # Use barplot instead of points
+#' pt <- pterm(o, 1)
+#' plot(pt) + l_fitBar() + l_ciBar()
 #'
-#' @importFrom mgcv predict.gam
-#' @rdname plot.ptermNumeric
-#' @export get_data.ptermNumeric
+#' # Same with binary varible
+#' pt <- pterm(o, 2)
+#' plot(pt) + l_fitPoints() + l_ciBar()
+#'
+#' @rdname get_data.ptermFactor
+#' @export get_data.ptermFactor
 #' @export
 #'
-plot.ptermNumeric <- function(
-    x,
-    n = 100,
-    xlim = NULL,
-    maxpo = 1e4,
-    trans = identity,
-    ...) {
+get_data.ptermFactor <- function(x, maxpo = 1e4, trans = identity, ...) {
   if (x$order > 1) {
     message("mgcViz does not know how to plot this effect. Returning NULL.")
     return(invisible(NULL))
@@ -53,17 +54,9 @@ plot.ptermNumeric <- function(
   # 1) Do prediction
   X <- gObj$model
 
-  if (n > nrow(X)) {
-    # Model matrix too short, we make it longer
-    X <- X[rep(1:nrow(X), ceiling(n / nrow(X))), ]
-  }
-
-  if (is.null(xlim)) {
-    xlim <- range(X[[x$varNam]])
-  }
-
-  xx <- seq(xlim[1], xlim[2], length = n)
-  data <- X[1:n, ]
+  vr <- as.factor(X[[x$varNam]])
+  xx <- as.factor(levels(vr))
+  data <- X[1:length(xx), ]
   data[[x$varNam]] <- xx
 
   # Suppressing spurious warnings from predict.gam
@@ -93,9 +86,10 @@ plot.ptermNumeric <- function(
     "ty" = trans(unname(.pred$fit)),
     "se" = unname(.pred$se)
   )
+  .dat$misc <- list("trans" = trans)
 
   # 3) Get partial residuals
-  .dat$res <- data.frame("x" = as.vector(gObj$model[[x$varNam]]))
+  .dat$res <- data.frame("x" = as.factor(gObj$model[[x$varNam]]))
 
   # Check if partial residuals are defined: for instance the are not for gamlss models
   if (is.null(gObj$residuals) || is.null(gObj$weights)) {
@@ -104,15 +98,10 @@ plot.ptermNumeric <- function(
     .wr <- sqrt(gObj$weights)
     .wr <- gObj$residuals * .wr / mean(.wr) # weighted working residuals
     .dat$res$y <- trans(
-      .wr + gObj$store$termsFit[, which(colnames(gObj$store$termsFit) == x$nam)]
+      .wr +
+        gObj$store$termsFit[, which(colnames(gObj$store$termsFit) == x$nam)]
     )
   }
-
-  # Exclude residuals falling outside boundaries
-  .dat$res <- .dat$res[
-    .dat$res$x >= xlim[1] & .dat$res$x <= xlim[2], ,
-    drop = FALSE
-  ]
 
   # Sample if too many points (> maxpo)
   nres <- nrow(.dat$res)
@@ -121,20 +110,5 @@ plot.ptermNumeric <- function(
   } else {
     rep(T, nres)
   }
-
-  # 4) Build output plot
-  .dat$misc <- list("trans" = trans)
-
-  .pl <- ggplot(data = .dat$fit, aes("x" = x, "y" = ty)) +
-    labs(title = NULL, x = x$nam, y = paste("f(", x$nam, ")", sep = "")) +
-    theme_bw() +
-    theme(
-      panel.grid.major = element_blank(),
-      panel.grid.minor = element_blank()
-    )
-
-  return(structure(
-    list("ggObj" = .pl, "data" = .dat, "type" = c("Pterm", "Numeric")),
-    class = c("plotSmooth", "gg")
-  ))
+  return(.dat)
 }

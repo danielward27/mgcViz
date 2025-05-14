@@ -96,41 +96,49 @@ which requires \code{o$family$qf} to be defined.
 library(mgcViz)
 set.seed(0)
 n.samp <- 400
-dat <- gamSim(1,n = n.samp, dist = "binary", scale = .33)
+dat <- gamSim(1, n = n.samp, dist = "binary", scale = .33)
 p <- binomial()$linkinv(dat$f) ## binomial p
 n <- sample(c(1, 3), n.samp, replace = TRUE) ## binomial n
 dat$y <- rbinom(n, n, p)
 dat$n <- n
-lr.fit <- gam(y/n ~ s(x0) + s(x1) + s(x2) + s(x3)
-              , family = binomial, data = dat,
-              weights = n, method = "REML")
+lr.fit <- gam(y / n ~ s(x0) + s(x1) + s(x2) + s(x3),
+  family = binomial, data = dat,
+  weights = n, method = "REML"
+)
 lr.fit <- getViz(lr.fit)
 
 # Quick QQ-plot of deviance residuals
 qq(lr.fit, method = "simul2")
 
 # Same, but changing points share and type of reference list
-qq(lr.fit, method = "simul2",
-       a.qqpoi = list("shape" = 1), a.ablin = list("linetype" = 2))
+qq(lr.fit,
+  method = "simul2",
+  a.qqpoi = list("shape" = 1), a.ablin = list("linetype" = 2)
+)
 
 # Simulation based QQ-plot with reference bands
 qq(lr.fit, rep = 100, level = .9, CI = "quantile")
 
 # Simulation based QQ-plot, Pearson resids, all simulations lines shown
-qq(lr.fit, rep = 100, CI = "none", showReps = TRUE, type = "pearson",
-       a.qqpoi = list(shape=19, size = 0.5))
+qq(lr.fit,
+  rep = 100, CI = "none", showReps = TRUE, type = "pearson",
+  a.qqpoi = list(shape = 19, size = 0.5)
+)
 
 ### Now fit the wrong model and check
-pif <- gam(y ~ s(x0) + s(x1) + s(x2) + s(x3)
-           , family = poisson, data = dat, method = "REML")
+pif <- gam(y ~ s(x0) + s(x1) + s(x2) + s(x3),
+  family = poisson, data = dat, method = "REML"
+)
 pif <- getViz(pif)
 
 qq(pif, method = "simul2")
 
 qq(pif, rep = 100, level = .9, CI = "quantile")
 
-qq(pif, rep = 100, type = "pearson", CI = "none", showReps = TRUE,
-               a.qqpoi = list(shape=19, size = 0.5))
+qq(pif,
+  rep = 100, type = "pearson", CI = "none", showReps = TRUE,
+  a.qqpoi = list(shape = 19, size = 0.5)
+)
 
 ######## Example: binary data model violation so gross that you see a problem
 ######## on the QQ plot
@@ -155,32 +163,39 @@ qq(b, rep = 50, showReps = TRUE, CI = "none", shape = 19)
 ########  "Big Data" example:
 set.seed(0)
 n.samp <- 50000
-dat <- gamSim(1,n=n.samp,dist="binary",scale=.33)
+dat <- gamSim(1, n = n.samp, dist = "binary", scale = .33)
 p <- binomial()$linkinv(dat$f) ## binomial p
-n <- sample(c(1,3),n.samp,replace=TRUE) ## binomial n
-dat$y <- rbinom(n,n,p)
+n <- sample(c(1, 3), n.samp, replace = TRUE) ## binomial n
+dat$y <- rbinom(n, n, p)
 dat$n <- n
-lr.fit <- bam(y/n ~ s(x0) + s(x1) + s(x2) + s(x3)
-              , family = binomial, data = dat,
-              weights = n, method = "fREML", discrete = TRUE)
+lr.fit <- bam(y / n ~ s(x0) + s(x1) + s(x2) + s(x3),
+  family = binomial, data = dat,
+  weights = n, method = "fREML", discrete = TRUE
+)
 lr.fit <- getViz(lr.fit)
 
 # Turning discretization off (on by default for large datasets).
 set.seed(414) # Setting the seed because qq.gamViz is doing simulations
-o <- qq(lr.fit, rep = 10, method = "simul1", CI = "normal", showReps = TRUE,
-            discrete = F, a.replin = list(alpha = 0.1))
+o <- qq(lr.fit,
+  rep = 10, method = "simul1", CI = "normal", showReps = TRUE,
+  discrete = F, a.replin = list(alpha = 0.1)
+)
 o # This might take some time!
 
 # Using default discretization
 set.seed(414)
-o <- qq(lr.fit, rep = 10, method = "simul1", CI = "normal", showReps = TRUE,
-            a.replin = list(alpha = 0.1))
+o <- qq(lr.fit,
+  rep = 10, method = "simul1", CI = "normal", showReps = TRUE,
+  a.replin = list(alpha = 0.1)
+)
 o # Much faster plotting!
 
 # Very coarse discretization
 set.seed(414)
-o <- qq(lr.fit, rep = 10, method = "simul1", CI = "normal", showReps = TRUE,
-            ngr = 1e2, a.replin = list(alpha = 0.1), a.qqpoi = list(shape = 19))
+o <- qq(lr.fit,
+  rep = 10, method = "simul1", CI = "normal", showReps = TRUE,
+  ngr = 1e2, a.replin = list(alpha = 0.1), a.qqpoi = list(shape = 19)
+)
 o
 
 # We can also zoom in at no extra costs (most work already done by qq.gamViz)
