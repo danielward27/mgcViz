@@ -14,11 +14,12 @@
 #' ####### 1. Gaussian GAM
 #' library(mgcViz)
 #' set.seed(3)
-#' dat <- gamSim(1,n=1500,dist="normal",scale=20)
-#' dat$fac <- as.factor( sample(c("A1", "A2", "A3"), nrow(dat), replace = TRUE) )
-#' dat$logi <- as.logical( sample(c(TRUE, FALSE), nrow(dat), replace = TRUE) )
-#' bs <- "cr"; k <- 12
-#' b <- gam(y ~ x0 + x1 + I(x1^2) + s(x2,bs=bs,k=k) + fac + x3:fac + I(x1*x2) + logi,data=dat)
+#' dat <- gamSim(1, n = 1500, dist = "normal", scale = 20)
+#' dat$fac <- as.factor(sample(c("A1", "A2", "A3"), nrow(dat), replace = TRUE))
+#' dat$logi <- as.logical(sample(c(TRUE, FALSE), nrow(dat), replace = TRUE))
+#' bs <- "cr"
+#' k <- 12
+#' b <- gam(y ~ x0 + x1 + I(x1^2) + s(x2, bs = bs, k = k) + fac + x3:fac + I(x1 * x2) + logi, data = dat)
 #' o <- getViz(b)
 #'
 #' # Plot effect of 'x0'
@@ -32,7 +33,7 @@
 #' # Plot effect of 'fac'
 #' pt <- pterm(o, 4)
 #' plot(pt) + l_ciBar(colour = "blue") + l_fitPoints(colour = "red") +
-#'            l_rug(alpha = 0.3)
+#'   l_rug(alpha = 0.3)
 #'
 #' # Plot effect of 'logi'
 #' pt <- pterm(o, 6)
@@ -43,8 +44,8 @@
 #' plot(pt)
 #'
 #' ####### 1. Continued: Quantile GAMs
-#' b <- mqgamV(y ~ x0 + x1 + I(x1^2) + s(x2,bs=bs,k=k) + x3:fac +
-#'               I(x1*x2) + logi, data=dat, qu = c(0.3, 0.5, 0.8))
+#' b <- mqgamV(y ~ x0 + x1 + I(x1^2) + s(x2, bs = bs, k = k) + x3:fac +
+#'   I(x1 * x2) + logi, data = dat, qu = c(0.3, 0.5, 0.8))
 #'
 #' plot(pterm(b, 3)) + l_ciBar(colour = 2) + l_fitPoints()
 #'
@@ -55,9 +56,10 @@
 #'
 #' ####### 2. Gaussian GAMLSS model
 #' library(MASS)
-#' mcycle$fac <- as.factor( sample(c("z", "k", "a", "f"), nrow(mcycle), replace = TRUE) )
-#' b <- gam(list(accel~times + I(times^2) + s(times,k=10), ~ times + fac + s(times)),
-#'           data=mcycle,family=gaulss(), optimizer = "efs")
+#' mcycle$fac <- as.factor(sample(c("z", "k", "a", "f"), nrow(mcycle), replace = TRUE))
+#' b <- gam(list(accel ~ times + I(times^2) + s(times, k = 10), ~ times + fac + s(times)),
+#'   data = mcycle, family = gaulss(), optimizer = "efs"
+#' )
 #' o <- getViz(b)
 #'
 #' # Plot effect of 'I(times^2)' on mean: notice that partial residuals
@@ -73,7 +75,7 @@
 #' # Plot effect of 'fac' in second linear predictor.
 #' pt <- pterm(o, 4)
 #' plot(pt) + l_ciBar(colour = "blue") + l_fitPoints(colour = "red") +
-#'            l_rug()
+#'   l_rug()
 #'
 #' @rdname pterm
 #' @export pterm
@@ -176,4 +178,22 @@ pterm <- function(o, select) {
   class(out) <- cl
 
   return(out)
+}
+
+
+# Extract class of variable
+.mapVarClass <- function(.cl) {
+  if ("integer" %in% .cl) {
+    return("numeric")
+  }
+  if ("numeric" %in% .cl) {
+    return("numeric")
+  }
+  if ("logical" %in% .cl) {
+    return("logical")
+  }
+  if ("factor" %in% .cl || "character" %in% .cl) {
+    return("factor")
+  }
+  return(.cl) # Not covered by mgcViz
 }

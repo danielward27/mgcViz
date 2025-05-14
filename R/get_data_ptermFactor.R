@@ -79,36 +79,36 @@ get_data.ptermFactor <- function(x, maxpo = 1e4, trans = identity, ...) {
   )
 
   # 2) Build dataset on fitted effect
-  .dat <- list()
-  .dat$fit <- data.frame(
+  data <- list()
+  data$fit <- data.frame(
     "x" = xx,
     "y" = unname(.pred$fit),
     "ty" = trans(unname(.pred$fit)),
     "se" = unname(.pred$se)
   )
-  .dat$misc <- list("trans" = trans)
+  data$misc <- list("trans" = trans)
 
   # 3) Get partial residuals
-  .dat$res <- data.frame("x" = as.factor(gObj$model[[x$varNam]]))
+  data$res <- data.frame("x" = as.factor(gObj$model[[x$varNam]]))
 
   # Check if partial residuals are defined: for instance the are not for gamlss models
   if (is.null(gObj$residuals) || is.null(gObj$weights)) {
-    .dat$res$y <- NULL
+    data$res$y <- NULL
   } else {
     .wr <- sqrt(gObj$weights)
     .wr <- gObj$residuals * .wr / mean(.wr) # weighted working residuals
-    .dat$res$y <- trans(
+    data$res$y <- trans(
       .wr +
         gObj$store$termsFit[, which(colnames(gObj$store$termsFit) == x$nam)]
     )
   }
 
   # Sample if too many points (> maxpo)
-  nres <- nrow(.dat$res)
-  .dat$res$sub <- if (nres > maxpo) {
+  nres <- nrow(data$res)
+  data$res$sub <- if (nres > maxpo) {
     sample(c(rep(T, maxpo), rep(F, nres - maxpo)))
   } else {
     rep(T, nres)
   }
-  return(.dat)
+  return(data)
 }

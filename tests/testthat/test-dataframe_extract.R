@@ -144,11 +144,3 @@ test_that("Random effect", {
   expect_true(is.data.frame(data$fit))
   # TODO No residuals for random effects. Expected?
 })
-
-
-# TODO just remove trans from all of them?
-
-# What I do
-# - Go to private plot
-# - Delete plotting code and return data only
-# -  Remove class(out) <- c("plotSmooth", "gg")

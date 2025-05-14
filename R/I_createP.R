@@ -20,17 +20,19 @@
 #' @noRd
 #' @examples
 #' library(mgcViz)
-#' n  <- 1e3
+#' n <- 1e3
 #' x1 <- rnorm(n)
 #' x2 <- rnorm(n)
-#' dat <- data.frame("x1" = x1, "x2" = x2,
-#'                   "y" = sin(x1) + 0.5 * x2^2 + pmax(x2, 0.2) * rnorm(n))
-#' b <- bam(y ~ s(x1)+s(x2), data = dat, method = "fREML", discrete = TRUE)
+#' dat <- data.frame(
+#'   "x1" = x1, "x2" = x2,
+#'   "y" = sin(x1) + 0.5 * x2^2 + pmax(x2, 0.2) * rnorm(n)
+#' )
+#' b <- bam(y ~ s(x1) + s(x2), data = dat, method = "fREML", discrete = TRUE)
 #' v <- getViz(b)(1)
 #' class(v)
 #' o <- v
 #' o$smooth <- o$gObj$smooth[[o$ism]]
-#' fv.terms <- o$store$termsFit[ , o$store$np + o$ism]
+#' fv.terms <- o$store$termsFit[, o$store$np + o$ism]
 #' init <- mgcViz:::.initializeXXX(o, unconditional = FALSE, residuals = FALSE, resDen = "cond", se = TRUE, fv.terms)
 #' o <- init$o
 #' w.resid <- init$w.resid
@@ -45,30 +47,29 @@
 #' too.far <- 0.1
 #' seWithMean <- FALSE
 #' b <- ylab <- xlim <- ylim <- main <- NULL
-#' resDen = "none"
+#' resDen <- "none"
 #' @noRd
 .createP <- function(
-  sm,
-  x,
-  partial.resids,
-  se,
-  n,
-  n2,
-  xlab,
-  ylab,
-  main,
-  ylim,
-  xlim,
-  too.far,
-  se1.mult,
-  se2.mult,
-  seWithMean,
-  fitSmooth,
-  w.resid,
-  resDen,
-  nsim,
-  ...
-) {
+    sm,
+    x,
+    partial.resids,
+    se,
+    n,
+    n2,
+    xlab,
+    ylab,
+    main,
+    ylim,
+    xlim,
+    too.far,
+    se1.mult,
+    se2.mult,
+    seWithMean,
+    fitSmooth,
+    w.resid,
+    resDen,
+    nsim,
+    ...) {
   first <- sm$first.para
   last <- sm$last.para
   edf <- sum(x$edf[first:last]) ## Effective DoF for this term
@@ -129,11 +130,11 @@
           if (nsim > 0) {
             P$simF <- drop(P$fit) +
               P$X %*%
-                t(rmvn(
-                  nsim,
-                  numeric(length(p)),
-                  x$Vp[first:last, first:last, drop = FALSE]
-                ))
+              t(rmvn(
+                nsim,
+                numeric(length(p)),
+                x$Vp[first:last, first:last, drop = FALSE]
+              ))
           }
           se.fit <- sqrt(pmax(
             0,

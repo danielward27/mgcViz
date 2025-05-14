@@ -86,8 +86,8 @@ get_data.ptermNumeric <- function(
   )
 
   # 2) Build dataset on fitted effect
-  .dat <- list()
-  .dat$fit <- data.frame(
+  data <- list()
+  data$fit <- data.frame(
     "x" = xx,
     "y" = unname(.pred$fit),
     "ty" = trans(unname(.pred$fit)),
@@ -95,33 +95,33 @@ get_data.ptermNumeric <- function(
   )
 
   # 3) Get partial residuals
-  .dat$res <- data.frame("x" = as.vector(gObj$model[[x$varNam]]))
+  data$res <- data.frame("x" = as.vector(gObj$model[[x$varNam]]))
 
   # Check if partial residuals are defined: for instance the are not for gamlss models
   if (is.null(gObj$residuals) || is.null(gObj$weights)) {
-    .dat$res$y <- NULL
+    data$res$y <- NULL
   } else {
     .wr <- sqrt(gObj$weights)
     .wr <- gObj$residuals * .wr / mean(.wr) # weighted working residuals
-    .dat$res$y <- trans(
+    data$res$y <- trans(
       .wr + gObj$store$termsFit[, which(colnames(gObj$store$termsFit) == x$nam)]
     )
   }
 
   # Exclude residuals falling outside boundaries
-  .dat$res <- .dat$res[
-    .dat$res$x >= xlim[1] & .dat$res$x <= xlim[2], ,
+  data$res <- data$res[
+    data$res$x >= xlim[1] & data$res$x <= xlim[2], ,
     drop = FALSE
   ]
 
   # Sample if too many points (> maxpo)
-  nres <- nrow(.dat$res)
-  .dat$res$sub <- if (nres > maxpo) {
+  nres <- nrow(data$res)
+  data$res$sub <- if (nres > maxpo) {
     sample(c(rep(T, maxpo), rep(F, nres - maxpo)))
   } else {
     rep(T, nres)
   }
 
-  .dat$misc <- list("trans" = trans)
-  return(.dat)
+  data$misc <- list("trans" = trans)
+  return(data)
 }

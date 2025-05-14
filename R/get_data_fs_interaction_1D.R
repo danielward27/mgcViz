@@ -85,15 +85,15 @@ get_data.fs.interaction.1D <- function(
     seWithMean = FALSE
   )
 
-  .dat <- list()
-  .dat$fit <- data.frame(
+  data <- list()
+  data$fit <- data.frame(
     "x" = rep(P$x, P$nf),
     "y" = P$fit,
     "ty" = trans(P$fit),
     "id" = as.factor(rep(P$smooth$flev, each = P$n))
   )
-  .dat$misc <- list("trans" = trans)
-  return(.dat)
+  data$misc <- list("trans" = trans)
+  return(data)
 }
 
 
