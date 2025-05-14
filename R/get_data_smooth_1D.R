@@ -107,15 +107,6 @@ plot.mgcv.smooth.1D <- function(
     seWithMean = seWithMean,
     nsim = nsim
   )
-
-  # 2) Produce output object
-  out <- .plot.mgcv.smooth.1D(x = P$smooth, P = P, trans = trans, maxpo = maxpo)
-  return(out)
-}
-
-########################
-#' @noRd
-.plot.mgcv.smooth.1D <- function(x, P, trans, maxpo) {
   .dat <- list()
   if (!is.null(P$raw)) {
     # Construct data.frame of partial residuals

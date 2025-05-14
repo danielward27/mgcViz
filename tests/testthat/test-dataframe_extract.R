@@ -49,7 +49,6 @@ test_that("MRF", {
   )
   p <- plot(sm(getViz(fit), 1)) # TODO currently highjacking plot :D
   expect_true(is.data.frame(p$fit))
-
   # TODO no residuals in mrf. To be expected?
 })
 
@@ -70,6 +69,34 @@ test_that("FS Interaction 1D", {
   expect_true(is.data.frame(p$fit))
   # TODO No residuals in FS interaction 1D. To be expected?
 })
+
+
+
+test_that("SOS", {
+  library(mgcv)
+  set.seed(2)
+  n <- 200
+
+  f <- function(la, lo) {
+    sin(lo) * cos(la - .3)
+  }
+  lo <- runif(n) * 2 * pi - pi
+  la <- runif(3 * n) * pi - pi / 2
+  ind <- runif(3 * n) <= cos(la)
+  la <- la[ind]
+  la <- la[1:n]
+
+  ff <- f(la, lo)
+  y <- ff + 0.2 * rnorm(n)
+
+  dat <- data.frame(la = la * 180 / pi, lo = lo * 180 / pi, y = y)
+  fit <- gam(y ~ s(la, lo, bs = "sos", k = 60), data = dat)
+  p <- plot(sm(getViz(fit), 1))
+
+  expect_true(is.data.frame(p$fit))
+  expect_true(is.data.frame(p$res))
+})
+
 
 
 

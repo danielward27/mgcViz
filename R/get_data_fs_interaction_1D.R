@@ -67,7 +67,6 @@ plot.fs.interaction.1D <- function(
     xlim = NULL,
     trans = identity,
     ...) {
-  # 1) Prepare data
   P <- prepareP(
     o = x,
     unconditional = FALSE,
@@ -86,22 +85,13 @@ plot.fs.interaction.1D <- function(
     seWithMean = FALSE
   )
 
-  # 2) Produce output object
-  out <- .plot.fs.interaction.1D(x = P$smooth, P = P, trans = trans)
-  return(out)
-}
-
-########################
-#' @noRd
-.plot.fs.interaction.1D <- function(x, P, trans) {
   .dat <- list()
-  # 1) Build dataset on fitted effect
   .dat$fit <- data.frame(
     "x" = rep(P$x, P$nf),
     "y" = P$fit,
     "ty" = trans(P$fit),
-    "id" = as.factor(rep(x$flev, each = P$n))
+    "id" = as.factor(rep(P$smooth$flev, each = P$n))
   )
   .dat$misc <- list("trans" = trans)
   return(.dat)
-} ## end .plot.fs.interaction.1D
+}

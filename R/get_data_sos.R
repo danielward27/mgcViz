@@ -38,60 +38,59 @@
 #' set.seed(0)
 #' n <- 400
 #'
-#' f <- function(la,lo) { ## a test function...
-#'   sin(lo)*cos(la-.3)
+#' f <- function(la, lo) { ## a test function...
+#'   sin(lo) * cos(la - .3)
 #' }
 #'
 #' ## generate with uniform density on sphere...
-#' lo <- runif(n)*2*pi-pi ## longitude
-#' la <- runif(3*n)*pi-pi/2
-#' ind <- runif(3*n)<=cos(la)
-#' la <- la[ind];
+#' lo <- runif(n) * 2 * pi - pi ## longitude
+#' la <- runif(3 * n) * pi - pi / 2
+#' ind <- runif(3 * n) <= cos(la)
+#' la <- la[ind]
 #' la <- la[1:n]
 #'
-#' ff <- f(la,lo)
-#' y <- ff + rnorm(n)*.2 ## test data
+#' ff <- f(la, lo)
+#' y <- ff + rnorm(n) * .2 ## test data
 #'
 #' ## generate data for plotting truth...
-#' lam <- seq(-pi/2,pi/2,length=30)
-#' lom <- seq(-pi,pi,length=60)
-#' gr <- expand.grid(la=lam,lo=lom)
-#' fz <- f(gr$la,gr$lo)
-#' zm <- matrix(fz,30,60)
+#' lam <- seq(-pi / 2, pi / 2, length = 30)
+#' lom <- seq(-pi, pi, length = 60)
+#' gr <- expand.grid(la = lam, lo = lom)
+#' fz <- f(gr$la, gr$lo)
+#' zm <- matrix(fz, 30, 60)
 #'
 #' require(mgcv)
-#' dat <- data.frame(la = la *180/pi,lo = lo *180/pi,y=y)
+#' dat <- data.frame(la = la * 180 / pi, lo = lo * 180 / pi, y = y)
 #'
 #' ## fit spline on sphere model...
-#' bp <- gam(y~s(la,lo,bs="sos",k=60),data=dat)
+#' bp <- gam(y ~ s(la, lo, bs = "sos", k = 60), data = dat)
 #' bp <- getViz(bp)
 #'
 #' # Plot on sphere
-#' plot(sm(bp, 1), scheme=0) + l_fitRaster() + l_fitContour() +
-#'    l_points(shape = 19) + l_rug() + l_coordContour() + l_bound()
+#' plot(sm(bp, 1), scheme = 0) + l_fitRaster() + l_fitContour() +
+#'   l_points(shape = 19) + l_rug() + l_coordContour() + l_bound()
 #'
 #' # Plotting as in standard 2D plots
-#' plot(sm(bp, 1), scheme=1) + l_fitRaster() + l_fitContour() +
-#'            l_points(shape = 19) + l_rug()
+#' plot(sm(bp, 1), scheme = 1) + l_fitRaster() + l_fitContour() +
+#'   l_points(shape = 19) + l_rug()
 #' @rdname plot.sos.smooth
 #' @export plot.sos.smooth
 #' @export
 #'
 plot.sos.smooth <- function(
-  x,
-  n = 40,
-  xlim = NULL,
-  ylim = NULL,
-  maxpo = 1e4,
-  too.far = 0.1,
-  phi = 30,
-  theta = 30,
-  trans = identity,
-  scheme = 0,
-  seWithMean = FALSE,
-  unconditional = FALSE,
-  ...
-) {
+    x,
+    n = 40,
+    xlim = NULL,
+    ylim = NULL,
+    maxpo = 1e4,
+    too.far = 0.1,
+    phi = 30,
+    theta = 30,
+    trans = identity,
+    scheme = 0,
+    seWithMean = FALSE,
+    unconditional = FALSE,
+    ...) {
   if (length(scheme) > 1) {
     scheme <- scheme[1]
     warning("scheme should be a single number")
@@ -132,18 +131,15 @@ plot.sos.smooth <- function(
   } else {
     # standard 2D plot
 
-    out <- .plot.mgcv.smooth.2D(
+    out <- .get_data_shared_2d(
       x = P$smooth,
       P = P,
       trans = trans,
       maxpo = maxpo,
-      flip = TRUE
+      flip = TRUE,
     )
     out$type <- "sos1"
   }
-
-  class(out) <- c("plotSmooth", "gg")
-
   return(out)
 }
 
@@ -187,18 +183,5 @@ plot.sos.smooth <- function(
   }
 
   .dat$misc <- list("trans" = trans)
-
-  .pl <- ggplot(data = .dat$fit, aes(x = x, y = y, z = z)) +
-    labs(title = P$main, x = P$xlab, y = P$ylab) +
-    theme_bw() +
-    theme(
-      panel.grid.major = element_blank(),
-      panel.grid.minor = element_blank(),
-      axis.line = element_blank(),
-      panel.border = element_blank(),
-      axis.text = element_blank(),
-      axis.ticks = element_blank()
-    )
-
-  return(list("ggObj" = .pl, "data" = .dat))
+  return("data" = .dat)
 }

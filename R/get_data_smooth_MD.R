@@ -85,7 +85,6 @@ plot.mgcv.smooth.MD <- function(
     too.far <- c(too.far, NA)
   }
 
-  # 1) Prepare data
   P <- prepareP(
     o = x,
     unconditional = unconditional,
@@ -105,7 +104,6 @@ plot.mgcv.smooth.MD <- function(
     fix = fix
   )
 
-  # 2) Produce output object
-  out <- .plot.mgcv.smooth.2D(x = P$smooth, P = P, trans = trans, maxpo = maxpo)
+  out <- .get_data_shared_2d(x = P$smooth, P = P, trans = trans, maxpo = maxpo)
   return(out)
 }

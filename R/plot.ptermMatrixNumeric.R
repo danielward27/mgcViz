@@ -3,12 +3,11 @@
 #' @export
 #'
 plot.ptermMatrixNumeric <- function(
-  x,
-  n = 100,
-  xlim = NULL,
-  trans = identity,
-  ...
-) {
+    x,
+    n = 100,
+    xlim = NULL,
+    trans = identity,
+    ...) {
   if (x$order > 1) {
     message("mgcViz does not know how to plot this effect. Returning NULL.")
     return(invisible(NULL))

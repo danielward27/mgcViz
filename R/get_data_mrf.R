@@ -43,11 +43,10 @@
 plot.mrf.smooth <- function(
     x,
     trans = identity,
-    seWithMean = FALSE,
+    se_with_mean = FALSE,
     unconditional = FALSE,
     ...) {
-  # 1) Prepare data
-  P <- prepareP(
+  p <- prepareP(
     o = x,
     unconditional = unconditional,
     residuals = TRUE,
@@ -62,27 +61,16 @@ plot.mrf.smooth <- function(
     ylim = NULL,
     xlim = NULL,
     too.far = NULL,
-    seWithMean = seWithMean
+    seWithMean = se_with_mean
   )
 
-  # 2) Produce output object
-  out <- .plot.mrf.smooth(x = P$smooth, P = P, trans = trans)
-  return(out)
-}
-
-
-############### Internal function
-#' @noRd
-.plot.mrf.smooth <- function(x, P, trans) {
   .dat <- list()
-
-  # Build dataset on fitted effect
-  .npb <- sapply(x$xt$polys, nrow)
-  .dat$fit <- as.data.frame(do.call("rbind", x$xt$polys))
+  .npb <- sapply(p$smooth$xt$polys, nrow)
+  .dat$fit <- as.data.frame(do.call("rbind", p$smooth$xt$polys))
   names(.dat$fit) <- c("x", "y")
-  .dat$fit$z <- rep(P$fit, .npb)
+  .dat$fit$z <- rep(p$fit, .npb)
   .dat$fit$tz <- trans(.dat$fit$z)
-  .dat$fit$id <- rep(P$raw, .npb)
+  .dat$fit$id <- rep(p$raw, .npb)
   .dat$misc <- list("trans" = trans)
   return(.dat)
 }

@@ -92,14 +92,14 @@ plot.mgcv.smooth.2D <- function(
   )
 
   # 2) Produce output object
-  out <- .plot.mgcv.smooth.2D(x = P$smooth, P = P, trans = trans, maxpo = maxpo)
+  out <- .get_data_shared_2d(x = P$smooth, P = P, trans = trans, maxpo = maxpo)
   return(out)
 }
 
 
-############### Internal function
+# Used by e.g MD and SOS
 #' @noRd
-.plot.mgcv.smooth.2D <- function(x, P, trans, maxpo, flip = FALSE) {
+.get_data_shared_2d <- function(x, P, trans, maxpo, flip = FALSE) {
   .dat <- list()
   # 1) Build dataset on fitted effect
   P$fit[P$exclude] <- NA
