@@ -62,16 +62,12 @@ n <- 10
 sim <- postSim(o = b, nsim = n, unconditional = TRUE)
 
 # Posterior simulations in grey and data in red
-plot(rep(mcycle$times, n), as.vector(sim), col = "grey",
-     ylab = "Acceleration", xlab = "Times")
 points(mcycle$times, mcycle$accel, col = 2)
 
 # There is clear disagreement between simulations' and data's
 # conditional variance, which can be solved using flexible GAMLSS model:
 b <- gam(list(accel~s(times, k=20), ~s(times)), data=mcycle, family = gaulss)
 sim <- postSim(o = b, nsim = n)
-plot(rep(mcycle$times, n), as.vector(sim), col = "grey",
-     ylab = "Acceleration", xlab = "Times")
 points(mcycle$times, mcycle$accel, col = 2)
 
 }

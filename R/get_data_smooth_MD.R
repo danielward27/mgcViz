@@ -94,9 +94,6 @@ get_data.mgcv.smooth.MD <- function(
     se.mult = 1,
     n = NULL,
     n2 = n,
-    xlab = NULL,
-    ylab = NULL,
-    main = NULL,
     ylim = ylim,
     xlim = xlim,
     too.far = too.far,
@@ -117,10 +114,6 @@ get_data.mgcv.smooth.MD <- function(
     data = NULL,
     se.mult = 2,
     n2 = 40,
-    label = "",
-    xlab = NULL,
-    ylab = NULL,
-    main = NULL,
     ylim = NULL,
     xlim = NULL,
     too.far = 0.1,
@@ -131,8 +124,6 @@ get_data.mgcv.smooth.MD <- function(
     iv <- x$term[!(x$term %in% ov)]
     xterm <- iv[1]
     yterm <- iv[2]
-    xlabel <- ifelse(is.null(xlab), xterm, xlab)
-    ylabel <- ifelse(is.null(ylab), yterm, ylab)
     raw <- data.frame(
       x = as.numeric(data[xterm][[1]]),
       y = as.numeric(data[yterm][[1]])
@@ -187,10 +178,7 @@ get_data.mgcv.smooth.MD <- function(
     }
 
     X <- PredictMat(x, dat) ## prediction matrix for this term
-    if (is.null(main)) {
-      # TODO: are label/main both necessary ? seems not
-      main <- label
-    }
+    
     if (is.null(ylim)) {
       ylim <- range(ym)
     }
@@ -204,9 +192,6 @@ get_data.mgcv.smooth.MD <- function(
       scale = FALSE,
       se = TRUE,
       raw = raw,
-      xlab = xlabel,
-      ylab = ylabel,
-      main = main,
       se.mult = se.mult,
       ylim = ylim,
       xlim = xlim,

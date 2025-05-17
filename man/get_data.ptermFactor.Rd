@@ -22,9 +22,6 @@ before plotting. Monotonicity is not checked.}
 
 \item{...}{currently unused.}
 
-\item{a.facet}{arguments to be passed to \link[ggplot2:facet_wrap]{ggplot2::facet_wrap} or \link[ggplot2:facet_grid]{ggplot2::facet_grid}. The former gets
-called when \code{fix} contains one vector, the latter when \code{fix} contains two vectors.}
-
 \item{asFact}{relevant only when working with models fitted with \link{mqgamV}. If
 \code{FALSE} quantile of interest (qu) is treated as a continuous variable, otherwise as
 a factor.}

@@ -52,9 +52,6 @@ matrix is used to compute uncertainty bands, if available.
 Otherwise the bands treat the smoothing parameters as fixed.}
 
 \item{...}{currently unused.}
-
-\item{a.facet}{arguments to be passed to \link[ggplot2:facet_wrap]{ggplot2::facet_wrap} or \link[ggplot2:facet_grid]{ggplot2::facet_grid}. The former gets
-called when \code{fix} contains one vector, the latter when \code{fix} contains two vectors.}
 }
 \value{
 An objects of class \code{plotSmooth}.

@@ -76,9 +76,6 @@ get_data.fs.interaction.1D <- function(
     se.mult = 1,
     n = n,
     n2 = NULL,
-    xlab = NULL,
-    ylab = NULL,
-    main = NULL,
     ylim = NULL,
     xlim = xlim,
     too.far = NULL,
@@ -103,11 +100,7 @@ get_data.fs.interaction.1D <- function(
 .prepare.fs.interaction <- function(
     x,
     data = NULL,
-    label = "",
     n = 100,
-    xlab = NULL,
-    ylab = NULL,
-    main = NULL,
     ylim = NULL,
     xlim = NULL,
     ...) {
@@ -127,8 +120,6 @@ get_data.fs.interaction.1D <- function(
   dat <- data.frame(as.factor(fac), xx)
   names(dat) <- c(x$fterm, x$base$term)
   X <- PredictMat(x, dat)
-  xlabel <- if (is.null(xlab)) x$base$term else xlab
-  ylabel <- if (is.null(ylab)) label else ylab
   return(list(
     X = X,
     scale = TRUE,
@@ -136,9 +127,6 @@ get_data.fs.interaction.1D <- function(
     raw = raw,
     xlim = xlim,
     ylim = ylim,
-    xlab = xlabel,
-    ylab = ylabel,
-    main = main,
     x = xx,
     n = n,
     nf = nf

@@ -26,8 +26,6 @@
 #'                   relates purely to the centred smooth itself. Marra and Wood (2012) suggests
 #'                   that TRUE results in better coverage performance, and this is also suggested
 #'                   by simulation.
-#' @param a.facet arguments to be passed to [ggplot2::facet_wrap] or [ggplot2::facet_grid]. The former gets
-#'                called when \code{fix} contains one vector, the latter when \code{fix} contains two vectors.
 #' @param ... currently unused.
 #' @return An objects of class \code{plotSmooth}.
 #' @references Marra, G and S.N. Wood (2012) Coverage Properties of Confidence Intervals for
@@ -82,9 +80,6 @@ get_data.mgcv.smooth.2D <- function(
     se.mult = 1,
     n = NULL,
     n2 = n,
-    xlab = NULL,
-    ylab = NULL,
-    main = NULL,
     ylim = ylim,
     xlim = xlim,
     too.far = too.far,
@@ -145,9 +140,6 @@ get_data.mgcv.smooth.2D <- function(
     .dat2$res$x <- .dat$res$y
     .dat2$res$y <- .dat$res$x
     .dat <- .dat2
-    tmp <- P$xlab
-    P$xlab <- P$ylab
-    P$ylab <- tmp
   }
 
   return(.dat)
@@ -160,10 +152,6 @@ get_data.mgcv.smooth.2D <- function(
     data = NULL,
     se.mult = 2,
     n2 = 40,
-    label = "",
-    xlab = NULL,
-    ylab = NULL,
-    main = NULL,
     ylim = NULL,
     xlim = NULL,
     too.far = 0.1,
@@ -172,8 +160,6 @@ get_data.mgcv.smooth.2D <- function(
   if (x$plot.me) {
     xterm <- x$term[1]
     yterm <- x$term[2]
-    xlabel <- ifelse(is.null(xlab), xterm, xlab)
-    ylabel <- ifelse(is.null(ylab), yterm, ylab)
     raw <- data.frame(
       x = as.numeric(data[xterm][[1]]),
       y = as.numeric(data[yterm][[1]])
@@ -206,10 +192,7 @@ get_data.mgcv.smooth.2D <- function(
       colnames(dat) <- c(xterm, yterm)
     } ## prediction data.frame complete
     X <- PredictMat(x, dat) ## prediction matrix for this term
-    if (is.null(main)) {
-      # TODO: are label/main both necessary ? seems not
-      main <- label
-    }
+    
     if (is.null(ylim)) {
       ylim <- range(ym)
     }
@@ -223,9 +206,6 @@ get_data.mgcv.smooth.2D <- function(
       scale = FALSE,
       se = TRUE,
       raw = raw,
-      xlab = xlabel,
-      ylab = ylabel,
-      main = main,
       se.mult = se.mult,
       ylim = ylim,
       xlim = xlim,

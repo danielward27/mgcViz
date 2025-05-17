@@ -97,9 +97,6 @@ get_data.mgcv.smooth.1D <- function(
     se.mult = 1,
     n = n,
     n2 = NULL,
-    xlab = NULL,
-    ylab = NULL,
-    main = NULL,
     ylim = NULL,
     xlim = xlim,
     too.far = NULL,
@@ -151,13 +148,9 @@ get_data.mgcv.smooth.1D <- function(
 .preparePlotSmooth1D <- function(
     x,
     data,
-    label = "",
     se.mult = 1,
     n = 100,
     xlim = NULL,
-    xlab = NULL,
-    ylab = NULL,
-    main = NULL,
     ...) {
   out <- NULL
   if (x$plot.me) {
@@ -178,8 +171,7 @@ get_data.mgcv.smooth.1D <- function(
       names(dat) <- x$term
     } # Finished preparing prediction data.frame
     X <- PredictMat(x, dat) # prediction matrix for this term
-    xlabel <- ifelse(is.null(xlab), x$term, xlab)
-    ylabel <- ifelse(is.null(ylab), label, ylab)
+
     if (is.null(xlim)) {
       xlim <- range(xx)
     }
@@ -189,9 +181,6 @@ get_data.mgcv.smooth.1D <- function(
       scale = TRUE,
       se = TRUE,
       raw = raw,
-      xlab = xlabel,
-      ylab = ylabel,
-      main = main,
       se.mult = se.mult,
       xlim = xlim
     )

@@ -30,25 +30,11 @@
 #' @rdname getViz
 #' @export getViz
 getViz <- function(o, nsim = 0, post = FALSE, newdata, ...) {
-  if (inherits(o, "list")) {
-    tmp <- names(o)
-    # lapply does not handle missing arguments in the "...", need to pass it explictly
-    o <- lapply(
-      o,
-      function(.x, newdata, ...) {
-        getViz(.x, nsim = nsim, post = post, newdata = newdata, ...)
-      },
-      newdata = newdata
-    )
-    if (is.null(tmp)) names(o) <- 1:length(o)
-    return(o)
-  }
 
   if (!inherits(o, "gam")) {
     stop("\"o\" should be of class \"gam\"")
   }
 
-  # If `o` is already a `gamViz` object we don't recompute the `termsFit`
   if (!inherits(o, "gamViz")) {
     tmp <- o$pterms
     np <- if (is.list(tmp)) {

@@ -22,9 +22,6 @@
 #'   smooth. Default value 100.
 #' @param n2 Square root of number of points used to grid estimates of 2-d
 #'   functions for contouring.
-#' @param xlab If supplied then this will be used as the x label for all plots.
-#' @param ylab If supplied then this will be used as the y label for all plots.
-#' @param main Used as title (or z axis label) for plots if supplied.
 #' @param ylim If supplied then this pair of numbers are used as the y limits
 #'   for each plot.
 #' @param xlim If supplied then this pair of numbers are used as the x limits
@@ -42,14 +39,10 @@
 .prepare.mgcv.smooth <- function(
     x,
     data = NULL,
-    label = "",
     se1.mult = 1,
     se2.mult = 2,
     n = 100,
     n2 = 40,
-    xlab = NULL,
-    ylab = NULL,
-    main = NULL,
     ylim = NULL,
     xlim = NULL,
     too.far = 0.1,
@@ -58,13 +51,9 @@
     out <- .preparePlotSmooth1D(
       x = x,
       data = data,
-      label = label,
       se.mult = se1.mult,
       n = n,
       xlim = xlim,
-      xlab = xlab,
-      ylab = ylab,
-      main = main,
       ...
     )
   }
@@ -75,10 +64,6 @@
       data = data,
       se.mult = se2.mult,
       n2 = n2,
-      label = label,
-      xlab = xlab,
-      ylab = ylab,
-      main = main,
       ylim = ylim,
       xlim = xlim,
       too.far = too.far,
@@ -92,10 +77,6 @@
       data = data,
       se.mult = se2.mult,
       n2 = n2,
-      label = label,
-      xlab = xlab,
-      ylab = ylab,
-      main = main,
       ylim = ylim,
       xlim = xlim,
       too.far = too.far,

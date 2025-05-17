@@ -55,9 +55,6 @@ get_data.mrf.smooth <- function(
     se.mult = 1,
     n = NULL,
     n2 = NULL,
-    xlab = NULL,
-    ylab = NULL,
-    main = NULL,
     ylim = NULL,
     xlim = NULL,
     too.far = NULL,
@@ -81,16 +78,12 @@ get_data.mrf.smooth <- function(
 .prepare.mrf.smooth <- function(
     x,
     data,
-    label,
     se1.mult,
     se2.mult,
     partial.resids,
     se,
     n,
     n2,
-    xlab,
-    ylab,
-    main,
     ylim,
     xlim,
     too.far,
@@ -103,15 +96,10 @@ get_data.mrf.smooth <- function(
   dat <- data.frame(x = factor(names(x$xt$polys), levels = levels(x$knots)))
   names(dat) <- x$term
   X <- PredictMat(x, dat) # prediction matrix for this term
-  if (is.null(xlab)) xlabel <- "" else xlabel <- xlab
-  if (is.null(ylab)) ylabel <- "" else ylabel <- ylab
   return(list(
     X = X,
     scale = FALSE,
     se = FALSE,
-    raw = raw,
-    xlab = xlabel,
-    ylab = ylabel,
-    main = label
+    raw = raw
   ))
 }

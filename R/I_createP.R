@@ -4,9 +4,6 @@
 #' @param se  XXX
 #' @param n  XXX
 #' @param n2  XXX
-#' @param xlab  XXX
-#' @param ylab  XXX
-#' @param main  XXX
 #' @param ylim  XXX
 #' @param xlim  XXX
 #' @param too.far  XXX
@@ -46,7 +43,6 @@
 #' x <- o$gObj
 #' too.far <- 0.1
 #' seWithMean <- FALSE
-#' b <- ylab <- xlim <- ylim <- main <- NULL
 #' resDen <- "none"
 #' @noRd
 .createP <- function(
@@ -56,9 +52,6 @@
     se,
     n,
     n2,
-    xlab,
-    ylab,
-    main,
     ylim,
     xlim,
     too.far,
@@ -73,7 +66,6 @@
   first <- sm$first.para
   last <- sm$last.para
   edf <- sum(x$edf[first:last]) ## Effective DoF for this term
-  term.lab <- .subEDF(sm$label, edf)
   attr(sm, "coefficients") <- x$coefficients[first:last] # Relevant coeffs for i-th smooth
   P <- .prepare(
     x = sm,
@@ -82,10 +74,6 @@
     se2.mult = se2.mult,
     n = n,
     n2 = n2,
-    xlab = xlab,
-    ylab = ylab,
-    main = main,
-    label = term.lab,
     ylim = ylim,
     xlim = xlim,
     too.far = too.far,
