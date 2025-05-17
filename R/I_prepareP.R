@@ -32,7 +32,7 @@ prepareP <- function(
 
   P <- .createP(
     sm = o$gObj$smooth[[o$ism]],
-    x = o$gObj,
+    gam = o$gObj,
     partial.resids = Q$partial.resids,
     se = Q$se,
     n = n,

@@ -79,17 +79,6 @@ sm <- function(o, select) {
       sep = ''
     )
   }
-
-  if ("nested" %in% cl) {
-    cl[which(cl == "nested")] <- paste(
-      "nested",
-      o$smooth[[select]]$dim,
-      "D",
-      sep = ''
-    )
-  }
-
   class(out) <- cl
-
   return(out)
 }

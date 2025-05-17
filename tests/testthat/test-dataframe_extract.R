@@ -94,6 +94,11 @@ test_that("SOS", {
 
   expect_true(is.data.frame(data$fit))
   expect_true(is.data.frame(data$res))
+
+  # Test scheme1
+  data <- get_data(sm(getViz(fit), 1), scheme=1)
+  expect_true(is.data.frame(data$fit))
+  expect_true(is.data.frame(data$res))
 })
 
 

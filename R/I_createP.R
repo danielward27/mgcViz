@@ -40,14 +40,13 @@
 #' fv.terms <- init$fv.terms
 #' order <- init$order
 #' sm <- o$smooth
-#' x <- o$gObj
 #' too.far <- 0.1
 #' seWithMean <- FALSE
 #' resDen <- "none"
 #' @noRd
 .createP <- function(
     sm,
-    x,
+    gam, # I think this is an mgcv GAM
     partial.resids,
     se,
     n,
@@ -65,11 +64,11 @@
     ...) {
   first <- sm$first.para
   last <- sm$last.para
-  edf <- sum(x$edf[first:last]) ## Effective DoF for this term
-  attr(sm, "coefficients") <- x$coefficients[first:last] # Relevant coeffs for i-th smooth
+  edf <- sum(gam$edf[first:last]) ## Effective DoF for this term
+  attr(sm, "coefficients") <- gam$coefficients[first:last] # Relevant coeffs for i-th smooth
   P <- .prepare(
     x = sm,
-    data = x$model,
+    data = gam$model,
     se1.mult = se1.mult,
     se2.mult = se2.mult,
     n = n,
@@ -84,7 +83,7 @@
   } else {
     P$smooth <- sm
     if (is.null(P$fit)) {
-      p <- x$coefficients[first:last] ## relevant coefficients
+      p <- gam$coefficients[first:last] ## relevant coefficients
       offset <- attr(P$X, "offset") ## any term specific offset
       ## get fitted values ....
       if (is.null(offset)) {
@@ -99,10 +98,10 @@
         ## get standard errors for fit
         ## test whether mean variability to be added to variability (only for centred terms)
         if (seWithMean && attr(sm, "nCons") > 0) {
-          if (length(x$cmX) < ncol(x$Vp)) {
-            x$cmX <- c(x$cmX, rep(0, ncol(x$Vp) - length(x$cmX)))
+          if (length(gam$cmX) < ncol(gam$Vp)) {
+            gam$cmX <- c(gam$cmX, rep(0, ncol(gam$Vp) - length(gam$cmX)))
           }
-          X1 <- matrix(x$cmX, nrow(P$X), ncol(x$Vp), byrow = TRUE)
+          X1 <- matrix(gam$cmX, nrow(P$X), ncol(gam$Vp), byrow = TRUE)
           meanL1 <- sm$meanL1
           if (!is.null(meanL1)) {
             X1 <- X1 / meanL1
@@ -110,9 +109,9 @@
           X1[, first:last] <- P$X
           if (nsim > 0) {
             P$simF <- drop(P$fit) +
-              X1 %*% t(rmvn(nsim, numeric(ncol(x$Vp)), x$Vp))
+              X1 %*% t(rmvn(nsim, numeric(ncol(gam$Vp)), gam$Vp))
           }
-          se.fit <- sqrt(pmax(0, rowSums((X1 %*% x$Vp) * X1)))
+          se.fit <- sqrt(pmax(0, rowSums((X1 %*%gam$Vp) * X1)))
         } else {
           ## se in centred (or anyway unconstrained) space only
           if (nsim > 0) {
@@ -121,12 +120,12 @@
               t(rmvn(
                 nsim,
                 numeric(length(p)),
-                x$Vp[first:last, first:last, drop = FALSE]
+                gam$Vp[first:last, first:last, drop = FALSE]
               ))
           }
           se.fit <- sqrt(pmax(
             0,
-            rowSums((P$X %*% x$Vp[first:last, first:last, drop = FALSE]) * P$X)
+            rowSums((P$X %*% gam$Vp[first:last, first:last, drop = FALSE]) * P$X)
           ))
         }
         if (!is.null(P$exclude)) {

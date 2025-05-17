@@ -133,7 +133,7 @@ get_data.sos.smooth <- function(
       P = P,
       trans = trans,
       maxpo = maxpo,
-      flip = TRUE,
+      flip = TRUE
     )
     out$type <- "sos1"
   }
@@ -205,16 +205,15 @@ get_data.sos.smooth <- function(
     ...) {
   ## plot method function for sos.smooth terms
   if (scheme == 1) {
-    return(.prepare.mgcv.smooth(
+
+    return(.preparePlotSmooth2D(
       x = x,
       data = data,
-      se1.mult = se1.mult,
-      se2.mult = se2.mult,
-      n = n,
+      se.mult = se2.mult,
       n2 = n2,
       ylim = ylim,
       xlim = xlim,
-      too.far = too.far
+      too.far = too.far,
     ))
   }
 
