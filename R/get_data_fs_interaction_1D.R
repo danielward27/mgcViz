@@ -68,7 +68,7 @@ get_data.fs.interaction.1D <- function(
     trans = identity,
     ...) {
   P <- prepareP(
-    o = term,
+    term = term,
     unconditional = FALSE,
     residuals = FALSE,
     resDen = "none",

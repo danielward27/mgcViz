@@ -1,7 +1,7 @@
 # Prepares P list, smooth (sm) and
 #' @export
 prepareP <- function(
-  o,
+  term,
   unconditional,
   residuals,
   resDen,
@@ -17,7 +17,7 @@ prepareP <- function(
   ...
 ) {
   Q <- .initialize(
-    o = o,
+    term = term,
     unconditional = unconditional,
     residuals = residuals,
     se.mult = se.mult,
@@ -27,12 +27,12 @@ prepareP <- function(
 
   # Modify Vp here: .createP creates conf int, so we do NOT need to take this into account later
   if (!is.null(Q$Vmat)) {
-    o$gObj$Vp <- Q$Vmat
+    term$gObj$Vp <- Q$Vmat
   }
 
   P <- .createP(
-    term = o$gObj$smooth[[o$ism]],
-    gam = o$gObj,
+    term = term$gObj$smooth[[term$ism]],
+    gam = term$gObj,
     partial.resids = Q$partial.resids,
     se = Q$se,
     n = n,

@@ -86,7 +86,7 @@ get_data.mgcv.smooth.MD <- function(
   }
 
   P <- prepareP(
-    o = term,
+    term = term,
     unconditional = unconditional,
     residuals = TRUE,
     resDen = "none",

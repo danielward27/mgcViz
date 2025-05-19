@@ -102,7 +102,7 @@ get_data.sos.smooth <- function(
 
   # 1) Prepare data
   P <- prepareP(
-    o = term,
+    term = term,
     unconditional = unconditional,
     residuals = TRUE,
     resDen = "none",

@@ -89,7 +89,7 @@ get_data.mgcv.smooth.1D <- function(
     nsim = 0,
     ...) {
   P <- prepareP(
-    o = term,
+    term = term,
     unconditional = unconditional,
     residuals = TRUE,
     resDen = "none",

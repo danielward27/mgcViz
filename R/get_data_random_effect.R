@@ -35,7 +35,7 @@
 #'
 get_data.random.effect <- function(term, trans = identity, ...) {
   P <- prepareP(
-    o = term,
+    term = term,
     unconditional = FALSE,
     residuals = TRUE,
     resDen = "none",

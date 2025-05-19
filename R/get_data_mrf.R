@@ -47,7 +47,7 @@ get_data.mrf.smooth <- function(
     unconditional = FALSE,
     ...) {
   p <- prepareP(
-    o = term,
+    term = term,
     unconditional = unconditional,
     residuals = TRUE,
     resDen = "none",
