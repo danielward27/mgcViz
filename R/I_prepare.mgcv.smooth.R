@@ -37,7 +37,7 @@
 #' @noRd
 #' @export
 .prepare.mgcv.smooth <- function(
-    x,
+    term,
     data = NULL,
     se1.mult = 1,
     se2.mult = 2,
@@ -47,9 +47,9 @@
     xlim = NULL,
     too.far = 0.1,
     ...) {
-  if (x$dim == 1) {
+  if (term$dim == 1) {
     out <- .preparePlotSmooth1D(
-      x = x,
+      term = term,
       data = data,
       se.mult = se1.mult,
       n = n,
@@ -58,9 +58,9 @@
     )
   }
 
-  if (x$dim == 2) {
+  if (term$dim == 2) {
     out <- .preparePlotSmooth2D(
-      x = x,
+      term = term,
       data = data,
       se.mult = se2.mult,
       n2 = n2,
@@ -71,9 +71,9 @@
     )
   }
 
-  if (x$dim > 2) {
+  if (term$dim > 2) {
     out <- .preparePlotSmoothMD(
-      x = x,
+      term = term,
       data = data,
       se.mult = se2.mult,
       n2 = n2,

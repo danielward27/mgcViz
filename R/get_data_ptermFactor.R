@@ -41,21 +41,21 @@
 #' @export get_data.ptermFactor
 #' @export
 #'
-get_data.ptermFactor <- function(x, maxpo = 1e4, trans = identity, ...) {
-  if (x$order > 1) {
+get_data.ptermFactor <- function(term, maxpo = 1e4, trans = identity, ...) {
+  if (term$order > 1) {
     message("mgcViz does not know how to plot this effect. Returning NULL.")
     return(invisible(NULL))
   }
 
-  gObj <- x$gObj
+  gObj <- term$gObj
 
   # 1) Do prediction
   X <- gObj$model
 
-  vr <- as.factor(X[[x$varNam]])
+  vr <- as.factor(X[[term$varNam]])
   xx <- as.factor(levels(vr))
   data <- X[1:length(xx), ]
-  data[[x$varNam]] <- xx
+  data[[term$varNam]] <- xx
 
   # Suppressing spurious warnings from predict.gam
   .pred <- withCallingHandlers(
@@ -63,7 +63,7 @@ get_data.ptermFactor <- function(x, maxpo = 1e4, trans = identity, ...) {
       gObj,
       type = "terms",
       se.fit = TRUE,
-      terms = x$nam,
+      terms = term$nam,
       newdata = data
     ),
     warning = function(w) {
@@ -87,7 +87,7 @@ get_data.ptermFactor <- function(x, maxpo = 1e4, trans = identity, ...) {
   data$misc <- list("trans" = trans)
 
   # 3) Get partial residuals
-  data$res <- data.frame("x" = as.factor(gObj$model[[x$varNam]]))
+  data$res <- data.frame("x" = as.factor(gObj$model[[term$varNam]]))
 
   # Check if partial residuals are defined: for instance the are not for gamlss models
   if (is.null(gObj$residuals) || is.null(gObj$weights)) {
@@ -97,7 +97,7 @@ get_data.ptermFactor <- function(x, maxpo = 1e4, trans = identity, ...) {
     .wr <- gObj$residuals * .wr / mean(.wr) # weighted working residuals
     data$res$y <- trans(
       .wr +
-        gObj$store$termsFit[, which(colnames(gObj$store$termsFit) == x$nam)]
+        gObj$store$termsFit[, which(colnames(gObj$store$termsFit) == term$nam)]
     )
   }
 

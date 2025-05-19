@@ -37,18 +37,18 @@
 #' @export
 #'
 get_data.ptermNumeric <- function(
-    x,
+    term,
     n = 100,
     xlim = NULL,
     maxpo = 1e4,
     trans = identity,
     ...) {
-  if (x$order > 1) {
+  if (term$order > 1) {
     message("mgcViz does not know how to plot this effect. Returning NULL.")
     return(invisible(NULL))
   }
 
-  gObj <- x$gObj
+  gObj <- term$gObj
 
   # 1) Do prediction
   X <- gObj$model
@@ -59,12 +59,12 @@ get_data.ptermNumeric <- function(
   }
 
   if (is.null(xlim)) {
-    xlim <- range(X[[x$varNam]])
+    xlim <- range(X[[term$varNam]])
   }
 
   xx <- seq(xlim[1], xlim[2], length = n)
   data <- X[1:n, ]
-  data[[x$varNam]] <- xx
+  data[[term$varNam]] <- xx
 
   # Suppressing spurious warnings from predict.gam
   .pred <- withCallingHandlers(
@@ -72,7 +72,7 @@ get_data.ptermNumeric <- function(
       gObj,
       type = "terms",
       se.fit = TRUE,
-      terms = x$nam,
+      terms = term$nam,
       newdata = data
     ),
     warning = function(w) {
@@ -95,7 +95,7 @@ get_data.ptermNumeric <- function(
   )
 
   # 3) Get partial residuals
-  data$res <- data.frame("x" = as.vector(gObj$model[[x$varNam]]))
+  data$res <- data.frame("x" = as.vector(gObj$model[[term$varNam]]))
 
   # Check if partial residuals are defined: for instance the are not for gamlss models
   if (is.null(gObj$residuals) || is.null(gObj$weights)) {
@@ -104,7 +104,7 @@ get_data.ptermNumeric <- function(
     .wr <- sqrt(gObj$weights)
     .wr <- gObj$residuals * .wr / mean(.wr) # weighted working residuals
     data$res$y <- trans(
-      .wr + gObj$store$termsFit[, which(colnames(gObj$store$termsFit) == x$nam)]
+      .wr + gObj$store$termsFit[, which(colnames(gObj$store$termsFit) == term$nam)]
     )
   }
 

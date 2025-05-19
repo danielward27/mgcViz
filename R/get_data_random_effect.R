@@ -33,9 +33,9 @@
 #' # Default
 #' plot(b)
 #'
-get_data.random.effect <- function(x, trans = identity, ...) {
+get_data.random.effect <- function(term, trans = identity, ...) {
   P <- prepareP(
-    o = x,
+    o = term,
     unconditional = FALSE,
     residuals = TRUE,
     resDen = "none",
@@ -65,14 +65,14 @@ get_data.random.effect <- function(x, trans = identity, ...) {
 #' @noRd
 #' @export
 .prepare.random.effect <- function(
-    x,
+    term,
     data = NULL,
     n = 100,
     ylim = NULL,
     xlim = NULL,
     ...) {
-  raw <- data[x$term][[1]]
-  p <- x$last.para - x$first.para + 1
+  raw <- data[term$term][[1]]
+  p <- term$last.para - term$first.para + 1
   X <- diag(p) # prediction matrix for this term
 
   return(list(

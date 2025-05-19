@@ -6,7 +6,7 @@
 \title{Plotting one dimensional smooth effects}
 \usage{
 \method{get_data}{mgcv.smooth.1D}(
-  x,
+  term,
   n = 100,
   xlim = NULL,
   maxpo = 10000,
@@ -18,8 +18,6 @@
 )
 }
 \arguments{
-\item{x}{a smooth effect object, extracted using \link{sm}.}
-
 \item{n}{number of grid points used to compute main effect and c.i. lines.
 For a nice smooth plot this needs to be several times the estimated degrees of
 freedom for the smooth.}
@@ -47,6 +45,8 @@ by simulation.}
 These can be plotted using the \link{l_simLine} layer. See Examples section below.}
 
 \item{...}{currently unused.}
+
+\item{x}{a smooth effect object, extracted using \link{sm}.}
 
 \item{asFact}{determines whether to use a factor or colour bar legend for plot.multi.mgcv.smooth.1D.
 For most models the default is \code{TRUE}. When working with QGAM models fitted with

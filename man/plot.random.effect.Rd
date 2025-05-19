@@ -5,15 +5,15 @@
 \alias{get_data.random.effect}
 \title{Plotting random effects}
 \usage{
-\method{get_data}{random.effect}(x, trans = identity, ...)
+\method{get_data}{random.effect}(term, trans = identity, ...)
 }
 \arguments{
-\item{x}{a random effect object, extracted using \link{sm}.}
-
 \item{trans}{monotonic function to apply to the fit, confidence intervals and residuals,
 before plotting. Monotonicity is not checked.}
 
 \item{...}{currently unused.}
+
+\item{x}{a random effect object, extracted using \link{sm}.}
 }
 \value{
 An object of class \code{plotSmooth}.

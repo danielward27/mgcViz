@@ -78,7 +78,7 @@
 #' @export
 #'
 get_data.sos.smooth <- function(
-    x,
+    term,
     n = 40,
     xlim = NULL,
     ylim = NULL,
@@ -102,7 +102,7 @@ get_data.sos.smooth <- function(
 
   # 1) Prepare data
   P <- prepareP(
-    o = x,
+    o = term,
     unconditional = unconditional,
     residuals = TRUE,
     resDen = "none",
@@ -123,13 +123,13 @@ get_data.sos.smooth <- function(
   if (scheme == 0) {
     # plot on sphere
 
-    out <- .plot.sos.smooth(x = P$smooth, P = P, trans = trans, maxpo = maxpo)
+    out <- .plot.sos.smooth(term = P$smooth, P = P, trans = trans, maxpo = maxpo)
     out$type <- "sos0"
   } else {
     # standard 2D plot
 
     out <- .get_data_shared_2d(
-      x = P$smooth,
+      term = P$smooth,
       P = P,
       trans = trans,
       maxpo = maxpo,
@@ -143,7 +143,7 @@ get_data.sos.smooth <- function(
 
 ###########################
 # Internal function
-.plot.sos.smooth <- function(x, P, trans, maxpo) {
+.plot.sos.smooth <- function(term, P, trans, maxpo) {
   .dat <- list()
 
   ### 1) Build dataset on fitted effect
@@ -187,7 +187,7 @@ get_data.sos.smooth <- function(
 #' @noRd
 #' @export
 .prepare.sos.smooth <- function(
-    x,
+    term,
     data,
     se1.mult = 1,
     se2.mult = 1,
@@ -207,7 +207,7 @@ get_data.sos.smooth <- function(
   if (scheme == 1) {
 
     return(.preparePlotSmooth2D(
-      x = x,
+      term = term,
       data = data,
       se.mult = se2.mult,
       n2 = n2,
@@ -230,11 +230,11 @@ get_data.sos.smooth <- function(
   if (phi > pi / 2) phi <- pi - phi
   if (phi < -pi / 2) phi <- -(phi + pi)
 
-  if (!x$plot.me) {
+  if (!term$plot.me) {
     return(NULL)
   } ## shouldn't or can't plot
   ## get basic plot data
-  raw <- data[x$term]
+  raw <- data[term$term]
   raw <- as.data.frame(.lolaxy(
     lo = raw[[2]] * pi / 180,
     la = raw[[1]] * pi / 180,
@@ -259,10 +259,10 @@ get_data.sos.smooth <- function(
   um <- .repole(lo, la, theta, phi)
 
   dat <- data.frame(la = um$la * 180 / pi, lo = um$lo * 180 / pi)
-  names(dat) <- x$term
-  if (x$by != "NA") dat[[x$by]] <- la * 0 + 1
+  names(dat) <- term$term
+  if (term$by != "NA") dat[[term$by]] <- la * 0 + 1
 
-  X <- PredictMat(x, dat) # prediction matrix for this term
+  X <- PredictMat(term, dat) # prediction matrix for this term
 
   ## fix lo for smooth contouring
   lo <- dat[[2]]

@@ -6,7 +6,7 @@
 \title{Plotting smooths on the sphere}
 \usage{
 \method{get_data}{sos.smooth}(
-  x,
+  term,
   n = 40,
   xlim = NULL,
   ylim = NULL,
@@ -22,8 +22,6 @@
 )
 }
 \arguments{
-\item{x}{a smooth effect object, extracted using \link{sm}.}
-
 \item{n}{sqrt of the number of grid points used to compute the effect plot.}
 
 \item{xlim}{if supplied then this pair of numbers are used as the x limits for the plot.}
@@ -62,6 +60,8 @@ matrix is used to compute uncertainty bands, if available.
 Otherwise the bands treat the smoothing parameters as fixed.}
 
 \item{...}{currently unused.}
+
+\item{x}{a smooth effect object, extracted using \link{sm}.}
 }
 \value{
 An objects of class \code{plotSmooth}.

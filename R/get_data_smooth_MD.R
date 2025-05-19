@@ -70,7 +70,7 @@
 #' @export
 #'
 get_data.mgcv.smooth.MD <- function(
-    x,
+    term,
     fix,
     n = 40,
     xlim = NULL,
@@ -86,7 +86,7 @@ get_data.mgcv.smooth.MD <- function(
   }
 
   P <- prepareP(
-    o = x,
+    o = term,
     unconditional = unconditional,
     residuals = TRUE,
     resDen = "none",
@@ -101,7 +101,7 @@ get_data.mgcv.smooth.MD <- function(
     fix = fix
   )
 
-  out <- .get_data_shared_2d(x = P$smooth, P = P, trans = trans, maxpo = maxpo)
+  out <- .get_data_shared_2d(term = P$smooth, P = P, trans = trans, maxpo = maxpo)
   return(out)
 }
 
@@ -109,7 +109,7 @@ get_data.mgcv.smooth.MD <- function(
 
 # Internal function for preparing plot of two dimensional smooths
 .preparePlotSmoothMD <- function(
-    x,
+    term,
     fix,
     data = NULL,
     se.mult = 2,
@@ -119,9 +119,9 @@ get_data.mgcv.smooth.MD <- function(
     too.far = 0.1,
     ...) {
   out <- NULL
-  if (x$plot.me) {
+  if (term$plot.me) {
     ov <- names(fix)
-    iv <- x$term[!(x$term %in% ov)]
+    iv <- term$term[!(term$term %in% ov)]
     xterm <- iv[1]
     yterm <- iv[2]
     raw <- data.frame(
@@ -163,11 +163,11 @@ get_data.mgcv.smooth.MD <- function(
     } else {
       exclude2 <- FALSE
     }
-    if (x$by != "NA") {
+    if (term$by != "NA") {
       # deal with any by variables
       by <- rep(1, n2^2)
       dat <- data.frame(x = xx, y = yy, by = by)
-      colnames(dat) <- c(xterm, yterm, x$by)
+      colnames(dat) <- c(xterm, yterm, term$by)
     } else {
       dat <- data.frame(x = xx, y = yy)
       colnames(dat) <- c(xterm, yterm)
@@ -177,7 +177,7 @@ get_data.mgcv.smooth.MD <- function(
       dat[[ii]] <- rep(fix[ii], n2^2)
     }
 
-    X <- PredictMat(x, dat) ## prediction matrix for this term
+    X <- PredictMat(term, dat) ## prediction matrix for this term
     
     if (is.null(ylim)) {
       ylim <- range(ym)

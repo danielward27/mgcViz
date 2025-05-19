@@ -60,7 +60,7 @@
 #' @export
 #'
 get_data.mgcv.smooth.2D <- function(
-    x,
+    term,
     n = 40,
     xlim = NULL,
     ylim = NULL,
@@ -72,7 +72,7 @@ get_data.mgcv.smooth.2D <- function(
     ...) {
   # 1) Prepare data
   P <- prepareP(
-    o = x,
+    o = term,
     unconditional = unconditional,
     residuals = TRUE,
     resDen = "none",
@@ -87,14 +87,14 @@ get_data.mgcv.smooth.2D <- function(
   )
 
   # 2) Produce output object
-  out <- .get_data_shared_2d(x = P$smooth, P = P, trans = trans, maxpo = maxpo)
+  out <- .get_data_shared_2d(term = P$smooth, P = P, trans = trans, maxpo = maxpo)
   return(out)
 }
 
 
 # Used by e.g MD and SOS
 #' @noRd
-.get_data_shared_2d <- function(x, P, trans, maxpo, flip = FALSE) {
+.get_data_shared_2d <- function(term, P, trans, maxpo, flip = FALSE) {  # TODO is term even used?
   .dat <- list()
   # 1) Build dataset on fitted effect
   P$fit[P$exclude] <- NA
@@ -148,7 +148,7 @@ get_data.mgcv.smooth.2D <- function(
 
 # Internal function for preparing plot of two dimensional smooths
 .preparePlotSmooth2D <- function(
-    x,
+    term,
     data = NULL,
     se.mult = 2,
     n2 = 40,
@@ -157,9 +157,9 @@ get_data.mgcv.smooth.2D <- function(
     too.far = 0.1,
     ...) {
   out <- NULL
-  if (x$plot.me) {
-    xterm <- x$term[1]
-    yterm <- x$term[2]
+  if (term$plot.me) {
+    xterm <- term$term[1]
+    yterm <- term$term[2]
     raw <- data.frame(
       x = as.numeric(data[xterm][[1]]),
       y = as.numeric(data[yterm][[1]])
@@ -182,16 +182,16 @@ get_data.mgcv.smooth.2D <- function(
     } else {
       exclude <- rep(FALSE, n2 * n2)
     }
-    if (x$by != "NA") {
+    if (term$by != "NA") {
       # deal with any by variables
       by <- rep(1, n2^2)
       dat <- data.frame(x = xx, y = yy, by = by)
-      colnames(dat) <- c(xterm, yterm, x$by)
+      colnames(dat) <- c(xterm, yterm, term$by)
     } else {
       dat <- data.frame(x = xx, y = yy)
       colnames(dat) <- c(xterm, yterm)
     } ## prediction data.frame complete
-    X <- PredictMat(x, dat) ## prediction matrix for this term
+    X <- PredictMat(term, dat) ## prediction matrix for this term
     
     if (is.null(ylim)) {
       ylim <- range(ym)

@@ -6,13 +6,11 @@
 \alias{get_data.ptermLogical}
 \title{Plotting factor or logical parametric effects}
 \usage{
-\method{get_data}{ptermFactor}(x, maxpo = 10000, trans = identity, ...)
+\method{get_data}{ptermFactor}(term, maxpo = 10000, trans = identity, ...)
 
-\method{get_data}{ptermLogical}(x, maxpo = 10000, trans = identity, ...)
+\method{get_data}{ptermLogical}(term, maxpo = 10000, trans = identity, ...)
 }
 \arguments{
-\item{x}{a factor or logical parametric effect object, extracted using \link{pterm}.}
-
 \item{maxpo}{maximum number of residuals points that will be used by layers such as
 \code{resRug()} and \code{resPoints()}. If number of datapoints > \code{maxpo},
 then a subsample of \code{maxpo} points will be taken.}
@@ -21,6 +19,8 @@ then a subsample of \code{maxpo} points will be taken.}
 before plotting. Monotonicity is not checked.}
 
 \item{...}{currently unused.}
+
+\item{x}{a factor or logical parametric effect object, extracted using \link{pterm}.}
 
 \item{asFact}{relevant only when working with models fitted with \link{mqgamV}. If
 \code{FALSE} quantile of interest (qu) is treated as a continuous variable, otherwise as

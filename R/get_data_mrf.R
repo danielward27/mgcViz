@@ -41,13 +41,13 @@
 #' @export
 #'
 get_data.mrf.smooth <- function(
-    x,
+    term,
     trans = identity,
     se_with_mean = FALSE,
     unconditional = FALSE,
     ...) {
   p <- prepareP(
-    o = x,
+    o = term,
     unconditional = unconditional,
     residuals = TRUE,
     resDen = "none",
@@ -76,7 +76,7 @@ get_data.mrf.smooth <- function(
 #' @noRd
 #' @export
 .prepare.mrf.smooth <- function(
-    x,
+    term,
     data,
     se1.mult,
     se2.mult,
@@ -92,10 +92,10 @@ get_data.mrf.smooth <- function(
     theta,
     scheme,
     ...) {
-  raw <- data[x$term][[1]]
-  dat <- data.frame(x = factor(names(x$xt$polys), levels = levels(x$knots)))
-  names(dat) <- x$term
-  X <- PredictMat(x, dat) # prediction matrix for this term
+  raw <- data[term$term][[1]]
+  dat <- data.frame(x = factor(names(term$xt$polys), levels = levels(term$knots)))
+  names(dat) <- term$term
+  X <- PredictMat(term, dat) # prediction matrix for this term
   return(list(
     X = X,
     scale = FALSE,

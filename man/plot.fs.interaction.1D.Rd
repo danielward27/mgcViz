@@ -5,11 +5,9 @@
 \alias{get_data.fs.interaction.1D}
 \title{Plotting one dimensional smooth factor interactions}
 \usage{
-\method{get_data}{fs.interaction.1D}(x, n = 100, xlim = NULL, trans = identity, ...)
+\method{get_data}{fs.interaction.1D}(term, n = 100, xlim = NULL, trans = identity, ...)
 }
 \arguments{
-\item{x}{a smooth effect object.}
-
 \item{n}{number of grid points used to compute main effect and c.i. lines.
 For a nice smooth plot this needs to be several times the estimated degrees of
 freedom for the smooth.}
@@ -20,6 +18,8 @@ freedom for the smooth.}
 Monotonicity is not checked.}
 
 \item{...}{currently unused.}
+
+\item{x}{a smooth effect object.}
 }
 \value{
 An object of class \code{c("plotSmooth", "gg")}.

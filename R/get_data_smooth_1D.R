@@ -79,7 +79,7 @@
 #' @export
 #'
 get_data.mgcv.smooth.1D <- function(
-    x,
+    term,
     n = 100,
     xlim = NULL,
     maxpo = 1e4,
@@ -89,7 +89,7 @@ get_data.mgcv.smooth.1D <- function(
     nsim = 0,
     ...) {
   P <- prepareP(
-    o = x,
+    o = term,
     unconditional = unconditional,
     residuals = TRUE,
     resDen = "none",
@@ -146,31 +146,31 @@ get_data.mgcv.smooth.1D <- function(
 
 # Internal function for preparing plot of one dimensional smooths
 .preparePlotSmooth1D <- function(
-    x,
+    term,
     data,
     se.mult = 1,
     n = 100,
     xlim = NULL,
     ...) {
   out <- NULL
-  if (x$plot.me) {
-    raw <- as.vector(data[x$term][[1]])
+  if (term$plot.me) {
+    raw <- as.vector(data[term$term][[1]])
     if (is.null(xlim)) {
       # Generate x sequence for prediction
       xx <- seq(min(raw), max(raw), length = n)
     } else {
       xx <- seq(xlim[1], xlim[2], length = n)
     }
-    if (x$by != "NA") {
+    if (term$by != "NA") {
       # Deal with any by variables
       by <- rep(1, n)
       dat <- data.frame(x = xx, by = by)
-      names(dat) <- c(x$term, x$by)
+      names(dat) <- c(term$term, term$by)
     } else {
       dat <- data.frame(x = xx)
-      names(dat) <- x$term
+      names(dat) <- term$term
     } # Finished preparing prediction data.frame
-    X <- PredictMat(x, dat) # prediction matrix for this term
+    X <- PredictMat(term, dat) # prediction matrix for this term
 
     if (is.null(xlim)) {
       xlim <- range(xx)

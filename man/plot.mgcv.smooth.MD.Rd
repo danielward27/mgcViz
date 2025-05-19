@@ -6,7 +6,7 @@
 \title{Plotting slice of higher-dimensional smooth effects}
 \usage{
 \method{get_data}{mgcv.smooth.MD}(
-  x,
+  term,
   fix,
   n = 40,
   xlim = NULL,
@@ -20,8 +20,6 @@
 )
 }
 \arguments{
-\item{x}{a smooth effect object, extracted using \link{sm}.}
-
 \item{fix}{a named vector indicating which variables must be kept fixed and to what values.
 When plotting a smooth in (d+2) dimensions, then d variables must be fixed.}
 
@@ -59,6 +57,8 @@ matrix is used to compute uncertainty bands, if available.
 Otherwise the bands treat the smoothing parameters as fixed.}
 
 \item{...}{currently unused.}
+
+\item{x}{a smooth effect object, extracted using \link{sm}.}
 }
 \value{
 An objects of class \code{plotSmooth}.

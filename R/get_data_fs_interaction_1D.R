@@ -62,13 +62,13 @@
 #' @export
 #'
 get_data.fs.interaction.1D <- function(
-    x,
+    term,
     n = 100,
     xlim = NULL,
     trans = identity,
     ...) {
   P <- prepareP(
-    o = x,
+    o = term,
     unconditional = FALSE,
     residuals = FALSE,
     resDen = "none",
@@ -98,16 +98,16 @@ get_data.fs.interaction.1D <- function(
 #' @noRd
 #' @export
 .prepare.fs.interaction <- function(
-    x,
+    term,
     data = NULL,
     n = 100,
     ylim = NULL,
     xlim = NULL,
     ...) {
-  if (x$dim > 1) {
+  if (term$dim > 1) {
     stop("no method for base smooth dim > 1")
   }
-  raw <- data[x$base$term][[1]]
+  raw <- data[term$base$term][[1]]
 
   # Generate x sequence for prediction
   if (is.null(xlim)) {
@@ -115,11 +115,11 @@ get_data.fs.interaction.1D <- function(
   }
   xx <- seq(xlim[1], xlim[2], length = n)
 
-  nf <- length(x$flev)
-  fac <- rep(x$flev, rep(n, nf))
+  nf <- length(term$flev)
+  fac <- rep(term$flev, rep(n, nf))
   dat <- data.frame(as.factor(fac), xx)
-  names(dat) <- c(x$fterm, x$base$term)
-  X <- PredictMat(x, dat)
+  names(dat) <- c(term$fterm, term$base$term)
+  X <- PredictMat(term, dat)
   return(list(
     X = X,
     scale = TRUE,

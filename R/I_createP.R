@@ -45,7 +45,7 @@
 #' resDen <- "none"
 #' @noRd
 .createP <- function(
-    sm,
+    term,
     gam, # I think this is an mgcv GAM
     partial.resids,
     se,
@@ -62,12 +62,12 @@
     resDen,
     nsim,
     ...) {
-  first <- sm$first.para
-  last <- sm$last.para
+  first <- term$first.para
+  last <- term$last.para
   edf <- sum(gam$edf[first:last]) ## Effective DoF for this term
-  attr(sm, "coefficients") <- gam$coefficients[first:last] # Relevant coeffs for i-th smooth
+  attr(term, "coefficients") <- gam$coefficients[first:last] # Relevant coeffs for i-th smooth
   P <- .prepare(
-    x = sm,
+    term = term,
     data = gam$model,
     se1.mult = se1.mult,
     se2.mult = se2.mult,
@@ -81,7 +81,7 @@
   if (is.null(P)) {
     P <- list(plot.me = FALSE)
   } else {
-    P$smooth <- sm
+    P$smooth <- term
     if (is.null(P$fit)) {
       p <- gam$coefficients[first:last] ## relevant coefficients
       offset <- attr(P$X, "offset") ## any term specific offset
@@ -97,12 +97,12 @@
       if (se && P$se) {
         ## get standard errors for fit
         ## test whether mean variability to be added to variability (only for centred terms)
-        if (seWithMean && attr(sm, "nCons") > 0) {
+        if (seWithMean && attr(term, "nCons") > 0) {
           if (length(gam$cmX) < ncol(gam$Vp)) {
             gam$cmX <- c(gam$cmX, rep(0, ncol(gam$Vp) - length(gam$cmX)))
           }
           X1 <- matrix(gam$cmX, nrow(P$X), ncol(gam$Vp), byrow = TRUE)
-          meanL1 <- sm$meanL1
+          meanL1 <- term$meanL1
           if (!is.null(meanL1)) {
             X1 <- X1 / meanL1
           }

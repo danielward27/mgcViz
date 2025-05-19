@@ -5,11 +5,15 @@
 \alias{get_data.mrf.smooth}
 \title{Plotting Markov random field smooths}
 \usage{
-\method{get_data}{mrf.smooth}(x, trans = identity, se_with_mean = FALSE, unconditional = FALSE, ...)
+\method{get_data}{mrf.smooth}(
+  term,
+  trans = identity,
+  se_with_mean = FALSE,
+  unconditional = FALSE,
+  ...
+)
 }
 \arguments{
-\item{x}{a smooth effect object, extracted using \link{sm}.}
-
 \item{trans}{monotonic function to apply to the smooth and residuals, before plotting.
 Monotonicity is not checked.}
 
@@ -18,6 +22,8 @@ matrix is used to compute uncertainty bands, if available.
 Otherwise the bands treat the smoothing parameters as fixed.}
 
 \item{...}{currently unused.}
+
+\item{x}{a smooth effect object, extracted using \link{sm}.}
 
 \item{seWithMean}{if TRUE the component smooths are shown with confidence intervals that
 include the uncertainty about the overall mean. If FALSE then the uncertainty

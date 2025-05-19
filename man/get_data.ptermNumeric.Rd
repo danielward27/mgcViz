@@ -5,11 +5,9 @@
 \alias{get_data.ptermNumeric}
 \title{Plotting numeric parametric effects}
 \usage{
-\method{get_data}{ptermNumeric}(x, n = 100, xlim = NULL, maxpo = 10000, trans = identity, ...)
+\method{get_data}{ptermNumeric}(term, n = 100, xlim = NULL, maxpo = 10000, trans = identity, ...)
 }
 \arguments{
-\item{x}{a numerical parametric effect object, extracted using \link{pterm}.}
-
 \item{n}{number of grid points used to compute main effect and c.i. lines.}
 
 \item{xlim}{if supplied then this pair of numbers are used as the x limits for the plot.}
@@ -22,6 +20,8 @@ then a subsample of \code{maxpo} points will be taken.}
 before plotting. Monotonicity is not checked.}
 
 \item{...}{currently unused.}
+
+\item{x}{a numerical parametric effect object, extracted using \link{pterm}.}
 }
 \value{
 An object of class \code{plotSmooth}.
