@@ -44,9 +44,9 @@
 #' seWithMean <- FALSE
 #' resDen <- "none"
 #' @noRd
-.createP <- function(
+.get_plot_data <- function(
     term,
-    gam, # I think this is an mgcv GAM
+    gam,
     partial.resids,
     se,
     n,

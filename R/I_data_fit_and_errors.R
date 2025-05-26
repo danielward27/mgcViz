@@ -1,14 +1,5 @@
-#' .initializeXXX
-#'
-#' @param o, ...
-#' @param unconditional, ...
-#' @param residuals, ...
-#' @param resDen, ...
-#' @param se, ...
-#' @param fv.terms, ...
-#' @return a list
-#' @noRd
-.initialize <- function(term, unconditional, residuals, resDen, se, se.mult) {
+
+.data_fit_and_errors <- function(term, unconditional, residuals, resDen, se, se.mult) {
   V <- fv.terms <- NULL
 
   # Use Bayesian cov matrix including smoothing parameter uncertainty?
@@ -63,16 +54,9 @@
     }
   }
 
-  ## Array giving the order of each parametric term
-  order <- if (is.list(term$gObj$pterms)) {
-    unlist(lapply(term$gObj$pterms, attr, "order"))
-  } else {
-    attr(term$gObj$pterms, "order")
-  }
 
   return(list(
     V = V,
-    order = order,
     w.resid = w.resid,
     se.mult = se.mult,
     se = se,

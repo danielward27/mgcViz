@@ -16,7 +16,7 @@ prepareP <- function(
   nsim = 0,
   ...
 ) {
-  Q <- .initialize(
+  fit_and_errors <- .data_fit_and_errors(
     term = term,
     unconditional = unconditional,
     residuals = residuals,
@@ -25,32 +25,25 @@ prepareP <- function(
     se = se
   )
 
-  # Modify Vp here: .createP creates conf int, so we do NOT need to take this into account later
-  if (!is.null(Q$Vmat)) {
-    term$gObj$Vp <- Q$Vmat
-  }
-
-  P <- .createP(
+  plot_data <- .get_plot_data(
     term = term$gObj$smooth[[term$ism]],
     gam = term$gObj,
-    partial.resids = Q$partial.resids,
-    se = Q$se,
+    partial.resids = fit_and_errors$partial.resids,
+    se = fit_and_errors$se,
     n = n,
     n2 = n2,
     ylim = ylim,
     xlim = xlim,
     too.far = too.far,
-    se1.mult = Q$se.mult,
-    se2.mult = Q$se.mult,
+    se1.mult = fit_and_errors$se.mult,
+    se2.mult = fit_and_errors$se.mult,
     seWithMean = seWithMean,
-    fitSmooth = Q$fv.terms,
-    w.resid = Q$w.resid,
+    fitSmooth = fit_and_errors$fv.terms,
+    w.resid = fit_and_errors$w.resid,
     resDen = resDen,
     nsim = nsim,
     ...
   )
 
-  P$doPlotResid <- Q$partial.resids
-
-  return(P)
+  return(plot_data)  # TODO, I don't like the concat in plot data, we can concat after the fact?
 }
