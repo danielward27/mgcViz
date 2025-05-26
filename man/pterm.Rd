@@ -14,7 +14,7 @@ pterm(o, select)
 \value{
 An object of class "pTermSomething" where "Something" is substituted with
 the class of the variable of interest. For instance if this "numeric", the \code{pterm}
-will return an object of class "ptermNumeric".
+will return an object of class "pterm_numeric".
 }
 \description{
 This function can be used to extract a parametric effect from an object of

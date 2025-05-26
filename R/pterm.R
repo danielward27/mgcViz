@@ -8,7 +8,7 @@
 #' @param select index of the selected parametric effect.
 #' @return An object of class "pTermSomething" where "Something" is substituted with
 #'         the class of the variable of interest. For instance if this "numeric", the \code{pterm}
-#'         will return an object of class "ptermNumeric".
+#'         will return an object of class "pterm_numeric".
 #' @name pterm
 #' @examples
 #' ####### 1. Gaussian GAM
@@ -81,30 +81,6 @@
 #' @export pterm
 #'
 pterm <- function(o, select) {
-  if (inherits(o, "list")) {
-    if (
-      all(sapply(o, function(.x) {
-        inherits(.x, "gamViz")
-      })) ==
-        FALSE
-    ) {
-      stop(
-        "Object \"o\" should be of class \"mgamViz\" or (a list of) \"gamViz\" objects"
-      )
-    }
-    if (is.null(names(o))) {
-      names(o) <- 1:length(o)
-    }
-    class(o) <- "mgamViz"
-  }
-
-  if (inherits(o, "mgamViz")) {
-    out <- lapply(o, pterm, select = select)
-    class(out) <- paste0("multi.", class(out[[1]]))
-    attr(out, "isMQGAM") <- inherits(o, "mqgamViz") # Signal that 'o' is output of mqgamV
-    return(out)
-  }
-
   if (!inherits(o, "gamViz")) {
     stop("Argument 'o' should be of class 'gamViz'. See ?getViz")
   }
@@ -173,7 +149,7 @@ pterm <- function(o, select) {
     gam_viz = o
   )
 
-  cl <- paste0("pterm", .simpleCap(.mapVarClass(cls)))
+  cl <- paste0("pterm_", .mapVarClass(cls))
 
   class(out) <- cl
 
@@ -196,10 +172,4 @@ pterm <- function(o, select) {
     return("factor")
   }
   return(.cl) # Not covered by mgcViz
-}
-
-# Simple function that capitalizes first letter of each word
-.simpleCap <- function(x) {
-  s <- strsplit(x, " ")[[1]]
-  paste(toupper(substring(s, 1, 1)), substring(s, 2), sep = "", collapse = " ")
 }
