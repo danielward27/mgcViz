@@ -20,7 +20,6 @@ prepareP <- function(
     term = term,
     unconditional = unconditional,
     residuals = residuals,
-    se_mult = se_mult,
     resDen = resDen,
     se = se
   )
@@ -35,8 +34,8 @@ prepareP <- function(
     ylim = ylim,
     xlim = xlim,
     too_far = too_far,
-    se1_mult = fit_and_errors$se_mult,
-    se2_mult = fit_and_errors$se_mult,
+    se1_mult = se_mult,
+    se2_mult = se_mult,
     seWithMean = seWithMean,
     fitSmooth = fit_and_errors$fv.terms,
     w.resid = fit_and_errors$w.resid,

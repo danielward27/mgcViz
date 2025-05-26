@@ -1,5 +1,5 @@
 
-.data_fit_and_errors <- function(term, unconditional, residuals, resDen, se, se_mult) {
+.data_fit_and_errors <- function(term, unconditional, residuals, resDen, se) {
   V <- fv.terms <- NULL
 
   # Use Bayesian cov matrix including smoothing parameter uncertainty?
@@ -35,18 +35,13 @@
         w.resid <- term$gam_viz$residuals * wr
       }
     }
-
     fv.terms <- term$gam_viz$store$termsFit[, term$gam_viz$store$np + term$term_idx]
     if (is.null(fv.terms)) {
-      fv.terms <- predict(term$gam_viz, type = "terms")
+      fv.terms <- predict(term$gam_viz, type = "terms")  # TODO inefficient?
     }
   }
 
   if (se) {
-    # Sort out CI widths for 1D and 2D smooths
-    if (se_mult < 0) {
-      se_mult <- 0
-    }
     # Check that variances are actually available
     if (term$gam_viz$Vp[1, 1] < 0) {
       se <- FALSE
@@ -58,7 +53,6 @@
   return(list(
     V = V,
     w.resid = w.resid,
-    se_mult = se_mult,
     se = se,
     fv.terms = fv.terms,
     partial_resids = partial_resids
