@@ -37,8 +37,8 @@ prepareP <- function(
     se1_mult = se_mult,
     se2_mult = se_mult,
     seWithMean = seWithMean,
-    fitSmooth = fit_and_errors$fv.terms,
-    w.resid = fit_and_errors$w.resid,
+    fitSmooth = fit_and_errors$fv_terms,
+    w_resid = fit_and_errors$w_resid,
     resDen = resDen,
     nsim = nsim,
     ...

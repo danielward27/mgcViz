@@ -1,6 +1,6 @@
 
 .data_fit_and_errors <- function(term, unconditional, residuals, resDen, se) {
-  V <- fv.terms <- NULL
+  V <- fv_terms <- NULL
 
   # Use Bayesian cov matrix including smoothing parameter uncertainty?
   if (unconditional) {
@@ -11,11 +11,11 @@
     }
   }
 
-  w.resid <- NULL
+  w_resid <- NULL
   if (length(residuals) > 1) {
     # residuals supplied
     if (length(residuals) == length(term$gam_viz$residuals)) {
-      w.resid <- residuals
+      w_resid <- residuals
     } else {
       warning("residuals argument to plot.gamViz is wrong length: ignored")
     }
@@ -26,18 +26,18 @@
 
   # Getting information needed for partial residuals
   if (partial_resids || (resDen != "none")) {
-    if (is.null(w.resid)) {
+    if (is.null(w_resid)) {
       # produce working residuals if info available
       if (is.null(term$gam_viz$residuals) || is.null(term$gam_viz$weights)) {
         partial_resids <- FALSE
       } else {
         wr <- sqrt(abs(term$gam_viz$weights))
-        w.resid <- term$gam_viz$residuals * wr
+        w_resid <- term$gam_viz$residuals * wr
       }
     }
-    fv.terms <- term$gam_viz$store$termsFit[, term$gam_viz$store$np + term$term_idx]
-    if (is.null(fv.terms)) {
-      fv.terms <- predict(term$gam_viz, type = "terms")  # TODO inefficient?
+    fv_terms <- term$gam_viz$store$termsFit[, term$gam_viz$store$np + term$term_idx]
+    if (is.null(fv_terms)) {
+      fv_terms <- predict(term$gam_viz, type = "terms")  # TODO inefficient?
     }
   }
 
@@ -52,9 +52,9 @@
 
   return(list(
     V = V,
-    w.resid = w.resid,
+    w_resid = w_resid,
     se = se,
-    fv.terms = fv.terms,
+    fv_terms = fv_terms,
     partial_resids = partial_resids
   ))
 }

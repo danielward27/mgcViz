@@ -11,7 +11,7 @@
 #' @param se2_mult  XXX
 #' @param seWithMean  XXX
 #' @param fitSmooth  XXX
-#' @param w.resid  XXX
+#' @param w_resid  XXX
 #' @param resDen  XXX
 #' @param ...  XXX
 #' @noRd
@@ -29,15 +29,15 @@
 #' class(v)
 #' o <- v
 #' o$smooth <- o$gam_viz$smooth[[o$ism]]
-#' fv.terms <- o$store$termsFit[, o$store$np + o$ism]
-#' init <- mgcViz:::.initializeXXX(o, unconditional = FALSE, residuals = FALSE, resDen = "cond", se = TRUE, fv.terms)
+#' fv_terms <- o$store$termsFit[, o$store$np + o$ism]
+#' init <- mgcViz:::.initializeXXX(o, unconditional = FALSE, residuals = FALSE, resDen = "cond", se = TRUE, fv_terms)
 #' o <- init$o
-#' w.resid <- init$w.resid
+#' w_resid <- init$w_resid
 #' partial_resids <- init$partial_resids
 #' se2_mult <- init$se2_mult
 #' se1_mult <- init$se1_mult
 #' se <- init$se
-#' fv.terms <- init$fv.terms
+#' fv_terms <- init$fv_terms
 #' order <- init$order
 #' sm <- o$smooth
 #' too_far <- 0.1
@@ -58,7 +58,7 @@
     se2_mult,
     seWithMean,
     fitSmooth,
-    w.resid,
+    w_resid,
     resDen,
     nsim,
     ...) {
@@ -133,7 +133,7 @@
         }
       } ## standard errors for fit completed
       if (partial_resids || (resDen != "none")) {
-        P$p.resid <- fitSmooth + w.resid
+        P$p.resid <- fitSmooth + w_resid
       }
       if (se && P$se) {
         P$se <- se.fit * P$se_mult
@@ -142,7 +142,7 @@
     } else {
       ## P$fit created directly
       if (partial_resids || (resDen != "none")) {
-        P$p.resid <- fitSmooth + w.resid
+        P$p.resid <- fitSmooth + w_resid
       }
     }
     P$plot.me <- TRUE
