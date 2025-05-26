@@ -5,12 +5,12 @@
 #'              This function takes a family object as input and returns the same object, but with the cdf
 #'              function added to the \code{$cdf} slot. Mainly for internal use.
 #' @param fam an object of class \code{family}.
-#' @name fix.family.cdf
+#' @name fix_family_cdf
 #' @importFrom stats ppois pbinom pgamma pnorm
-#' @rdname fix.family.cdf
-#' @export fix.family.cdf
+#' @rdname fix_family_cdf
+#' @export fix_family_cdf
 #'
-fix.family.cdf <- function(fam) {
+fix_family_cdf <- function(fam) {
   ## add cdf to family object
 
   if (!inherits(fam, "family")) {

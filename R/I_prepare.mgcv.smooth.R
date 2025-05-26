@@ -26,10 +26,10 @@
 #'   for each plot.
 #' @param xlim If supplied then this pair of numbers are used as the x limits
 #'   for each plot.
-#' @param too.far If greater than 0 then this is used to determine when a
+#' @param too_far If greater than 0 then this is used to determine when a
 #'   location is too far from data to be plotted when plotting 2-D smooths. This
 #'   is useful since smooths tend to go wild away from data. The data are scaled
-#'   into the unit square before deciding what to exclude, and too.far <- <-  is a
+#'   into the unit square before deciding what to exclude, and too_far <- <-  is a
 #'   distance within the unit square. Setting to zero can make plotting faster
 #'   for large datasets, but care then needed with interpretation of plots.
 #' @param ... Other graphics parameters to pass on to plotting commands.
@@ -39,19 +39,19 @@
 .prepare.mgcv.smooth <- function(
     term,
     data = NULL,
-    se1.mult = 1,
-    se2.mult = 2,
+    se1_mult = 1,
+    se2_mult = 2,
     n = 100,
     n2 = 40,
     ylim = NULL,
     xlim = NULL,
-    too.far = 0.1,
+    too_far = 0.1,
     ...) {
   if (term$dim == 1) {
     out <- .preparePlotSmooth1D(
       term = term,
       data = data,
-      se.mult = se1.mult,
+      se_mult = se1_mult,
       n = n,
       xlim = xlim,
       ...
@@ -62,11 +62,11 @@
     out <- .preparePlotSmooth2D(
       term = term,
       data = data,
-      se.mult = se2.mult,
+      se_mult = se2_mult,
       n2 = n2,
       ylim = ylim,
       xlim = xlim,
-      too.far = too.far,
+      too_far = too_far,
       ...
     )
   }
@@ -75,11 +75,11 @@
     out <- .preparePlotSmoothMD(
       term = term,
       data = data,
-      se.mult = se2.mult,
+      se_mult = se2_mult,
       n2 = n2,
       ylim = ylim,
       xlim = xlim,
-      too.far = too.far,
+      too_far = too_far,
       ...
     )
   }

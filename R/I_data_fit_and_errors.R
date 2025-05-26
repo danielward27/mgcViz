@@ -1,5 +1,5 @@
 
-.data_fit_and_errors <- function(term, unconditional, residuals, resDen, se, se.mult) {
+.data_fit_and_errors <- function(term, unconditional, residuals, resDen, se, se_mult) {
   V <- fv.terms <- NULL
 
   # Use Bayesian cov matrix including smoothing parameter uncertainty?
@@ -19,17 +19,17 @@
     } else {
       warning("residuals argument to plot.gamViz is wrong length: ignored")
     }
-    partial.resids <- TRUE
+    partial_resids <- TRUE
   } else {
-    partial.resids <- residuals
+    partial_resids <- residuals
   } # use working residuals or none
 
   # Getting information needed for partial residuals
-  if (partial.resids || (resDen != "none")) {
+  if (partial_resids || (resDen != "none")) {
     if (is.null(w.resid)) {
       # produce working residuals if info available
       if (is.null(term$gam_viz$residuals) || is.null(term$gam_viz$weights)) {
-        partial.resids <- FALSE
+        partial_resids <- FALSE
       } else {
         wr <- sqrt(abs(term$gam_viz$weights))
         w.resid <- term$gam_viz$residuals * wr
@@ -44,8 +44,8 @@
 
   if (se) {
     # Sort out CI widths for 1D and 2D smooths
-    if (se.mult < 0) {
-      se.mult <- 0
+    if (se_mult < 0) {
+      se_mult <- 0
     }
     # Check that variances are actually available
     if (term$gam_viz$Vp[1, 1] < 0) {
@@ -58,9 +58,9 @@
   return(list(
     V = V,
     w.resid = w.resid,
-    se.mult = se.mult,
+    se_mult = se_mult,
     se = se,
     fv.terms = fv.terms,
-    partial.resids = partial.resids
+    partial_resids = partial_resids
   ))
 }

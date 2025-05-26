@@ -40,12 +40,12 @@ get_data.random.effect <- function(term, trans = identity, ...) {
     residuals = TRUE,
     resDen = "none",
     se = TRUE,
-    se.mult = 1,
+    se_mult = 1,
     n = 100,
     n2 = NULL,
     ylim = NULL,
     xlim = NULL,
-    too.far = NULL,
+    too_far = NULL,
     seWithMean = FALSE
   )
   dat <- list()

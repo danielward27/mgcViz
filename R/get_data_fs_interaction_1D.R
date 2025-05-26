@@ -73,12 +73,12 @@ get_data.fs.interaction.1D <- function(
     residuals = FALSE,
     resDen = "none",
     se = TRUE,
-    se.mult = 1,
+    se_mult = 1,
     n = n,
     n2 = NULL,
     ylim = NULL,
     xlim = xlim,
-    too.far = NULL,
+    too_far = NULL,
     seWithMean = FALSE
   )
 

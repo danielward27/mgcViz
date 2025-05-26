@@ -11,7 +11,7 @@
   xlim = NULL,
   ylim = NULL,
   maxpo = 10000,
-  too.far = 0.1,
+  too_far = 0.1,
   trans = identity,
   seWithMean = FALSE,
   unconditional = FALSE,
@@ -29,10 +29,10 @@
 \code{resRug()} and \code{resPoints()}. If number of datapoints > \code{maxpo},
 then a subsample of \code{maxpo} points will be taken.}
 
-\item{too.far}{if greater than 0 then this is used to determine when a location is too far
+\item{too_far}{if greater than 0 then this is used to determine when a location is too far
 from data to be plotted. This is useful since smooths tend to go wild
 away from data. The data are scaled into the unit square before deciding
-what to exclude, and too.far is a distance within the unit square.
+what to exclude, and too_far is a distance within the unit square.
 Setting to zero can make plotting faster for large datasets, but care
 then needed with interpretation of plots.}
 

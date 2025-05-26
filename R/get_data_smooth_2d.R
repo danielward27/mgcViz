@@ -10,10 +10,10 @@
 #' @param maxpo maximum number of residuals points that will be used by layers such as
 #'              \code{resRug()} and \code{resPoints()}. If number of datapoints > \code{maxpo},
 #'              then a subsample of \code{maxpo} points will be taken.
-#' @param too.far if greater than 0 then this is used to determine when a location is too far
+#' @param too_far if greater than 0 then this is used to determine when a location is too far
 #'               from data to be plotted. This is useful since smooths tend to go wild
 #'               away from data. The data are scaled into the unit square before deciding
-#'               what to exclude, and too.far is a distance within the unit square.
+#'               what to exclude, and too_far is a distance within the unit square.
 #'               Setting to zero can make plotting faster for large datasets, but care
 #'               then needed with interpretation of plots.
 #' @param trans monotonic function to apply to the smooth and residuals, before plotting.
@@ -65,7 +65,7 @@ get_data.mgcv.smooth.2D <- function(
     xlim = NULL,
     ylim = NULL,
     maxpo = 1e4,
-    too.far = 0.1,
+    too_far = 0.1,
     trans = identity,
     seWithMean = FALSE,
     unconditional = FALSE,
@@ -77,12 +77,12 @@ get_data.mgcv.smooth.2D <- function(
     residuals = TRUE,
     resDen = "none",
     se = TRUE,
-    se.mult = 1,
+    se_mult = 1,
     n = NULL,
     n2 = n,
     ylim = ylim,
     xlim = xlim,
-    too.far = too.far,
+    too_far = too_far,
     seWithMean = seWithMean
   )
 
@@ -150,11 +150,11 @@ get_data.mgcv.smooth.2D <- function(
 .preparePlotSmooth2D <- function(
     term,
     data = NULL,
-    se.mult = 2,
+    se_mult = 2,
     n2 = 40,
     ylim = NULL,
     xlim = NULL,
-    too.far = 0.1,
+    too_far = 0.1,
     ...) {
   out <- NULL
   if (term$plot.me) {
@@ -178,8 +178,8 @@ get_data.mgcv.smooth.2D <- function(
     y_seq = seq(ylim[1], ylim[2], length = n2)
     x_rep <- rep(x_seq, n2)
     y_rep <- rep(y_seq, rep(n2, n2))
-    if (too.far > 0) {
-      exclude <- exclude.too.far(x_rep, y_rep, raw$x, raw$y, dist = too.far)
+    if (too_far > 0) {
+      exclude <- exclude.too.far(x_rep, y_rep, raw$x, raw$y, dist = too_far)
     } else {
       exclude <- rep(FALSE, n2 * n2)
     }
@@ -201,7 +201,7 @@ get_data.mgcv.smooth.2D <- function(
       scale = FALSE,
       se = TRUE,
       raw = raw,
-      se.mult = se.mult,
+      se_mult = se_mult,
       ylim = ylim,
       xlim = xlim,
       exclude = exclude

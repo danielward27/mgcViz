@@ -1,14 +1,14 @@
 #' @param sm XXX
 #' @param x  XXX
-#' @param partial.resids  XXX
+#' @param partial_resids  XXX
 #' @param se  XXX
 #' @param n  XXX
 #' @param n2  XXX
 #' @param ylim  XXX
 #' @param xlim  XXX
-#' @param too.far  XXX
-#' @param se1.mult  XXX
-#' @param se2.mult  XXX
+#' @param too_far  XXX
+#' @param se1_mult  XXX
+#' @param se2_mult  XXX
 #' @param seWithMean  XXX
 #' @param fitSmooth  XXX
 #' @param w.resid  XXX
@@ -33,29 +33,29 @@
 #' init <- mgcViz:::.initializeXXX(o, unconditional = FALSE, residuals = FALSE, resDen = "cond", se = TRUE, fv.terms)
 #' o <- init$o
 #' w.resid <- init$w.resid
-#' partial.resids <- init$partial.resids
-#' se2.mult <- init$se2.mult
-#' se1.mult <- init$se1.mult
+#' partial_resids <- init$partial_resids
+#' se2_mult <- init$se2_mult
+#' se1_mult <- init$se1_mult
 #' se <- init$se
 #' fv.terms <- init$fv.terms
 #' order <- init$order
 #' sm <- o$smooth
-#' too.far <- 0.1
+#' too_far <- 0.1
 #' seWithMean <- FALSE
 #' resDen <- "none"
 #' @noRd
 .get_plot_data <- function(
     term,
     gam_viz,
-    partial.resids,
+    partial_resids,
     se,
     n,
     n2,
     ylim,
     xlim,
-    too.far,
-    se1.mult,
-    se2.mult,
+    too_far,
+    se1_mult,
+    se2_mult,
     seWithMean,
     fitSmooth,
     w.resid,
@@ -69,13 +69,13 @@
   P <- .prepare(
     term = term,
     data = gam_viz$model,
-    se1.mult = se1.mult,
-    se2.mult = se2.mult,
+    se1_mult = se1_mult,
+    se2_mult = se2_mult,
     n = n,
     n2 = n2,
     ylim = ylim,
     xlim = xlim,
-    too.far = too.far,
+    too_far = too_far,
     ...
   )
   if (is.null(P)) {
@@ -132,16 +132,16 @@
           P$se.fit[P$exclude] <- NA
         }
       } ## standard errors for fit completed
-      if (partial.resids || (resDen != "none")) {
+      if (partial_resids || (resDen != "none")) {
         P$p.resid <- fitSmooth + w.resid
       }
       if (se && P$se) {
-        P$se <- se.fit * P$se.mult
+        P$se <- se.fit * P$se_mult
       } # Note multiplier
       P$X <- NULL
     } else {
       ## P$fit created directly
-      if (partial.resids || (resDen != "none")) {
+      if (partial_resids || (resDen != "none")) {
         P$p.resid <- fitSmooth + w.resid
       }
     }

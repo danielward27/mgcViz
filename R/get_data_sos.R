@@ -11,10 +11,10 @@
 #' @param maxpo maximum number of residuals points that will be used by layers such as
 #'              \code{resRug()} and \code{resPoints()}. If number of datapoints > \code{maxpo},
 #'              then a subsample of \code{maxpo} points will be taken.
-#' @param too.far if greater than 0 then this is used to determine when a location is too far
+#' @param too_far if greater than 0 then this is used to determine when a location is too far
 #'               from data to be plotted. This is useful since smooths tend to go wild
 #'               away from data. The data are scaled into the unit square before deciding
-#'               what to exclude, and too.far is a distance within the unit square.
+#'               what to exclude, and too_far is a distance within the unit square.
 #'               Setting to zero can make plotting faster for large datasets, but care
 #'               then needed with interpretation of plots.
 #' @param phi one of the plotting angles, relevant only if \code{scheme = 0}.
@@ -83,7 +83,7 @@ get_data.sos.smooth <- function(
     xlim = NULL,
     ylim = NULL,
     maxpo = 1e4,
-    too.far = 0.1,
+    too_far = 0.1,
     phi = 30,
     theta = 30,
     trans = identity,
@@ -107,12 +107,12 @@ get_data.sos.smooth <- function(
     residuals = TRUE,
     resDen = "none",
     se = TRUE,
-    se.mult = 1,
+    se_mult = 1,
     n = NULL,
     n2 = n,
     ylim = ylim,
     xlim = xlim,
-    too.far = too.far,
+    too_far = too_far,
     seWithMean = seWithMean,
     scheme = scheme,
     phi = phi,
@@ -189,15 +189,15 @@ get_data.sos.smooth <- function(
 .prepare.sos.smooth <- function(
     term,
     data,
-    se1.mult = 1,
-    se2.mult = 1,
-    partial.resids = NULL,
+    se1_mult = 1,
+    se2_mult = 1,
+    partial_resids = NULL,
     se,
     n,
     n2,
     ylim = NULL,
     xlim = NULL,
-    too.far,
+    too_far,
     trans,
     phi,
     theta,
@@ -209,11 +209,11 @@ get_data.sos.smooth <- function(
     return(.preparePlotSmooth2D(
       term = term,
       data = data,
-      se.mult = se2.mult,
+      se_mult = se2_mult,
       n2 = n2,
       ylim = ylim,
       xlim = xlim,
-      too.far = too.far,
+      too_far = too_far,
     ))
   }
 
@@ -282,7 +282,7 @@ get_data.sos.smooth <- function(
     ym = ym,
     lo = lo,
     la = dat[[1]],
-    se.mult = se1.mult
+    se_mult = se1_mult
   ))
 } ## end prepare.sos.smooth
 

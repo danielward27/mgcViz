@@ -39,7 +39,7 @@ residuals.gamViz <- function(object, type = "deviance", ...) {
   o <- object
 
   if (type %in% c("tunif", "tnormal")) {
-    fam <- fix.family.cdf(o$family)
+    fam <- fix_family_cdf(o$family)
 
     if (is.null(fam$cdf)) {
       stop(

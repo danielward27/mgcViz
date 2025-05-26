@@ -12,7 +12,7 @@
   xlim = NULL,
   ylim = NULL,
   maxpo = 10000,
-  too.far = c(0.1, NA),
+  too_far = c(0.1, NA),
   trans = identity,
   seWithMean = FALSE,
   unconditional = FALSE,
@@ -33,7 +33,7 @@ When plotting a smooth in (d+2) dimensions, then d variables must be fixed.}
 \code{resRug()} and \code{resPoints()}. If number of datapoints > \code{maxpo},
 then a subsample of \code{maxpo} points will be taken.}
 
-\item{too.far}{a numeric vector with two entries. The first has the same interpretation
+\item{too_far}{a numeric vector with two entries. The first has the same interpretation
 as in \link{plot.mgcv.smooth.2D} and it avoids plotting the smooth effect
 in areas that are too far form any observation. The distance will be calculated only
 using the variables which are not in \code{fix} (see above). Hence in two dimensions,

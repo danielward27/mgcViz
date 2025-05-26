@@ -10,7 +10,7 @@
 #' @param maxpo maximum number of residuals points that will be used by layers such as
 #'              \code{resRug()} and \code{resPoints()}. If number of datapoints > \code{maxpo},
 #'              then a subsample of \code{maxpo} points will be taken.
-#' @param too.far a numeric vector with two entries. The first has the same interpretation
+#' @param too_far a numeric vector with two entries. The first has the same interpretation
 #'                as in [plot.mgcv.smooth.2D] and it avoids plotting the smooth effect
 #'                in areas that are too far form any observation. The distance will be calculated only
 #'                using the variables which are not in \code{fix} (see above). Hence in two dimensions,
@@ -76,13 +76,13 @@ get_data.mgcv.smooth.MD <- function(
     xlim = NULL,
     ylim = NULL,
     maxpo = 1e4,
-    too.far = c(0.1, NA),
+    too_far = c(0.1, NA),
     trans = identity,
     seWithMean = FALSE,
     unconditional = FALSE,
     ...) {
-  if (length(too.far) == 1) {
-    too.far <- c(too.far, NA)
+  if (length(too_far) == 1) {
+    too_far <- c(too_far, NA)
   }
 
   P <- prepareP(
@@ -91,12 +91,12 @@ get_data.mgcv.smooth.MD <- function(
     residuals = TRUE,
     resDen = "none",
     se = TRUE,
-    se.mult = 1,
+    se_mult = 1,
     n = NULL,
     n2 = n,
     ylim = ylim,
     xlim = xlim,
-    too.far = too.far,
+    too_far = too_far,
     seWithMean = seWithMean,
     fix = fix
   )
@@ -112,11 +112,11 @@ get_data.mgcv.smooth.MD <- function(
     term,
     fix,
     data = NULL,
-    se.mult = 2,
+    se_mult = 2,
     n2 = 40,
     ylim = NULL,
     xlim = NULL,
-    too.far = 0.1,
+    too_far = 0.1,
     ...) {
   out <- NULL
   if (term$plot.me) {
@@ -143,22 +143,22 @@ get_data.mgcv.smooth.MD <- function(
     yy <- rep(ym, each = n2)
 
     # Mark cells on X-Y grid are too far from any observation
-    if (too.far[1] > 0) {
-      exclude <- exclude.too.far(xx, yy, raw$x, raw$y, dist = too.far[1])
+    if (too_far[1] > 0) {
+      exclude <- exclude.too.far(xx, yy, raw$x, raw$y, dist = too_far[1])
     } else {
       exclude <- rep(FALSE, n2 * n2)
     }
 
     # Mark covariate vectors (and corresponding residuals) that are too
     # far from X-Y plane (the slice of interest)
-    if (is.na(too.far[2]) || too.far[2] > 0) {
+    if (is.na(too_far[2]) || too_far[2] > 0) {
       tmp <- sapply(ov, function(.nm) as.numeric(data[.nm][[1]]))
       tmp <- sqrt(mahalanobis(tmp, fix, diag(diag(cov(tmp)), ncol(tmp)))) # Euclidean distance
       exclude2 <- tmp >
-        if (is.na(too.far[2])) {
+        if (is.na(too_far[2])) {
           quantile(tmp, 0.1)
         } else {
-          too.far[2]
+          too_far[2]
         }
     } else {
       exclude2 <- FALSE
@@ -192,7 +192,7 @@ get_data.mgcv.smooth.MD <- function(
       scale = FALSE,
       se = TRUE,
       raw = raw,
-      se.mult = se.mult,
+      se_mult = se_mult,
       ylim = ylim,
       xlim = xlim,
       exclude = exclude,

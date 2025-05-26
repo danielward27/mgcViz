@@ -94,12 +94,12 @@ get_data.mgcv.smooth.1D <- function(
     residuals = TRUE,
     resDen = "none",
     se = TRUE,
-    se.mult = 1,
+    se_mult = 1,
     n = n,
     n2 = NULL,
     ylim = NULL,
     xlim = xlim,
-    too.far = NULL,
+    too_far = NULL,
     seWithMean = seWithMean,
     nsim = nsim
   )
@@ -148,7 +148,7 @@ get_data.mgcv.smooth.1D <- function(
 .preparePlotSmooth1D <- function(
     term,
     data,
-    se.mult = 1,
+    se_mult = 1,
     n = 100,
     xlim = NULL,
     ...) {
@@ -181,7 +181,7 @@ get_data.mgcv.smooth.1D <- function(
       scale = TRUE,
       se = TRUE,
       raw = raw,
-      se.mult = se.mult,
+      se_mult = se_mult,
       xlim = xlim
     )
   }
