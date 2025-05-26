@@ -12,38 +12,8 @@
 #' @rdname sm
 #' @export sm
 sm <- function(o, select) {
-  if (inherits(o, "list")) {
-    if (
-      all(sapply(o, function(.x) {
-        inherits(.x, "gamViz")
-      })) ==
-        FALSE
-    ) {
-      stop(
-        "Object \"o\" should be of class \"mgamViz\" or (a list of) \"gamViz\" objects"
-      )
-    }
-    if (is.null(names(o))) {
-      names(o) <- 1:length(o)
-    }
-    class(o) <- "mgamViz"
-  }
-
-  if (inherits(o, "mgamViz")) {
-    out <- lapply(o, sm, select = select)
-    class(out) <- paste0("multi.", class(out[[1]]))
-    attr(out, "isMQGAM") <- inherits(o, "mqgamViz") # Signal that 'o' is output of mqgamV
-    return(out)
-  }
-
   if (!inherits(o, "gamViz")) {
     stop("Argument 'o' should be of class 'gamViz'. See ?getViz")
-  }
-
-  # We should just use un-weighted raw residuals for plots
-  if ("qgam" %in% class(o)) {
-    o$residuals <- residuals(o, type = "response")
-    o$weights <- o$weights * 0 + 1
   }
 
   m <- length(o$smooth) # number of smooth effects
