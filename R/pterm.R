@@ -165,12 +165,12 @@ pterm <- function(o, select) {
   }
 
   out <- list(
-    "ism" = select,
-    "name" = nam,
-    "varName" = vNam,
-    "class" = cls,
-    "order" = ord,
-    "gam_viz" = o
+    term_idx = select,
+    name = nam,
+    varName = vNam,
+    class = cls,
+    order = ord,
+    gam_viz = o
   )
 
   cl <- paste0("pterm", .simpleCap(.mapVarClass(cls)))

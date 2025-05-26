@@ -26,7 +26,7 @@ prepareP <- function(
   )
 
   plot_data <- .get_plot_data(
-    term = term$gam_viz$smooth[[term$ism]],
+    term = term$gam_viz$smooth[[term$term_idx]],
     gam_viz = term$gam_viz,
     partial.resids = fit_and_errors$partial.resids,
     se = fit_and_errors$se,

@@ -36,7 +36,7 @@
       }
     }
 
-    fv.terms <- term$gam_viz$store$termsFit[, term$gam_viz$store$np + term$ism]
+    fv.terms <- term$gam_viz$store$termsFit[, term$gam_viz$store$np + term$term_idx]
     if (is.null(fv.terms)) {
       fv.terms <- predict(term$gam_viz, type = "terms")
     }
