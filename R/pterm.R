@@ -170,7 +170,7 @@ pterm <- function(o, select) {
     "varName" = vNam,
     "class" = cls,
     "order" = ord,
-    "gObj" = o
+    "gam_viz" = o
   )
 
   cl <- paste0("pterm", .simpleCap(.mapVarClass(cls)))

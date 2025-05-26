@@ -26,8 +26,8 @@ prepareP <- function(
   )
 
   plot_data <- .get_plot_data(
-    term = term$gObj$smooth[[term$ism]],
-    gam = term$gObj,
+    term = term$gam_viz$smooth[[term$ism]],
+    gam_viz = term$gam_viz,
     partial.resids = fit_and_errors$partial.resids,
     se = fit_and_errors$se,
     n = n,

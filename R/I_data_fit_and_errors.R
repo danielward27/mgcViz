@@ -4,17 +4,17 @@
 
   # Use Bayesian cov matrix including smoothing parameter uncertainty?
   if (unconditional) {
-    if (is.null(term$gObj$Vc)) {
+    if (is.null(term$gam_viz$Vc)) {
       warning("Smoothness uncertainty corrected covariance not available")
     } else {
-      V <- term$gObj$Vc
+      V <- term$gam_viz$Vc
     }
   }
 
   w.resid <- NULL
   if (length(residuals) > 1) {
     # residuals supplied
-    if (length(residuals) == length(term$gObj$residuals)) {
+    if (length(residuals) == length(term$gam_viz$residuals)) {
       w.resid <- residuals
     } else {
       warning("residuals argument to plot.gamViz is wrong length: ignored")
@@ -28,17 +28,17 @@
   if (partial.resids || (resDen != "none")) {
     if (is.null(w.resid)) {
       # produce working residuals if info available
-      if (is.null(term$gObj$residuals) || is.null(term$gObj$weights)) {
+      if (is.null(term$gam_viz$residuals) || is.null(term$gam_viz$weights)) {
         partial.resids <- FALSE
       } else {
-        wr <- sqrt(abs(term$gObj$weights))
-        w.resid <- term$gObj$residuals * wr
+        wr <- sqrt(abs(term$gam_viz$weights))
+        w.resid <- term$gam_viz$residuals * wr
       }
     }
 
-    fv.terms <- term$gObj$store$termsFit[, term$gObj$store$np + term$ism]
+    fv.terms <- term$gam_viz$store$termsFit[, term$gam_viz$store$np + term$ism]
     if (is.null(fv.terms)) {
-      fv.terms <- predict(term$gObj, type = "terms")
+      fv.terms <- predict(term$gam_viz, type = "terms")
     }
   }
 
@@ -48,7 +48,7 @@
       se.mult <- 0
     }
     # Check that variances are actually available
-    if (term$gObj$Vp[1, 1] < 0) {
+    if (term$gam_viz$Vp[1, 1] < 0) {
       se <- FALSE
       warning("No variance estimates available")
     }

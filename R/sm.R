@@ -59,7 +59,7 @@ sm <- function(o, select) {
     ))
   }
 
-  out <- list("ism" = select, "gObj" = o)
+  out <- list(ism = select, gam_viz = o)
 
   cl <- class(o$smooth[[select]])
 
