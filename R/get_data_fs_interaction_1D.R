@@ -113,11 +113,11 @@ get_data.fs.interaction.1D <- function(
   if (is.null(xlim)) {
     xlim <- range(raw)
   }
-  xx <- seq(xlim[1], xlim[2], length = n)
+  x_seq <- seq(xlim[1], xlim[2], length = n)
 
   nf <- length(term$flev)
   fac <- rep(term$flev, rep(n, nf))
-  dat <- data.frame(as.factor(fac), xx)
+  dat <- data.frame(as.factor(fac), x_seq)
   names(dat) <- c(term$fterm, term$base$term)
   X <- PredictMat(term, dat)
   return(list(
@@ -127,7 +127,7 @@ get_data.fs.interaction.1D <- function(
     raw = raw,
     xlim = xlim,
     ylim = ylim,
-    x = xx,
+    x = x_seq,
     n = n,
     nf = nf
   ))

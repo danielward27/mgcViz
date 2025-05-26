@@ -62,9 +62,9 @@ get_data.ptermNumeric <- function(
     xlim <- range(X[[term$varNam]])
   }
 
-  xx <- seq(xlim[1], xlim[2], length = n)
+  x_seq <- seq(xlim[1], xlim[2], length = n)
   data <- X[1:n, ]
-  data[[term$varNam]] <- xx
+  data[[term$varNam]] <- x_seq
 
   # Suppressing spurious warnings from predict.gam
   .pred <- withCallingHandlers(
@@ -88,7 +88,7 @@ get_data.ptermNumeric <- function(
   # 2) Build dataset on fitted effect
   data <- list()
   data$fit <- data.frame(
-    "x" = xx,
+    "x" = x_seq,
     "y" = unname(.pred$fit),
     "ty" = trans(unname(.pred$fit)),
     "se" = unname(.pred$se)

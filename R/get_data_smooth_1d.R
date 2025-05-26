@@ -157,27 +157,27 @@ get_data.mgcv.smooth.1D <- function(
     raw <- as.vector(data[term$term][[1]])
     if (is.null(xlim)) {
       # Generate x sequence for prediction
-      xx <- seq(min(raw), max(raw), length = n)
+      x_seq <- seq(min(raw), max(raw), length = n)
     } else {
-      xx <- seq(xlim[1], xlim[2], length = n)
+      x_seq <- seq(xlim[1], xlim[2], length = n)
     }
     if (term$by != "NA") {
       # Deal with any by variables
       by <- rep(1, n)
-      dat <- data.frame(x = xx, by = by)
+      dat <- data.frame(x = x_seq, by = by)
       names(dat) <- c(term$term, term$by)
     } else {
-      dat <- data.frame(x = xx)
+      dat <- data.frame(x = x_seq)
       names(dat) <- term$term
     } # Finished preparing prediction data.frame
     X <- PredictMat(term, dat) # prediction matrix for this term
 
     if (is.null(xlim)) {
-      xlim <- range(xx)
+      xlim <- range(x_seq)
     }
     out <- list(
       X = X,
-      x = xx,
+      x = x_seq,
       scale = TRUE,
       se = TRUE,
       raw = raw,
