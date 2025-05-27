@@ -1,64 +1,5 @@
-#'
-#' Plotting two dimensional smooth effects
-#'
-#' @description Plotting method for two dimensional smooth effects.
-#'
-#' @param x a smooth effect object, extracted using [mgcViz::sm].
-#' @param n sqrt of the number of grid points used to compute the effect plot.
-#' @param xlim if supplied then this pair of numbers are used as the x limits for the plot.
-#' @param ylim if supplied then this pair of numbers are used as the y limits for the plot.
-#' @param maxpo maximum number of residuals points that will be used by layers such as
-#'              \code{resRug()} and \code{resPoints()}. If number of datapoints > \code{maxpo},
-#'              then a subsample of \code{maxpo} points will be taken.
-#' @param too_far if greater than 0 then this is used to determine when a location is too far
-#'               from data to be plotted. This is useful since smooths tend to go wild
-#'               away from data. The data are scaled into the unit square before deciding
-#'               what to exclude, and too_far is a distance within the unit square.
-#'               Setting to zero can make plotting faster for large datasets, but care
-#'               then needed with interpretation of plots.
-#' @param trans monotonic function to apply to the smooth and residuals, before plotting.
-#'              Monotonicity is not checked.
-#' @param unconditional if \code{TRUE} then the smoothing parameter uncertainty corrected covariance
-#'                      matrix is used to compute uncertainty bands, if available.
-#'                      Otherwise the bands treat the smoothing parameters as fixed.
-#' @param seWithMean if TRUE the component smooths are shown with confidence intervals that
-#'                   include the uncertainty about the overall mean. If FALSE then the uncertainty
-#'                   relates purely to the centred smooth itself. Marra and Wood (2012) suggests
-#'                   that TRUE results in better coverage performance, and this is also suggested
-#'                   by simulation.
-#' @param ... currently unused.
-#' @return An objects of class \code{plotSmooth}.
-#' @references Marra, G and S.N. Wood (2012) Coverage Properties of Confidence Intervals for
-#'             Generalized Additive Model Components. Scandinavian Journal of Statistics.
-#' @name plot.mgcv.smooth.2D
-#' @examples
-#' library(mgcViz)
-#' set.seed(2) ## simulate some data...
-#' dat <- gamSim(1, n = 700, dist = "normal", scale = 2)
-#' b <- gam(y ~ s(x0) + s(x1, x2) + s(x3), data = dat, method = "REML")
-#' b <- getViz(b)
-#'
-#' # Plot 2D effect with noised-up raster, contour and rug for design points
-#' # Opacity is proportional to the significance of the effect
-#' plot(sm(b, 2)) + l_fitRaster(pTrans = zto1(0.05, 2, 0.1), noiseup = TRUE) +
-#'   l_rug() + l_fitContour()
-#'
-#' # Plot contour of effect joint density of design points
-#' plot(sm(b, 2)) + l_dens(type = "joint") + l_points() + l_fitContour() +
-#'   coord_cartesian(expand = FALSE) # Fill the plot
-#'
-#' ###
-#' # Quantile GAM example
-#' ###
-#' b <- mqgamV(y ~ s(x0) + s(x1, x2) + s(x3), qu = c(0.3, 0.7), data = dat)
-#'
-#' plot(sm(b, 2)) + l_fitRaster(noiseup = TRUE) + l_fitContour(colour = 2)
-#'
-#' @importFrom mgcv exclude.too.far
-#' @rdname plot.mgcv.smooth.2D
-#' @export get_data.mgcv.smooth.2D
+#' @description Get data for plotting two dimensional smooth effects.
 #' @export
-#'
 get_data.mgcv.smooth.2D <- function(
     term,
     n = 40,
@@ -94,7 +35,7 @@ get_data.mgcv.smooth.2D <- function(
 
 # Used by e.g MD and SOS
 #' @noRd
-.get_data_shared_2d <- function(term, P, trans, maxpo, flip = FALSE) {  # TODO is term even used?
+.get_data_shared_2d <- function(term, P, trans, maxpo, flip = FALSE) { # TODO is term even used?
   .dat <- list()
   # 1) Build dataset on fitted effect
   P$fit[P$exclude] <- NA
@@ -147,7 +88,7 @@ get_data.mgcv.smooth.2D <- function(
 
 
 # Internal function for preparing plot of two dimensional smooths
-.preparePlotSmooth2D <- function(
+.prepare_plot_smooth_2d <- function(
     term,
     data = NULL,
     se_mult = 2,
@@ -166,7 +107,7 @@ get_data.mgcv.smooth.2D <- function(
     )
     n2 <- max(10, n2)
 
-    
+
     if (is.null(xlim)) {
       xlim <- c(min(raw$x), max(raw$x))
     }
@@ -174,8 +115,8 @@ get_data.mgcv.smooth.2D <- function(
       ylim <- c(min(raw$y), max(raw$y))
     }
 
-    x_seq = seq(xlim[1], xlim[2], length = n2)
-    y_seq = seq(ylim[1], ylim[2], length = n2)
+    x_seq <- seq(xlim[1], xlim[2], length = n2)
+    y_seq <- seq(ylim[1], ylim[2], length = n2)
     x_rep <- rep(x_seq, n2)
     y_rep <- rep(y_seq, rep(n2, n2))
     if (too_far > 0) {
@@ -193,7 +134,7 @@ get_data.mgcv.smooth.2D <- function(
       colnames(dat) <- c(xterm, yterm)
     } ## prediction data.frame complete
     X <- PredictMat(term, dat) ## prediction matrix for this term
-    
+
     out <- list(
       X = X,
       x = x_seq,

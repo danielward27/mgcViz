@@ -1,36 +1,7 @@
-################################################################
-#' Converting gam objects to gamViz objects
-#'
-#' @description This function converts \code{gam} objects into \code{gamViz} objects,
-#'              for which \code{mgcViz} provides several plotting methods.
+#' @description This function converts \code{gam} objects into \code{gamViz} objects.
 #' @param o an object of class \code{gam}.
-#' @param nsim the number of simulated vectors of responses. A positive integer.
-#' @param post if \code{TRUE} then posterior simulation is performed. That is, we simulate \code{nsim} vectors
-#'             of regression coefficients from a Gaussian approximation to the posterior, and then we simulate
-#'             a vector of response using each parameter vector. If \code{FALSE}, then \code{nsim} vectors of
-#'             responses are simulated using parameters fixed at the posterior mode.
-#' @param newdata Optional new data frame used to perform the simulations. To be passed to \link[mgcv]{predict.gam} and,
-#'                if \code{post == TRUE}, to \code{postSim}.
-#' @param ... extra arguments to be passed to \link{simulate.gam} (if \code{post==FALSE}) or
-#'            \link{postSim} (if \code{post==TRUE}). For instance, we could pass prior
-#'            weights \code{w} and \code{offset}.
-#' @return An object of class \code{gamViz}.
-#' @name getViz
-#' @examples
-#' library(mgcViz)
-#' set.seed(2) ## simulate some data...
-#' dat <- gamSim(1, n = 1000, dist = "normal", scale = 2)
-#' b <- gam(y ~ s(x0) + s(x1, x2) + s(x3), data = dat, method = "REML")
-#' b <- getViz(b, nsim = 20)
-#' str(b$store$sim) # Simulated responses now stored here
-#'
-#' plot(sm(b, 1)) + l_fitLine() + l_ciLine() + l_rug() + l_points()
-#' plot(sm(b, 2)) + l_rug() + l_fitRaster() + l_fitContour()
-#' @importFrom stats simulate
-#' @rdname getViz
-#' @export getViz
+#' @export
 getViz <- function(o, nsim = 0, post = FALSE, newdata, ...) {
-
   if (!inherits(o, "gam")) {
     stop("\"o\" should be of class \"gam\"")
   }

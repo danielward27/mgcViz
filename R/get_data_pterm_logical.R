@@ -1,5 +1,4 @@
-#' @rdname get_data.pterm_factor
-#' @export get_data.pterm_logical
+#' @description Get the data for plotting of boolean effects
 #' @export
 #'
 get_data.pterm_logical <- function(term, maxpo = 1e4, trans = identity, ...) {

@@ -1,80 +1,5 @@
-#' Plotting smooths on the sphere
-#'
-#' @description This is the plotting method for smooth effects on the sphere.
-#' @name plot.sos.smooth
-#' @param x a smooth effect object, extracted using [mgcViz::sm].
-#' @param scheme if 0 the smooth effect is plotted on the sphere. If 1 the smooth effect is plotted
-#'               on the two hemispheres.
-#' @param n sqrt of the number of grid points used to compute the effect plot.
-#' @param xlim if supplied then this pair of numbers are used as the x limits for the plot.
-#' @param ylim if supplied then this pair of numbers are used as the y limits for the plot.
-#' @param maxpo maximum number of residuals points that will be used by layers such as
-#'              \code{resRug()} and \code{resPoints()}. If number of datapoints > \code{maxpo},
-#'              then a subsample of \code{maxpo} points will be taken.
-#' @param too_far if greater than 0 then this is used to determine when a location is too far
-#'               from data to be plotted. This is useful since smooths tend to go wild
-#'               away from data. The data are scaled into the unit square before deciding
-#'               what to exclude, and too_far is a distance within the unit square.
-#'               Setting to zero can make plotting faster for large datasets, but care
-#'               then needed with interpretation of plots.
-#' @param phi one of the plotting angles, relevant only if \code{scheme = 0}.
-#' @param theta the other plotting angle, relevant only if \code{scheme = 0}.
-#' @param trans monotonic function to apply to the smooth and residuals, before plotting.
-#'              Monotonicity is not checked.
-#' @param unconditional if \code{TRUE} then the smoothing parameter uncertainty corrected covariance
-#'                      matrix is used to compute uncertainty bands, if available.
-#'                      Otherwise the bands treat the smoothing parameters as fixed.
-#' @param seWithMean if TRUE the component smooths are shown with confidence intervals that
-#'                   include the uncertainty about the overall mean. If FALSE then the uncertainty
-#'                   relates purely to the centred smooth itself. Marra and Wood (2012) suggests
-#'                   that TRUE results in better coverage performance, and this is also suggested
-#'                   by simulation.
-#' @param ... currently unused.
-#' @return An objects of class \code{plotSmooth}.
-#' @references Marra, G and S.N. Wood (2012) Coverage Properties of Confidence Intervals for
-#'             Generalized Additive Model Components. Scandinavian Journal of Statistics.
-#' @examples
-#' library(mgcViz)
-#' set.seed(0)
-#' n <- 400
-#'
-#' f <- function(la, lo) { ## a test function...
-#'   sin(lo) * cos(la - .3)
-#' }
-#'
-#' ## generate with uniform density on sphere...
-#' lo <- runif(n) * 2 * pi - pi ## longitude
-#' la <- runif(3 * n) * pi - pi / 2
-#' ind <- runif(3 * n) <= cos(la)
-#' la <- la[ind]
-#' la <- la[1:n]
-#'
-#' ff <- f(la, lo)
-#' y <- ff + rnorm(n) * .2 ## test data
-#'
-#' ## generate data for plotting truth...
-#' lam <- seq(-pi / 2, pi / 2, length = 30)
-#' lom <- seq(-pi, pi, length = 60)
-#' gr <- expand.grid(la = lam, lo = lom)
-#' fz <- f(gr$la, gr$lo)
-#' zm <- matrix(fz, 30, 60)
-#'
-#' require(mgcv)
-#' dat <- data.frame(la = la * 180 / pi, lo = lo * 180 / pi, y = y)
-#'
-#' ## fit spline on sphere model...
-#' bp <- gam(y ~ s(la, lo, bs = "sos", k = 60), data = dat)
-#' bp <- getViz(bp)
-#'
-#' # Plot on sphere
-#' plot(sm(bp, 1), scheme = 0) + l_fitRaster() + l_fitContour() +
-#'   l_points(shape = 19) + l_rug() + l_coordContour() + l_bound()
-#'
-#' # Plotting as in standard 2D plots
-#' plot(sm(bp, 1), scheme = 1) + l_fitRaster() + l_fitContour() +
-#'   l_points(shape = 19) + l_rug()
-#' @rdname plot.sos.smooth
-#' @export get_data.sos.smooth
+#' @description Get data for plotting smooth effects on the sphere.
+
 #' @export
 #'
 get_data.sos.smooth <- function(
@@ -205,8 +130,7 @@ get_data.sos.smooth <- function(
     ...) {
   ## plot method function for sos.smooth terms
   if (scheme == 1) {
-
-    return(.preparePlotSmooth2D(
+    return(.prepare_plot_smooth_2d(
       term = term,
       data = data,
       se_mult = se2_mult,

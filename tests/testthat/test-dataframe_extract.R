@@ -8,8 +8,8 @@ test_that("1D", {
   data <- get_data(sm(getViz(fit), 1))
   expect_true(is.data.frame(data$fit))
   expect_true(is.data.frame(data$res))
-})
 
+})
 
 test_that("2D", {
   library(mgcViz)
@@ -20,7 +20,6 @@ test_that("2D", {
   expect_true(is.data.frame(data$fit))
   expect_true(is.data.frame(data$res))
 })
-
 
 test_that("MD", {
   library(mgcViz)
@@ -35,7 +34,6 @@ test_that("MD", {
   expect_true(is.data.frame(data$fit))
   expect_true(is.data.frame(data$res))
 })
-
 
 test_that("MRF", {
   library(mgcv)
@@ -67,9 +65,8 @@ test_that("FS Interaction 1D", {
   data <- get_data(sm(getViz(fit), 1))
   expect_true(is.data.frame(data$fit))
   # TODO No residuals in FS interaction 1D. To be expected?
+  # TODO. I don't think this calls get_data.fs.interaction.1D
 })
-
-
 
 test_that("SOS", {
   library(mgcv)
@@ -101,7 +98,6 @@ test_that("SOS", {
   expect_true(is.data.frame(data$res))
 })
 
-
 test_that("P Term Factor", {
   library(mgcv)
   set.seed(2)
@@ -112,8 +108,6 @@ test_that("P Term Factor", {
   expect_true(is.data.frame(data$fit))
   expect_true(is.data.frame(data$res))
 })
-
-
 
 test_that("P Term Logical", {
   library(mgcv)
@@ -126,8 +120,6 @@ test_that("P Term Logical", {
   expect_true(is.data.frame(data$res))
 })
 
-
-
 test_that("P Term Numeric", {
   library(mgcv)
   set.seed(2)
@@ -138,7 +130,6 @@ test_that("P Term Numeric", {
   expect_true(is.data.frame(data$fit))
   expect_true(is.data.frame(data$res))
 })
-
 
 test_that("Random effect", {
   library(mgcViz)

@@ -38,7 +38,7 @@ sm <- function(o, select) {
     if (d > 2) {
       d <- "M"
     }
-    cl[which(cl == "mgcv.smooth")] <- paste("mgcv.smooth.", d, "D", sep = '')
+    cl[which(cl == "mgcv.smooth")] <- paste("mgcv.smooth.", d, "D", sep = "")
   }
 
   if ("fs.interaction" %in% cl) {
@@ -46,7 +46,7 @@ sm <- function(o, select) {
       "fs.interaction.",
       o$smooth[[select]]$dim,
       "D",
-      sep = ''
+      sep = ""
     )
   }
   class(out) <- cl

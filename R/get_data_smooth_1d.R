@@ -1,83 +1,5 @@
-#'
-#' Plotting one dimensional smooth effects
-#'
-#' @description Plotting method for one dimensional smooth effects.
-#' @name plot.mgcv.smooth.1D
-#' @param x a smooth effect object, extracted using [mgcViz::sm].
-#' @param n number of grid points used to compute main effect and c.i. lines.
-#'          For a nice smooth plot this needs to be several times the estimated degrees of
-#'          freedom for the smooth.
-#' @param xlim if supplied then this pair of numbers are used as the x limits for the plot.
-#' @param maxpo maximum number of residuals points that will be used by layers such as
-#'              \code{resRug()} and \code{resPoints()}. If number of datapoints > \code{maxpo},
-#'              then a subsample of \code{maxpo} points will be taken.
-#' @param trans monotonic function to apply to the smooth and residuals, before plotting.
-#'              Monotonicity is not checked.
-#' @param unconditional if \code{TRUE} then the smoothing parameter uncertainty corrected covariance
-#'                      matrix is used to compute uncertainty bands, if available.
-#'                      Otherwise the bands treat the smoothing parameters as fixed.
-#' @param seWithMean if TRUE the component smooths are shown with confidence intervals that
-#'                   include the uncertainty about the overall mean. If FALSE then the uncertainty
-#'                   relates purely to the centred smooth itself. Marra and Wood (2012) suggests
-#'                   that TRUE results in better coverage performance, and this is also suggested
-#'                   by simulation.
-#' @param nsim number of smooth effect curves to be simulated from the posterior distribution.
-#'             These can be plotted using the \link{l_simLine} layer. See Examples section below.
-#' @param asFact determines whether to use a factor or colour bar legend for plot.multi.mgcv.smooth.1D.
-#'               For most models the default is \code{TRUE}. When working with QGAM models fitted with
-#'               \link{mqgamV}, the default is \code{FALSE} for less than 10 quantiles,
-#'               \code{TRUE} otherwise. For QGAM models there a third option, \code{asFact = "force"},
-#'               which forces the use of a discrete colour scale.
-#' @param ... currently unused.
-#' @return An objects of class \code{plotSmooth}.
-#' @references Marra, G and S.N. Wood (2012) Coverage Properties of Confidence Intervals for
-#'             Generalized Additive Model Components. Scandinavian Journal of Statistics.
-#' @examples
-#' library(mgcViz)
-#' n <- 1e3
-#' x1 <- rnorm(n)
-#' x2 <- rnorm(n)
-#' dat <- data.frame(
-#'   "x1" = x1, "x2" = x2,
-#'   "y" = sin(x1) + 0.5 * x2^2 + pmax(x2, 0.2) * rnorm(n)
-#' )
-#' b <- bamV(y ~ s(x1) + s(x2), data = dat, method = "fREML", aGam = list(discrete = TRUE))
-#'
-#' o <- plot(sm(b, 1), nsim = 50) # 50 posterior simulations
-#'
-#' # Plot with fitted effect + posterior simulations + rug on x axis
-#' (o <- o + l_simLine() + l_fitLine(colour = "red") +
-#'   l_rug(alpha = 0.8))
-#'
-#' # Add CI lines at 1*sigma and 5*sigma
-#' (o <- o + l_ciLine(mul = 1) + l_ciLine(mul = 5, colour = "blue", linetype = 2))
-#'
-#' # Add partial residuals and change theme
-#' (o + l_points(shape = 19, size = 1, alpha = 0.2) + theme_classic())
-#'
-#' # Get second effect plot
-#' o2 <- plot(sm(b, 2))
-#'
-#' # Plot it with polygon for partial residuals
-#' o2 + l_ciPoly(mul = 5, fill = "light blue") +
-#'   l_fitLine(linetype = 2, colour = "red")
-#'
-#' # Plot is with conditional density of partial residuals
-#' o2 + l_dens(type = "cond", alpha = 0.9) +
-#'   l_fitLine(linetype = 2, colour = "red")
-#'
-#' ########
-#' # Quantile GAM example
-#' ########
-#' # Fit model
-#' b <- mqgamV(y ~ s(x1) + s(x2), qu = c(0.2, 0.5, 0.8), data = dat)
-#'
-#' plot(sm(b, 1)) + l_fitLine(linetype = 2) + l_rug(colour = "blue")
-#'
-#' @rdname plot.mgcv.smooth.1D
-#' @export get_data.mgcv.smooth.1D
+#' @description Get data for plotting one dimensional smooth effects.
 #' @export
-#'
 get_data.mgcv.smooth.1D <- function(
     term,
     n = 100,
@@ -143,9 +65,8 @@ get_data.mgcv.smooth.1D <- function(
   return(.dat)
 }
 
-
 # Internal function for preparing plot of one dimensional smooths
-.preparePlotSmooth1D <- function(
+.prepare_plot_smooth_1d <- function(
     term,
     data,
     se_mult = 1,
@@ -185,5 +106,95 @@ get_data.mgcv.smooth.1D <- function(
       xlim = xlim
     )
   }
+  return(out)
+}
+
+
+##
+## Default plot preparation method for smooth objects `x' inheriting from "mgcv.smooth"
+## Input:
+## `x' is a smooth object, usually part of a `gam' fit. It has an attribute
+##     'coefficients' containg the coefs for the smooth, but usually these
+##     are not needed.
+## Output is a list of plot data containing:
+##     * fit - the values for plotting
+##     * se.fit - standard errors of fit (can be NULL)
+##     * the values against which to plot
+##     * any raw data information
+##     * any partial.residuals
+
+#' @description Default plot preparation method for smooth objects `x'
+#' inheriting from "mgcv.smooth".
+#' @param x Is a smooth object, usually part of a `gam' fit. It has an attribute
+#' `coefficients` containg the coefs for the smooth, but usually these
+#' are not needed.
+#' @param data The data.
+#' @param n Number of points used for each 1-d plot - for a nice smooth plot
+#'   this needs to be several times the estimated degrees of freedom for the
+#'   smooth. Default value 100.
+#' @param n2 Square root of number of points used to grid estimates of 2-d
+#'   functions for contouring.
+#' @param ylim If supplied then this pair of numbers are used as the y limits
+#'   for each plot.
+#' @param xlim If supplied then this pair of numbers are used as the x limits
+#'   for each plot.
+#' @param too_far If greater than 0 then this is used to determine when a
+#'   location is too far from data to be plotted when plotting 2-D smooths. This
+#'   is useful since smooths tend to go wild away from data. The data are scaled
+#'   into the unit square before deciding what to exclude, and too_far <- <-  is a
+#'   distance within the unit square. Setting to zero can make plotting faster
+#'   for large datasets, but care then needed with interpretation of plots.
+#' @param ... Other graphics parameters to pass on to plotting commands.
+#' See details for smooth plot specific options.
+#' @noRd
+#' @export
+.prepare.mgcv.smooth <- function(
+    term,
+    data = NULL,
+    se1_mult = 1,
+    se2_mult = 2,
+    n = 100,
+    n2 = 40,
+    ylim = NULL,
+    xlim = NULL,
+    too_far = 0.1,
+    ...) {
+  if (term$dim == 1) {
+    out <- .prepare_plot_smooth_1d(
+      term = term,
+      data = data,
+      se_mult = se1_mult,
+      n = n,
+      xlim = xlim,
+      ...
+    )
+  }
+
+  if (term$dim == 2) {
+    out <- .prepare_plot_smooth_2d(
+      term = term,
+      data = data,
+      se_mult = se2_mult,
+      n2 = n2,
+      ylim = ylim,
+      xlim = xlim,
+      too_far = too_far,
+      ...
+    )
+  }
+
+  if (term$dim > 2) {
+    out <- .prepare_plot_smooth_md(
+      term = term,
+      data = data,
+      se_mult = se2_mult,
+      n2 = n2,
+      ylim = ylim,
+      xlim = xlim,
+      too_far = too_far,
+      ...
+    )
+  }
+
   return(out)
 }
