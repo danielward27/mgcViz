@@ -58,7 +58,6 @@ get_data.mrf.smooth <- function(
   X <- PredictMat(term, dat) # prediction matrix for this term
   return(list(
     X = X,
-    scale = FALSE,
     se = FALSE,
     raw = raw
   ))

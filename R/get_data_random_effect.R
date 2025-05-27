@@ -44,7 +44,6 @@ get_data.random.effect <- function(term, trans = identity, ...) {
 
   return(list(
     X = X,
-    scale = FALSE,
     se = FALSE,
     raw = raw
   ))

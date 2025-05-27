@@ -1,3 +1,5 @@
+# TODO Why doesn't this take the output of perpareP?
+
 #' @export
 get_data.fs.interaction.1D <- function(
     term,
@@ -60,7 +62,6 @@ get_data.fs.interaction.1D <- function(
   X <- PredictMat(term, dat)
   return(list(
     X = X,
-    scale = TRUE,
     se = FALSE,
     raw = raw,
     xlim = xlim,

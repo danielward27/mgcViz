@@ -198,7 +198,6 @@ get_data.sos.smooth <- function(
 
   return(list(
     X = X,
-    scale = FALSE,
     se = TRUE,
     raw = raw,
     ind = ind,
