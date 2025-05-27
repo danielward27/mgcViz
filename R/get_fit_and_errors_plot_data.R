@@ -1,4 +1,4 @@
-.get_plot_data <- function(
+.get_fit_and_errors_plot_data <- function(
     term,
     gam_viz,
     partial_resids,
@@ -10,17 +10,17 @@
     too_far,
     se1_mult,
     se2_mult,
-    seWithMean,
-    fitSmooth,
+    se_with_mean,
+    fit_smooth,
     w_resid,
-    resDen,
+    res_den,
     nsim,
     ...) {
   first <- term$first.para
   last <- term$last.para
   edf <- sum(gam_viz$edf[first:last]) ## Effective DoF for this term
   attr(term, "coefficients") <- gam_viz$coefficients[first:last] # Relevant coeffs for i-th smooth
-  P <- .prepare(
+  P <- .get_plot_prediction_matrix_and_aux(
     term = term,
     data = gam_viz$model,
     se1_mult = se1_mult,
@@ -51,7 +51,7 @@
       if (se && P$se) {
         ## get standard errors for fit
         ## test whether mean variability to be added to variability (only for centred terms)
-        if (seWithMean && attr(term, "nCons") > 0) {
+        if (se_with_mean && attr(term, "nCons") > 0) {
           if (length(gam_viz$cmX) < ncol(gam_viz$Vp)) {
             gam_viz$cmX <- c(gam_viz$cmX, rep(0, ncol(gam_viz$Vp) - length(gam_viz$cmX)))
           }
@@ -86,8 +86,8 @@
           P$se.fit[P$exclude] <- NA
         }
       } ## standard errors for fit completed
-      if (partial_resids || (resDen != "none")) {
-        P$p.resid <- fitSmooth + w_resid
+      if (partial_resids || (res_den != "none")) {
+        P$p.resid <- fit_smooth + w_resid
       }
       if (se && P$se) {
         P$se <- se.fit * P$se_mult
@@ -95,8 +95,8 @@
       P$X <- NULL
     } else {
       ## P$fit created directly
-      if (partial_resids || (resDen != "none")) {
-        P$p.resid <- fitSmooth + w_resid
+      if (partial_resids || (res_den != "none")) {
+        P$p.resid <- fit_smooth + w_resid
       }
     }
     P$plot.me <- TRUE

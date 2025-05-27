@@ -1,5 +1,4 @@
-
-.data_fit_and_errors <- function(term, unconditional, residuals, resDen, se) {
+.get_fit_and_errors_dataset <- function(term, unconditional, residuals, res_den, se) {
   V <- fv_terms <- NULL
 
   # Use Bayesian cov matrix including smoothing parameter uncertainty?
@@ -25,7 +24,7 @@
   } # use working residuals or none
 
   # Getting information needed for partial residuals
-  if (partial_resids || (resDen != "none")) {
+  if (partial_resids || (res_den != "none")) {
     if (is.null(w_resid)) {
       # produce working residuals if info available
       if (is.null(term$gam_viz$residuals) || is.null(term$gam_viz$weights)) {
@@ -37,7 +36,7 @@
     }
     fv_terms <- term$gam_viz$store$termsFit[, term$gam_viz$store$np + term$term_idx]
     if (is.null(fv_terms)) {
-      fv_terms <- predict(term$gam_viz, type = "terms")  # TODO inefficient?
+      fv_terms <- predict(term$gam_viz, type = "terms") # TODO inefficient?
     }
   }
 
@@ -48,7 +47,6 @@
       warning("No variance estimates available")
     }
   }
-
 
   return(list(
     V = V,

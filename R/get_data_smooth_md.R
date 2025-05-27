@@ -10,7 +10,7 @@ get_data.mgcv.smooth.MD <- function(
     maxpo = 1e4,
     too_far = c(0.1, NA),
     trans = identity,
-    seWithMean = FALSE,
+    se_with_mean = FALSE,
     unconditional = FALSE,
     ...) {
   if (length(too_far) == 1) {
@@ -21,7 +21,7 @@ get_data.mgcv.smooth.MD <- function(
     term = term,
     unconditional = unconditional,
     residuals = TRUE,
-    resDen = "none",
+    res_den = "none",
     se = TRUE,
     se_mult = 1,
     n = NULL,
@@ -29,7 +29,7 @@ get_data.mgcv.smooth.MD <- function(
     ylim = ylim,
     xlim = xlim,
     too_far = too_far,
-    seWithMean = seWithMean,
+    se_with_mean = se_with_mean,
     fix = fix
   )
 
@@ -40,7 +40,7 @@ get_data.mgcv.smooth.MD <- function(
 
 
 # Internal function for preparing plot of two dimensional smooths
-.prepare_plot_smooth_md <- function(
+.get_plot_prediction_matrix_and_aux_plot_smooth_md <- function(
     term,
     fix,
     data = NULL,

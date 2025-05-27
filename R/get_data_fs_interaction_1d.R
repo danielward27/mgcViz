@@ -9,7 +9,7 @@ get_data.fs.interaction.1D <- function(
     term = term,
     unconditional = FALSE,
     residuals = FALSE,
-    resDen = "none",
+    res_den = "none",
     se = TRUE,
     se_mult = 1,
     n = n,
@@ -17,7 +17,7 @@ get_data.fs.interaction.1D <- function(
     ylim = NULL,
     xlim = xlim,
     too_far = NULL,
-    seWithMean = FALSE
+    se_with_mean = FALSE
   )
 
   data <- list()
@@ -35,7 +35,7 @@ get_data.fs.interaction.1D <- function(
 
 #' @noRd
 #' @export
-.prepare.fs.interaction <- function(
+.get_plot_prediction_matrix_and_aux.fs.interaction <- function(
     term,
     data = NULL,
     n = 100,

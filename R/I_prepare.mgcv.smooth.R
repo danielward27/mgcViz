@@ -2,7 +2,7 @@
 #' @description Default plot preparation method for smooth objects `x'
 #' inheriting from "mgcv.smooth".
 #' @export
-.prepare.mgcv.smooth <- function(
+.get_plot_prediction_matrix_and_aux.mgcv.smooth <- function(
     term,
     data = NULL,
     se1_mult = 1,
@@ -14,7 +14,7 @@
     too_far = 0.1,
     ...) {
   if (term$dim == 1) {
-    out <- .prepare_plot_smooth_1d(
+    out <- .get_plot_prediction_matrix_and_aux_plot_smooth_1d(
       term = term,
       data = data,
       se_mult = se1_mult,
@@ -25,7 +25,7 @@
   }
 
   if (term$dim == 2) {
-    out <- .prepare_plot_smooth_2d(
+    out <- .get_plot_prediction_matrix_and_aux_plot_smooth_2d(
       term = term,
       data = data,
       se_mult = se2_mult,
@@ -38,7 +38,7 @@
   }
 
   if (term$dim > 2) {
-    out <- .prepare_plot_smooth_md(
+    out <- .get_plot_prediction_matrix_and_aux_plot_smooth_md(
       term = term,
       data = data,
       se_mult = se2_mult,

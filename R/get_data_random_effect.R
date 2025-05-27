@@ -5,7 +5,7 @@ get_data.random.effect <- function(term, trans = identity, ...) {
     term = term,
     unconditional = FALSE,
     residuals = TRUE,
-    resDen = "none",
+    res_den = "none",
     se = TRUE,
     se_mult = 1,
     n = 100,
@@ -13,7 +13,7 @@ get_data.random.effect <- function(term, trans = identity, ...) {
     ylim = NULL,
     xlim = NULL,
     too_far = NULL,
-    seWithMean = FALSE
+    se_with_mean = FALSE
   )
   dat <- list()
 
@@ -31,7 +31,7 @@ get_data.random.effect <- function(term, trans = identity, ...) {
 
 #' @noRd
 #' @export
-.prepare.random.effect <- function(
+.get_plot_prediction_matrix_and_aux.random.effect <- function(
     term,
     data = NULL,
     n = 100,

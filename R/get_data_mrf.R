@@ -1,4 +1,3 @@
-
 #' @description Get the data for plottingMarkov random field smooths.
 #' @export
 get_data.mrf.smooth <- function(
@@ -11,7 +10,7 @@ get_data.mrf.smooth <- function(
     term = term,
     unconditional = unconditional,
     residuals = TRUE,
-    resDen = "none",
+    res_den = "none",
     se = TRUE,
     se_mult = 1,
     n = NULL,
@@ -19,7 +18,7 @@ get_data.mrf.smooth <- function(
     ylim = NULL,
     xlim = NULL,
     too_far = NULL,
-    seWithMean = se_with_mean
+    se_with_mean = se_with_mean
   )
 
   data <- list()
@@ -36,7 +35,7 @@ get_data.mrf.smooth <- function(
 
 #' @noRd
 #' @export
-.prepare.mrf.smooth <- function(
+.get_plot_prediction_matrix_and_aux.mrf.smooth <- function(
     term,
     data,
     se1_mult,

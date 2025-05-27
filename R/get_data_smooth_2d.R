@@ -8,7 +8,7 @@ get_data.mgcv.smooth.2D <- function(
     maxpo = 1e4,
     too_far = 0.1,
     trans = identity,
-    seWithMean = FALSE,
+    se_with_mean = FALSE,
     unconditional = FALSE,
     ...) {
   # 1) Prepare data
@@ -16,7 +16,7 @@ get_data.mgcv.smooth.2D <- function(
     term = term,
     unconditional = unconditional,
     residuals = TRUE,
-    resDen = "none",
+    res_den = "none",
     se = TRUE,
     se_mult = 1,
     n = NULL,
@@ -24,7 +24,7 @@ get_data.mgcv.smooth.2D <- function(
     ylim = ylim,
     xlim = xlim,
     too_far = too_far,
-    seWithMean = seWithMean
+    se_with_mean = se_with_mean
   )
 
   # 2) Produce output object
@@ -88,7 +88,7 @@ get_data.mgcv.smooth.2D <- function(
 
 
 # Internal function for preparing plot of two dimensional smooths
-.prepare_plot_smooth_2d <- function(
+.get_plot_prediction_matrix_and_aux_plot_smooth_2d <- function(
     term,
     data = NULL,
     se_mult = 2,

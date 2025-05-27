@@ -13,7 +13,7 @@ get_data.sos.smooth <- function(
     theta = 30,
     trans = identity,
     scheme = 0,
-    seWithMean = FALSE,
+    se_with_mean = FALSE,
     unconditional = FALSE,
     ...) {
   if (length(scheme) > 1) {
@@ -30,7 +30,7 @@ get_data.sos.smooth <- function(
     term = term,
     unconditional = unconditional,
     residuals = TRUE,
-    resDen = "none",
+    res_den = "none",
     se = TRUE,
     se_mult = 1,
     n = NULL,
@@ -38,7 +38,7 @@ get_data.sos.smooth <- function(
     ylim = ylim,
     xlim = xlim,
     too_far = too_far,
-    seWithMean = seWithMean,
+    se_with_mean = se_with_mean,
     scheme = scheme,
     phi = phi,
     theta = theta
@@ -111,7 +111,7 @@ get_data.sos.smooth <- function(
 
 #' @noRd
 #' @export
-.prepare.sos.smooth <- function(
+.get_plot_prediction_matrix_and_aux.sos.smooth <- function(
     term,
     data,
     se1_mult = 1,
@@ -130,7 +130,7 @@ get_data.sos.smooth <- function(
     ...) {
   ## plot method function for sos.smooth terms
   if (scheme == 1) {
-    return(.prepare_plot_smooth_2d(
+    return(.get_plot_prediction_matrix_and_aux_plot_smooth_2d(
       term = term,
       data = data,
       se_mult = se2_mult,
