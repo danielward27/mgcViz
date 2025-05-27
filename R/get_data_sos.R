@@ -32,7 +32,6 @@ get_data.sos.smooth <- function(
     residuals = TRUE,
     res_den = "none",
     se = TRUE,
-    se_mult = 1,
     n = NULL,
     n2 = n,
     ylim = ylim,
@@ -114,8 +113,6 @@ get_data.sos.smooth <- function(
 .get_plot_prediction_matrix_and_aux.sos.smooth <- function(
     term,
     data,
-    se1_mult = 1,
-    se2_mult = 1,
     partial_resids = NULL,
     se,
     n,
@@ -133,7 +130,6 @@ get_data.sos.smooth <- function(
     return(.get_plot_prediction_matrix_and_aux_plot_smooth_2d(
       term = term,
       data = data,
-      se_mult = se2_mult,
       n2 = n2,
       ylim = ylim,
       xlim = xlim,
@@ -204,8 +200,7 @@ get_data.sos.smooth <- function(
     xm = xm,
     ym = ym,
     lo = lo,
-    la = dat[[1]],
-    se_mult = se1_mult
+    la = dat[[1]]
   ))
 } ## end prepare.sos.smooth
 

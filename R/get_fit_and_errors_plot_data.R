@@ -8,8 +8,6 @@
     ylim,
     xlim,
     too_far,
-    se1_mult,
-    se2_mult,
     se_with_mean,
     fit_smooth,
     w_resid,
@@ -23,8 +21,6 @@
   P <- .get_plot_prediction_matrix_and_aux(
     term = term,
     data = gam_viz$model,
-    se1_mult = se1_mult,
-    se2_mult = se2_mult,
     n = n,
     n2 = n2,
     ylim = ylim,
@@ -90,8 +86,8 @@
         P$p.resid <- fit_smooth + w_resid
       }
       if (se && P$se) {
-        P$se <- se.fit * P$se_mult
-      } # Note multiplier
+        P$se <- se.fit
+      }
       P$X <- NULL
     } else {
       ## P$fit created directly

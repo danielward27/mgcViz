@@ -16,7 +16,6 @@ get_data.mgcv.smooth.1D <- function(
     residuals = TRUE,
     res_den = "none",
     se = TRUE,
-    se_mult = 1,
     n = n,
     n2 = NULL,
     ylim = NULL,
@@ -65,102 +64,7 @@ get_data.mgcv.smooth.1D <- function(
   return(.dat)
 }
 
-# Internal function for preparing plot of one dimensional smooths
-.get_plot_prediction_matrix_and_aux_plot_smooth_1d <- function(
-    term,
-    data,
-    se_mult = 1,
-    n = 100,
-    xlim = NULL,
-    ...) {
-  out <- NULL
-  if (term$plot.me) {
-    raw <- as.vector(data[term$term][[1]])
-    if (is.null(xlim)) {
-      # Generate x sequence for prediction
-      x_seq <- seq(min(raw), max(raw), length = n)
-    } else {
-      x_seq <- seq(xlim[1], xlim[2], length = n)
-    }
-    if (term$by != "NA") {
-      # Deal with any by variables
-      by <- rep(1, n)
-      dat <- data.frame(x = x_seq, by = by)
-      names(dat) <- c(term$term, term$by)
-    } else {
-      dat <- data.frame(x = x_seq)
-      names(dat) <- term$term
-    } # Finished preparing prediction data.frame
-    X <- PredictMat(term, dat) # prediction matrix for this term
 
-    if (is.null(xlim)) {
-      xlim <- range(x_seq)
-    }
-    out <- list(
-      X = X,
-      x = x_seq,
-      se = TRUE,
-      raw = raw,
-      se_mult = se_mult,
-      xlim = xlim
-    )
-  }
-  return(out)
-}
-
-#' @description Default plot preparation method for smooth objects `x'
-#' inheriting from "mgcv.smooth".
-#' @export
-.get_plot_prediction_matrix_and_aux.mgcv.smooth <- function(
-    term,
-    data = NULL,
-    se1_mult = 1,
-    se2_mult = 2,
-    n = 100,
-    n2 = 40,
-    ylim = NULL,
-    xlim = NULL,
-    too_far = 0.1,
-    ...) {
-  if (term$dim == 1) {
-    out <- .get_plot_prediction_matrix_and_aux_plot_smooth_1d(
-      term = term,
-      data = data,
-      se_mult = se1_mult,
-      n = n,
-      xlim = xlim,
-      ...
-    )
-  }
-
-  if (term$dim == 2) {
-    out <- .get_plot_prediction_matrix_and_aux_plot_smooth_2d(
-      term = term,
-      data = data,
-      se_mult = se2_mult,
-      n2 = n2,
-      ylim = ylim,
-      xlim = xlim,
-      too_far = too_far,
-      ...
-    )
-  }
-
-  if (term$dim > 2) {
-    out <- .get_plot_prediction_matrix_and_aux_plot_smooth_md(
-      term = term,
-      data = data,
-      se_mult = se2_mult,
-      n2 = n2,
-      ylim = ylim,
-      xlim = xlim,
-      too_far = too_far,
-      ...
-    )
-  }
-
-  return(out)
-}
 
 #' @description Get data for plotting two dimensional smooth effects.
 #' @export
@@ -182,7 +86,6 @@ get_data.mgcv.smooth.2D <- function(
     residuals = TRUE,
     res_den = "none",
     se = TRUE,
-    se_mult = 1,
     n = NULL,
     n2 = n,
     ylim = ylim,
@@ -252,11 +155,141 @@ get_data.mgcv.smooth.2D <- function(
 }
 
 
+
+#' @description Get data for plotting a 2D slice of a higher-dimensional smooth effects.
+#' @export
+#'
+get_data.mgcv.smooth.MD <- function(
+    term,
+    fix,
+    n = 40,
+    xlim = NULL,
+    ylim = NULL,
+    maxpo = 1e4,
+    too_far = c(0.1, NA),
+    trans = identity,
+    se_with_mean = FALSE,
+    unconditional = FALSE,
+    ...) {
+  if (length(too_far) == 1) {
+    too_far <- c(too_far, NA)
+  }
+
+  P <- prepareP(
+    term = term,
+    unconditional = unconditional,
+    residuals = TRUE,
+    res_den = "none",
+    se = TRUE,
+    n = NULL,
+    n2 = n,
+    ylim = ylim,
+    xlim = xlim,
+    too_far = too_far,
+    se_with_mean = se_with_mean,
+    fix = fix
+  )
+
+  out <- .get_data_shared_2d(term = P$smooth, P = P, trans = trans, maxpo = maxpo)
+  return(out)
+}
+
+
+
+#' @description Default plot preparation method for smooth objects `x'
+#' inheriting from "mgcv.smooth".
+#' @export
+.get_plot_prediction_matrix_and_aux.mgcv.smooth <- function(
+    term,
+    data = NULL,
+    n = 100,
+    n2 = 40,
+    ylim = NULL,
+    xlim = NULL,
+    too_far = 0.1,
+    ...) {
+  if (term$dim == 1) {
+    out <- .get_plot_prediction_matrix_and_aux_plot_smooth_1d(
+      term = term,
+      data = data,
+      n = n,
+      xlim = xlim,
+      ...
+    )
+  }
+
+  if (term$dim == 2) {
+    out <- .get_plot_prediction_matrix_and_aux_plot_smooth_2d(
+      term = term,
+      data = data,
+      n2 = n2,
+      ylim = ylim,
+      xlim = xlim,
+      too_far = too_far,
+      ...
+    )
+  }
+
+  if (term$dim > 2) {
+    out <- .get_plot_prediction_matrix_and_aux_plot_smooth_md(
+      term = term,
+      data = data,
+      n2 = n2,
+      ylim = ylim,
+      xlim = xlim,
+      too_far = too_far,
+      ...
+    )
+  }
+
+  return(out)
+}
+
+
+# Internal function for preparing plot of one dimensional smooths
+.get_plot_prediction_matrix_and_aux_plot_smooth_1d <- function(
+    term,
+    data,
+    n = 100,
+    xlim = NULL,
+    ...) {
+  out <- NULL
+  if (term$plot.me) {
+    raw <- as.vector(data[term$term][[1]])
+    if (is.null(xlim)) {
+      # Generate x sequence for prediction
+      x_seq <- seq(min(raw), max(raw), length = n)
+    } else {
+      x_seq <- seq(xlim[1], xlim[2], length = n)
+    }
+    if (term$by != "NA") {
+      # Deal with any by variables
+      by <- rep(1, n)
+      dat <- data.frame(x = x_seq, by = by)
+      names(dat) <- c(term$term, term$by)
+    } else {
+      dat <- data.frame(x = x_seq)
+      names(dat) <- term$term
+    } # Finished preparing prediction data.frame
+    X <- PredictMat(term, dat) # prediction matrix for this term
+
+    if (is.null(xlim)) {
+      xlim <- range(x_seq)
+    }
+    out <- list(
+      X = X,
+      x = x_seq,
+      se = TRUE,
+      raw = raw
+    )
+  }
+  return(out)
+}
+
 # Internal function for preparing plot of two dimensional smooths
 .get_plot_prediction_matrix_and_aux_plot_smooth_2d <- function(
     term,
     data = NULL,
-    se_mult = 2,
     n2 = 40,
     ylim = NULL,
     xlim = NULL,
@@ -306,9 +339,6 @@ get_data.mgcv.smooth.2D <- function(
       y = y_seq,
       se = TRUE,
       raw = raw,
-      se_mult = se_mult,
-      ylim = ylim,
-      xlim = xlim,
       exclude = exclude
     )
   }
@@ -316,53 +346,11 @@ get_data.mgcv.smooth.2D <- function(
 }
 
 
-#' @description Get data for plotting a 2D slice of a higher-dimensional smooth effects.
-#' @export
-#'
-get_data.mgcv.smooth.MD <- function(
-    term,
-    fix,
-    n = 40,
-    xlim = NULL,
-    ylim = NULL,
-    maxpo = 1e4,
-    too_far = c(0.1, NA),
-    trans = identity,
-    se_with_mean = FALSE,
-    unconditional = FALSE,
-    ...) {
-  if (length(too_far) == 1) {
-    too_far <- c(too_far, NA)
-  }
-
-  P <- prepareP(
-    term = term,
-    unconditional = unconditional,
-    residuals = TRUE,
-    res_den = "none",
-    se = TRUE,
-    se_mult = 1,
-    n = NULL,
-    n2 = n,
-    ylim = ylim,
-    xlim = xlim,
-    too_far = too_far,
-    se_with_mean = se_with_mean,
-    fix = fix
-  )
-
-  out <- .get_data_shared_2d(term = P$smooth, P = P, trans = trans, maxpo = maxpo)
-  return(out)
-}
-
-
-
 # Internal function for preparing plot of two dimensional smooths
 .get_plot_prediction_matrix_and_aux_plot_smooth_md <- function(
     term,
     fix,
     data = NULL,
-    se_mult = 2,
     n2 = 40,
     ylim = NULL,
     xlim = NULL,
@@ -441,9 +429,6 @@ get_data.mgcv.smooth.MD <- function(
       y = y_seq,
       se = TRUE,
       raw = raw,
-      se_mult = se_mult,
-      ylim = ylim,
-      xlim = xlim,
       exclude = exclude,
       exclude2 = exclude2
     )

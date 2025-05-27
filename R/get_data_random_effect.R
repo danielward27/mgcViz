@@ -7,7 +7,6 @@ get_data.random.effect <- function(term, trans = identity, ...) {
     residuals = TRUE,
     res_den = "none",
     se = TRUE,
-    se_mult = 1,
     n = 100,
     n2 = NULL,
     ylim = NULL,

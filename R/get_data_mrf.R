@@ -12,7 +12,6 @@ get_data.mrf.smooth <- function(
     residuals = TRUE,
     res_den = "none",
     se = TRUE,
-    se_mult = 1,
     n = NULL,
     n2 = NULL,
     ylim = NULL,
@@ -38,8 +37,6 @@ get_data.mrf.smooth <- function(
 .get_plot_prediction_matrix_and_aux.mrf.smooth <- function(
     term,
     data,
-    se1_mult,
-    se2_mult,
     partial_resids,
     se,
     n,

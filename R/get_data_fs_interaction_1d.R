@@ -13,7 +13,6 @@ get_data.fs.interaction.1D <- function(
     residuals = FALSE,
     res_den = "none",
     se = TRUE,
-    se_mult = 1,
     n = n,
     n2 = NULL,
     ylim = NULL,
@@ -64,8 +63,6 @@ get_data.fs.interaction.1D <- function(
     X = X,
     se = FALSE,
     raw = raw,
-    xlim = xlim,
-    ylim = ylim,
     x = x_seq,
     n = n,
     nf = nf
