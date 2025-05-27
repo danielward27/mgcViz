@@ -1,7 +1,7 @@
 #' @description This function converts \code{gam} objects into \code{gamViz} objects.
 #' @param o an object of class \code{gam}.
 #' @export
-getViz <- function(o, nsim = 0, post = FALSE, newdata, ...) {
+gam_to_gam_viz <- function(o, nsim = 0, post = FALSE, newdata, ...) {
   if (!inherits(o, "gam")) {
     stop("\"o\" should be of class \"gam\"")
   }
