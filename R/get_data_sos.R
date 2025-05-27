@@ -52,7 +52,6 @@ get_data.sos.smooth <- function(
     # standard 2D plot
 
     out <- .get_data_shared_2d(
-      term = P$smooth,
       P = P,
       trans = trans,
       maxpo = maxpo,
@@ -110,7 +109,7 @@ get_data.sos.smooth <- function(
 #' @noRd
 #' @export
 .get_plot_prediction_matrix_and_aux.sos.smooth <- function(
-    term,
+    mgcv_term,
     data,
     partial_resids = NULL,
     n,
@@ -126,7 +125,7 @@ get_data.sos.smooth <- function(
   ## plot method function for sos.smooth terms
   if (scheme == 1) {
     return(.get_plot_prediction_matrix_and_aux_plot_smooth_2d(
-      term = term,
+      mgcv_term = mgcv_term,
       data = data,
       n2 = n2,
       ylim = ylim,
@@ -149,7 +148,7 @@ get_data.sos.smooth <- function(
   if (phi < -pi / 2) phi <- -(phi + pi)
 
   ## get basic plot data
-  raw <- data[term$term]
+  raw <- data[mgcv_term$term]
   raw <- as.data.frame(.lolaxy(
     lo = raw[[2]] * pi / 180,
     la = raw[[1]] * pi / 180,
@@ -174,10 +173,10 @@ get_data.sos.smooth <- function(
   um <- .repole(lo, la, theta, phi)
 
   dat <- data.frame(la = um$la * 180 / pi, lo = um$lo * 180 / pi)
-  names(dat) <- term$term
-  if (term$by != "NA") dat[[term$by]] <- la * 0 + 1
+  names(dat) <- mgcv_term$term
+  if (mgcv_term$by != "NA") dat[[mgcv_term$by]] <- la * 0 + 1
 
-  X <- PredictMat(term, dat) # prediction matrix for this term
+  X <- PredictMat(mgcv_term, dat) # prediction matrix for this term
 
   ## fix lo for smooth contouring
   lo <- dat[[2]]

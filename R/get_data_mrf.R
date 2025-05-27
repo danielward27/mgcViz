@@ -34,13 +34,13 @@ get_data.mrf.smooth <- function(
 #' @noRd
 #' @export
 .get_plot_prediction_matrix_and_aux.mrf.smooth <- function(
-    term,
+    mgcv_term,
     data,
     ...) {
-  raw <- data[term$term][[1]]
-  dat <- data.frame(x = factor(names(term$xt$polys), levels = levels(term$knots)))
-  names(dat) <- term$term
-  X <- PredictMat(term, dat) # prediction matrix for this term
+  raw <- data[mgcv_term$term][[1]]
+  dat <- data.frame(x = factor(names(mgcv_term$xt$polys), levels = levels(mgcv_term$knots)))
+  names(dat) <- mgcv_term$term
+  X <- PredictMat(mgcv_term, dat) # prediction matrix for this term
   return(list(
     X = X,
     raw = raw

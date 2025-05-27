@@ -20,7 +20,7 @@
   attr(mgcv_term, "coefficients") <- gam_viz$coefficients[first:last] # Relevant coeffs for i-th smooth
 
   P <- .get_plot_prediction_matrix_and_aux(
-    term = mgcv_term,
+    mgcv_term = mgcv_term,
     data = gam_viz$model,
     n = n,
     n2 = n2,

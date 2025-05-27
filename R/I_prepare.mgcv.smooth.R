@@ -3,7 +3,7 @@
 #' inheriting from "mgcv.smooth".
 #' @export
 .get_plot_prediction_matrix_and_aux.mgcv.smooth <- function(
-    term,
+    mgcv_term,
     data = NULL,
     n = 100,
     n2 = 40,
@@ -11,9 +11,9 @@
     xlim = NULL,
     too_far = 0.1,
     ...) {
-  if (term$dim == 1) {
+  if (mgcv_term$dim == 1) {
     out <- .get_plot_prediction_matrix_and_aux_plot_smooth_1d(
-      term = term,
+      mgcv_term = mgcv_term,
       data = data,
       n = n,
       xlim = xlim,
@@ -21,9 +21,9 @@
     )
   }
 
-  if (term$dim == 2) {
+  if (mgcv_term$dim == 2) {
     out <- .get_plot_prediction_matrix_and_aux_plot_smooth_2d(
-      term = term,
+      mgcv_term = mgcv_term,
       data = data,
       n2 = n2,
       ylim = ylim,
@@ -33,9 +33,9 @@
     )
   }
 
-  if (term$dim > 2) {
+  if (mgcv_term$dim > 2) {
     out <- .get_plot_prediction_matrix_and_aux_plot_smooth_md(
-      term = term,
+      mgcv_term = mgcv_term,
       data = data,
       n2 = n2,
       ylim = ylim,

@@ -30,14 +30,14 @@ get_data.random.effect <- function(term, trans = identity, ...) {
 #' @noRd
 #' @export
 .get_plot_prediction_matrix_and_aux.random.effect <- function(
-    term,
+    mgcv_term,
     data = NULL,
     n = 100,
     ylim = NULL,
     xlim = NULL,
     ...) {
-  raw <- data[term$term][[1]]
-  p <- term$last.para - term$first.para + 1
+  raw <- data[mgcv_term$term][[1]]
+  p <- mgcv_term$last.para - mgcv_term$first.para + 1
   X <- diag(p) # prediction matrix for this term
 
   return(list(

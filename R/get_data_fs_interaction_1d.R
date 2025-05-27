@@ -36,16 +36,16 @@ get_data.fs.interaction.1D <- function(
 #' @noRd
 #' @export
 .get_plot_prediction_matrix_and_aux.fs.interaction <- function(
-    term,
+    mgcv_term,
     data = NULL,
     n = 100,
     ylim = NULL,
     xlim = NULL,
     ...) {
-  if (term$dim > 1) {
+  if (mgcv_term$dim > 1) {
     stop("no method for base smooth dim > 1")
   }
-  raw <- data[term$base$term][[1]]
+  raw <- data[mgcv_term$base$term][[1]]
 
   # Generate x sequence for prediction
   if (is.null(xlim)) {
@@ -53,11 +53,11 @@ get_data.fs.interaction.1D <- function(
   }
   x_seq <- seq(xlim[1], xlim[2], length = n)
 
-  nf <- length(term$flev)
-  fac <- rep(term$flev, rep(n, nf))
+  nf <- length(mgcv_term$flev)
+  fac <- rep(mgcv_term$flev, rep(n, nf))
   dat <- data.frame(as.factor(fac), x_seq)
-  names(dat) <- c(term$fterm, term$base$term)
-  X <- PredictMat(term, dat)
+  names(dat) <- c(mgcv_term$fterm, mgcv_term$base$term)
+  X <- PredictMat(mgcv_term, dat)
   return(list(
     X = X,
     raw = raw,

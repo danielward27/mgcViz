@@ -93,7 +93,7 @@ get_data.mgcv.smooth.2D <- function(
   )
 
   # 2) Produce output object
-  out <- .get_data_shared_2d(term = P$smooth, P = P, trans = trans, maxpo = maxpo)
+  out <- .get_data_shared_2d(P = P, trans = trans, maxpo = maxpo)
   return(out)
 }
 
@@ -101,7 +101,7 @@ get_data.mgcv.smooth.2D <- function(
 
 # Used by e.g MD and SOS
 #' @noRd
-.get_data_shared_2d <- function(term, P, trans, maxpo, flip = FALSE) { # TODO is term even used?
+.get_data_shared_2d <- function(P, trans, maxpo, flip = FALSE) {
   .dat <- list()
   # 1) Build dataset on fitted effect
   P$fit[P$exclude] <- NA
@@ -187,7 +187,7 @@ get_data.mgcv.smooth.MD <- function(
     fix = fix
   )
 
-  out <- .get_data_shared_2d(term = P$smooth, P = P, trans = trans, maxpo = maxpo)
+  out <- .get_data_shared_2d(P = P, trans = trans, maxpo = maxpo)
   return(out)
 }
 
@@ -197,7 +197,7 @@ get_data.mgcv.smooth.MD <- function(
 #' inheriting from "mgcv.smooth".
 #' @export
 .get_plot_prediction_matrix_and_aux.mgcv.smooth <- function(
-    term,
+    mgcv_term,
     data = NULL,
     n = 100,
     n2 = 40,
@@ -205,9 +205,9 @@ get_data.mgcv.smooth.MD <- function(
     xlim = NULL,
     too_far = 0.1,
     ...) {
-  if (term$dim == 1) {
+  if (mgcv_term$dim == 1) {
     out <- .get_plot_prediction_matrix_and_aux_plot_smooth_1d(
-      term = term,
+      mgcv_term = mgcv_term,
       data = data,
       n = n,
       xlim = xlim,
@@ -215,9 +215,9 @@ get_data.mgcv.smooth.MD <- function(
     )
   }
 
-  if (term$dim == 2) {
+  if (mgcv_term$dim == 2) {
     out <- .get_plot_prediction_matrix_and_aux_plot_smooth_2d(
-      term = term,
+      mgcv_term = mgcv_term,
       data = data,
       n2 = n2,
       ylim = ylim,
@@ -227,9 +227,9 @@ get_data.mgcv.smooth.MD <- function(
     )
   }
 
-  if (term$dim > 2) {
+  if (mgcv_term$dim > 2) {
     out <- .get_plot_prediction_matrix_and_aux_plot_smooth_md(
-      term = term,
+      mgcv_term = mgcv_term,
       data = data,
       n2 = n2,
       ylim = ylim,
@@ -245,28 +245,28 @@ get_data.mgcv.smooth.MD <- function(
 
 # Internal function for preparing plot of one dimensional smooths
 .get_plot_prediction_matrix_and_aux_plot_smooth_1d <- function(
-    term,
+    mgcv_term,
     data,
     n = 100,
     xlim = NULL,
     ...) {
-  raw <- as.vector(data[term$term][[1]])
+  raw <- as.vector(data[mgcv_term$term][[1]])
   if (is.null(xlim)) {
     # Generate x sequence for prediction
     x_seq <- seq(min(raw), max(raw), length = n)
   } else {
     x_seq <- seq(xlim[1], xlim[2], length = n)
   }
-  if (term$by != "NA") {
+  if (mgcv_term$by != "NA") {
     # Deal with any by variables
     by <- rep(1, n)
     dat <- data.frame(x = x_seq, by = by)
-    names(dat) <- c(term$term, term$by)
+    names(dat) <- c(mgcv_term$term, mgcv_term$by)
   } else {
     dat <- data.frame(x = x_seq)
-    names(dat) <- term$term
+    names(dat) <- mgcv_term$term
   } # Finished preparing prediction data.frame
-  X <- PredictMat(term, dat) # prediction matrix for this term
+  X <- PredictMat(mgcv_term, dat) # prediction matrix for this term
 
   if (is.null(xlim)) {
     xlim <- range(x_seq)
@@ -281,15 +281,15 @@ get_data.mgcv.smooth.MD <- function(
 
 # Internal function for preparing plot of two dimensional smooths
 .get_plot_prediction_matrix_and_aux_plot_smooth_2d <- function(
-    term,
+    mgcv_term,
     data = NULL,
     n2 = 40,
     ylim = NULL, # TODO name y is confusing!
     xlim = NULL,
     too_far = 0.1,
     ...) {
-  xterm <- term$term[1]
-  yterm <- term$term[2]
+  xterm <- mgcv_term$term[1]
+  yterm <- mgcv_term$term[2]
   raw <- data.frame(
     x = as.numeric(data[xterm][[1]]),
     y = as.numeric(data[yterm][[1]])
@@ -313,16 +313,16 @@ get_data.mgcv.smooth.MD <- function(
   } else {
     exclude <- rep(FALSE, n2 * n2)
   }
-  if (term$by != "NA") {
+  if (mgcv_term$by != "NA") {
     # deal with any by variables
     by <- rep(1, n2^2)
     dat <- data.frame(x = x_rep, y = y_rep, by = by)
-    colnames(dat) <- c(xterm, yterm, term$by)
+    colnames(dat) <- c(xterm, yterm, mgcv_term$by)
   } else {
     dat <- data.frame(x = x_rep, y = y_rep)
     colnames(dat) <- c(xterm, yterm)
   } ## prediction data.frame complete
-  X <- PredictMat(term, dat) ## prediction matrix for this term
+  X <- PredictMat(mgcv_term, dat) ## prediction matrix for this term
 
   out <- list(
     X = X,
@@ -338,7 +338,7 @@ get_data.mgcv.smooth.MD <- function(
 
 # Internal function for preparing plot of two dimensional smooths
 .get_plot_prediction_matrix_and_aux_plot_smooth_md <- function(
-    term,
+    mgcv_term,
     fix,
     data = NULL,
     n2 = 40,
@@ -347,7 +347,7 @@ get_data.mgcv.smooth.MD <- function(
     too_far = 0.1,
     ...) {
   ov <- names(fix)
-  iv <- term$term[!(term$term %in% ov)]
+  iv <- mgcv_term$term[!(mgcv_term$term %in% ov)]
   xterm <- iv[1]
   yterm <- iv[2]
   raw <- data.frame(
@@ -389,11 +389,11 @@ get_data.mgcv.smooth.MD <- function(
   } else {
     exclude2 <- FALSE
   }
-  if (term$by != "NA") {
+  if (mgcv_term$by != "NA") {
     # deal with any by variables
     by <- rep(1, n2^2)
     dat <- data.frame(x = xx, y = yy, by = by)
-    colnames(dat) <- c(xterm, yterm, term$by)
+    colnames(dat) <- c(xterm, yterm, mgcv_term$by)
   } else {
     dat <- data.frame(x = xx, y = yy)
     colnames(dat) <- c(xterm, yterm)
@@ -403,7 +403,7 @@ get_data.mgcv.smooth.MD <- function(
     dat[[ii]] <- rep(fix[ii], n2^2)
   }
 
-  X <- PredictMat(term, dat) ## prediction matrix for this term
+  X <- PredictMat(mgcv_term, dat) ## prediction matrix for this term
 
   if (is.null(ylim)) {
     ylim <- range(y_seq)
