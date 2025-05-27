@@ -16,8 +16,8 @@
     ...) {
   first <- term$first.para
   last <- term$last.para
-  edf <- sum(gam_viz$edf[first:last]) ## Effective DoF for this term
   attr(term, "coefficients") <- gam_viz$coefficients[first:last] # Relevant coeffs for i-th smooth
+
   P <- .get_plot_prediction_matrix_and_aux(
     term = term,
     data = gam_viz$model,
@@ -44,8 +44,9 @@
       if (!is.null(P$exclude)) {
         P$fit[P$exclude] <- NA
       }
-      if (se && P$se) {
+      if (se) {
         ## get standard errors for fit
+
         ## test whether mean variability to be added to variability (only for centred terms)
         if (se_with_mean && attr(term, "nCons") > 0) {
           if (length(gam_viz$cmX) < ncol(gam_viz$Vp)) {
@@ -85,7 +86,7 @@
       if (partial_resids || (res_den != "none")) {
         P$p.resid <- fit_smooth + w_resid
       }
-      if (se && P$se) {
+      if (se) {
         P$se <- se.fit
       }
       P$X <- NULL

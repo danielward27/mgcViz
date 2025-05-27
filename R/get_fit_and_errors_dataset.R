@@ -1,4 +1,4 @@
-.get_fit_and_errors_dataset <- function(term, unconditional, residuals, res_den, se) {
+.get_fit_and_errors_dataset <- function(term, unconditional, residuals, res_den) {
   V <- fv_terms <- NULL
 
   # Use Bayesian cov matrix including smoothing parameter uncertainty?
@@ -34,25 +34,24 @@
         w_resid <- term$gam_viz$residuals * wr
       }
     }
+
     fv_terms <- term$gam_viz$store$termsFit[, term$gam_viz$store$np + term$term_idx]
     if (is.null(fv_terms)) {
       fv_terms <- predict(term$gam_viz, type = "terms") # TODO inefficient?
     }
   }
 
-  if (se) {
-    # Check that variances are actually available
-    if (term$gam_viz$Vp[1, 1] < 0) {
-      se <- FALSE
-      warning("No variance estimates available")
-    }
+  # Check that variances are actually available
+  if (term$gam_viz$Vp[1, 1] < 0) {
+    stop("No variance estimates available")
   }
 
-  return(list(
+  list(
     V = V,
     w_resid = w_resid,
-    se = se,
     fv_terms = fv_terms,
-    partial_resids = partial_resids
-  ))
+    w_resid = w_resid,
+    partial_resids = partial_resids,
+    V = V
+  )
 }

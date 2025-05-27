@@ -15,7 +15,6 @@ get_data.mgcv.smooth.1D <- function(
     unconditional = unconditional,
     residuals = TRUE,
     res_den = "none",
-    se = TRUE,
     n = n,
     n2 = NULL,
     ylim = NULL,
@@ -28,8 +27,8 @@ get_data.mgcv.smooth.1D <- function(
   if (!is.null(P$raw)) {
     # Construct data.frame of partial residuals
     res <- data.frame("x" = as.vector(P$raw))
-    if (!is.null(P$p.resid) & length(P$p.resid)) {
-      res$y <- trans(P$p.resid)
+    if (!is.null(P$p_resid) & length(P$p_resid)) {
+      res$y <- trans(P$p_resid)
     }
 
     # Exclude residuals falling outside boundaries
@@ -51,12 +50,12 @@ get_data.mgcv.smooth.1D <- function(
     se = P$se
   ) # standard error
 
-  if (!is.null(P$simF)) {
-    nsim <- ncol(P$simF)
+  if (!is.null(P$sim_f)) {
+    nsim <- ncol(P$sim_f)
     .dat$sim <- data.frame(
       "x" = rep(P$x, nsim),
-      "ty" = trans(as.vector(P$simF)),
-      "id" = as.factor(rep(1:nsim, each = nrow(P$simF)))
+      "ty" = trans(as.vector(P$sim_f)),
+      "id" = as.factor(rep(1:nsim, each = nrow(P$sim_f)))
     )
   }
 
@@ -85,7 +84,6 @@ get_data.mgcv.smooth.2D <- function(
     unconditional = unconditional,
     residuals = TRUE,
     res_den = "none",
-    se = TRUE,
     n = NULL,
     n2 = n,
     ylim = ylim,
@@ -180,7 +178,6 @@ get_data.mgcv.smooth.MD <- function(
     unconditional = unconditional,
     residuals = TRUE,
     res_den = "none",
-    se = TRUE,
     n = NULL,
     n2 = n,
     ylim = ylim,
@@ -253,36 +250,32 @@ get_data.mgcv.smooth.MD <- function(
     n = 100,
     xlim = NULL,
     ...) {
-  out <- NULL
-  if (term$plot.me) {
-    raw <- as.vector(data[term$term][[1]])
-    if (is.null(xlim)) {
-      # Generate x sequence for prediction
-      x_seq <- seq(min(raw), max(raw), length = n)
-    } else {
-      x_seq <- seq(xlim[1], xlim[2], length = n)
-    }
-    if (term$by != "NA") {
-      # Deal with any by variables
-      by <- rep(1, n)
-      dat <- data.frame(x = x_seq, by = by)
-      names(dat) <- c(term$term, term$by)
-    } else {
-      dat <- data.frame(x = x_seq)
-      names(dat) <- term$term
-    } # Finished preparing prediction data.frame
-    X <- PredictMat(term, dat) # prediction matrix for this term
-
-    if (is.null(xlim)) {
-      xlim <- range(x_seq)
-    }
-    out <- list(
-      X = X,
-      x = x_seq,
-      se = TRUE,
-      raw = raw
-    )
+  raw <- as.vector(data[term$term][[1]])
+  if (is.null(xlim)) {
+    # Generate x sequence for prediction
+    x_seq <- seq(min(raw), max(raw), length = n)
+  } else {
+    x_seq <- seq(xlim[1], xlim[2], length = n)
   }
+  if (term$by != "NA") {
+    # Deal with any by variables
+    by <- rep(1, n)
+    dat <- data.frame(x = x_seq, by = by)
+    names(dat) <- c(term$term, term$by)
+  } else {
+    dat <- data.frame(x = x_seq)
+    names(dat) <- term$term
+  } # Finished preparing prediction data.frame
+  X <- PredictMat(term, dat) # prediction matrix for this term
+
+  if (is.null(xlim)) {
+    xlim <- range(x_seq)
+  }
+  out <- list(
+    X = X,
+    x = x_seq,
+    raw = raw
+  )
   return(out)
 }
 
@@ -291,57 +284,54 @@ get_data.mgcv.smooth.MD <- function(
     term,
     data = NULL,
     n2 = 40,
-    ylim = NULL,
+    ylim = NULL, # TODO name y is confusing!
     xlim = NULL,
     too_far = 0.1,
     ...) {
-  out <- NULL
-  if (term$plot.me) {
-    xterm <- term$term[1]
-    yterm <- term$term[2]
-    raw <- data.frame(
-      x = as.numeric(data[xterm][[1]]),
-      y = as.numeric(data[yterm][[1]])
-    )
-    n2 <- max(10, n2)
+  xterm <- term$term[1]
+  yterm <- term$term[2]
+  raw <- data.frame(
+    x = as.numeric(data[xterm][[1]]),
+    y = as.numeric(data[yterm][[1]])
+  )
+  n2 <- max(10, n2)
 
 
-    if (is.null(xlim)) {
-      xlim <- c(min(raw$x), max(raw$x))
-    }
-    if (is.null(ylim)) {
-      ylim <- c(min(raw$y), max(raw$y))
-    }
-
-    x_seq <- seq(xlim[1], xlim[2], length = n2)
-    y_seq <- seq(ylim[1], ylim[2], length = n2)
-    x_rep <- rep(x_seq, n2)
-    y_rep <- rep(y_seq, rep(n2, n2))
-    if (too_far > 0) {
-      exclude <- exclude.too.far(x_rep, y_rep, raw$x, raw$y, dist = too_far)
-    } else {
-      exclude <- rep(FALSE, n2 * n2)
-    }
-    if (term$by != "NA") {
-      # deal with any by variables
-      by <- rep(1, n2^2)
-      dat <- data.frame(x = x_rep, y = y_rep, by = by)
-      colnames(dat) <- c(xterm, yterm, term$by)
-    } else {
-      dat <- data.frame(x = x_rep, y = y_rep)
-      colnames(dat) <- c(xterm, yterm)
-    } ## prediction data.frame complete
-    X <- PredictMat(term, dat) ## prediction matrix for this term
-
-    out <- list(
-      X = X,
-      x = x_seq,
-      y = y_seq,
-      se = TRUE,
-      raw = raw,
-      exclude = exclude
-    )
+  if (is.null(xlim)) {
+    xlim <- c(min(raw$x), max(raw$x))
   }
+  if (is.null(ylim)) {
+    ylim <- c(min(raw$y), max(raw$y))
+  }
+
+  x_seq <- seq(xlim[1], xlim[2], length = n2)
+  y_seq <- seq(ylim[1], ylim[2], length = n2)
+  x_rep <- rep(x_seq, n2)
+  y_rep <- rep(y_seq, rep(n2, n2))
+  if (too_far > 0) {
+    exclude <- exclude.too.far(x_rep, y_rep, raw$x, raw$y, dist = too_far)
+  } else {
+    exclude <- rep(FALSE, n2 * n2)
+  }
+  if (term$by != "NA") {
+    # deal with any by variables
+    by <- rep(1, n2^2)
+    dat <- data.frame(x = x_rep, y = y_rep, by = by)
+    colnames(dat) <- c(xterm, yterm, term$by)
+  } else {
+    dat <- data.frame(x = x_rep, y = y_rep)
+    colnames(dat) <- c(xterm, yterm)
+  } ## prediction data.frame complete
+  X <- PredictMat(term, dat) ## prediction matrix for this term
+
+  out <- list(
+    X = X,
+    x = x_seq,
+    y = y_seq,
+    raw = raw,
+    exclude = exclude
+  )
+
   return(out)
 }
 
@@ -356,82 +346,78 @@ get_data.mgcv.smooth.MD <- function(
     xlim = NULL,
     too_far = 0.1,
     ...) {
-  out <- NULL
-  if (term$plot.me) {
-    ov <- names(fix)
-    iv <- term$term[!(term$term %in% ov)]
-    xterm <- iv[1]
-    yterm <- iv[2]
-    raw <- data.frame(
-      x = as.numeric(data[xterm][[1]]),
-      y = as.numeric(data[yterm][[1]])
-    )
-    n2 <- max(10, n2)
-    if (is.null(xlim)) {
-      x_seq <- seq(min(raw$x), max(raw$x), length = n2)
-    } else {
-      x_seq <- seq(xlim[1], xlim[2], length = n2)
-    }
-    if (is.null(ylim)) {
-      y_seq <- seq(min(raw$y), max(raw$y), length = n2)
-    } else {
-      y_seq <- seq(ylim[1], ylim[2], length = n2)
-    }
-    xx <- rep(x_seq, n2)
-    yy <- rep(y_seq, each = n2)
-
-    # Mark cells on X-Y grid are too far from any observation
-    if (too_far[1] > 0) {
-      exclude <- exclude.too.far(xx, yy, raw$x, raw$y, dist = too_far[1])
-    } else {
-      exclude <- rep(FALSE, n2 * n2)
-    }
-
-    # Mark covariate vectors (and corresponding residuals) that are too
-    # far from X-Y plane (the slice of interest)
-    if (is.na(too_far[2]) || too_far[2] > 0) {
-      tmp <- sapply(ov, function(.nm) as.numeric(data[.nm][[1]]))
-      tmp <- sqrt(mahalanobis(tmp, fix, diag(diag(cov(tmp)), ncol(tmp)))) # Euclidean distance
-      exclude2 <- tmp >
-        if (is.na(too_far[2])) {
-          quantile(tmp, 0.1)
-        } else {
-          too_far[2]
-        }
-    } else {
-      exclude2 <- FALSE
-    }
-    if (term$by != "NA") {
-      # deal with any by variables
-      by <- rep(1, n2^2)
-      dat <- data.frame(x = xx, y = yy, by = by)
-      colnames(dat) <- c(xterm, yterm, term$by)
-    } else {
-      dat <- data.frame(x = xx, y = yy)
-      colnames(dat) <- c(xterm, yterm)
-    } ## prediction data.frame complete
-
-    for (ii in ov) {
-      dat[[ii]] <- rep(fix[ii], n2^2)
-    }
-
-    X <- PredictMat(term, dat) ## prediction matrix for this term
-
-    if (is.null(ylim)) {
-      ylim <- range(y_seq)
-    }
-    if (is.null(xlim)) {
-      xlim <- range(x_seq)
-    }
-    out <- list(
-      X = X,
-      x = x_seq,
-      y = y_seq,
-      se = TRUE,
-      raw = raw,
-      exclude = exclude,
-      exclude2 = exclude2
-    )
+  ov <- names(fix)
+  iv <- term$term[!(term$term %in% ov)]
+  xterm <- iv[1]
+  yterm <- iv[2]
+  raw <- data.frame(
+    x = as.numeric(data[xterm][[1]]),
+    y = as.numeric(data[yterm][[1]])
+  )
+  n2 <- max(10, n2)
+  if (is.null(xlim)) {
+    x_seq <- seq(min(raw$x), max(raw$x), length = n2)
+  } else {
+    x_seq <- seq(xlim[1], xlim[2], length = n2)
   }
+  if (is.null(ylim)) {
+    y_seq <- seq(min(raw$y), max(raw$y), length = n2)
+  } else {
+    y_seq <- seq(ylim[1], ylim[2], length = n2)
+  }
+  xx <- rep(x_seq, n2)
+  yy <- rep(y_seq, each = n2)
+
+  # Mark cells on X-Y grid are too far from any observation
+  if (too_far[1] > 0) {
+    exclude <- exclude.too.far(xx, yy, raw$x, raw$y, dist = too_far[1])
+  } else {
+    exclude <- rep(FALSE, n2 * n2)
+  }
+
+  # Mark covariate vectors (and corresponding residuals) that are too
+  # far from X-Y plane (the slice of interest)
+  if (is.na(too_far[2]) || too_far[2] > 0) {
+    tmp <- sapply(ov, function(.nm) as.numeric(data[.nm][[1]]))
+    tmp <- sqrt(mahalanobis(tmp, fix, diag(diag(cov(tmp)), ncol(tmp)))) # Euclidean distance
+    exclude2 <- tmp >
+      if (is.na(too_far[2])) {
+        quantile(tmp, 0.1)
+      } else {
+        too_far[2]
+      }
+  } else {
+    exclude2 <- FALSE
+  }
+  if (term$by != "NA") {
+    # deal with any by variables
+    by <- rep(1, n2^2)
+    dat <- data.frame(x = xx, y = yy, by = by)
+    colnames(dat) <- c(xterm, yterm, term$by)
+  } else {
+    dat <- data.frame(x = xx, y = yy)
+    colnames(dat) <- c(xterm, yterm)
+  } ## prediction data.frame complete
+
+  for (ii in ov) {
+    dat[[ii]] <- rep(fix[ii], n2^2)
+  }
+
+  X <- PredictMat(term, dat) ## prediction matrix for this term
+
+  if (is.null(ylim)) {
+    ylim <- range(y_seq)
+  }
+  if (is.null(xlim)) {
+    xlim <- range(x_seq)
+  }
+  out <- list(
+    X = X,
+    x = x_seq,
+    y = y_seq,
+    raw = raw,
+    exclude = exclude,
+    exclude2 = exclude2
+  )
   return(out)
 }

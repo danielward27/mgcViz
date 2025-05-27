@@ -12,7 +12,6 @@ get_data.fs.interaction.1D <- function(
     unconditional = FALSE,
     residuals = FALSE,
     res_den = "none",
-    se = TRUE,
     n = n,
     n2 = NULL,
     ylim = NULL,
@@ -61,7 +60,6 @@ get_data.fs.interaction.1D <- function(
   X <- PredictMat(term, dat)
   return(list(
     X = X,
-    se = FALSE,
     raw = raw,
     x = x_seq,
     n = n,

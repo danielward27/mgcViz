@@ -11,7 +11,6 @@ get_data.mrf.smooth <- function(
     unconditional = unconditional,
     residuals = TRUE,
     res_den = "none",
-    se = TRUE,
     n = NULL,
     n2 = NULL,
     ylim = NULL,
@@ -37,17 +36,6 @@ get_data.mrf.smooth <- function(
 .get_plot_prediction_matrix_and_aux.mrf.smooth <- function(
     term,
     data,
-    partial_resids,
-    se,
-    n,
-    n2,
-    ylim,
-    xlim,
-    too_far,
-    trans,
-    phi,
-    theta,
-    scheme,
     ...) {
   raw <- data[term$term][[1]]
   dat <- data.frame(x = factor(names(term$xt$polys), levels = levels(term$knots)))
@@ -55,7 +43,6 @@ get_data.mrf.smooth <- function(
   X <- PredictMat(term, dat) # prediction matrix for this term
   return(list(
     X = X,
-    se = FALSE,
     raw = raw
   ))
 }

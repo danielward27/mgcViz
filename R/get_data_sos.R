@@ -31,7 +31,6 @@ get_data.sos.smooth <- function(
     unconditional = unconditional,
     residuals = TRUE,
     res_den = "none",
-    se = TRUE,
     n = NULL,
     n2 = n,
     ylim = ylim,
@@ -114,7 +113,6 @@ get_data.sos.smooth <- function(
     term,
     data,
     partial_resids = NULL,
-    se,
     n,
     n2,
     ylim = NULL,
@@ -150,9 +148,6 @@ get_data.sos.smooth <- function(
   if (phi > pi / 2) phi <- pi - phi
   if (phi < -pi / 2) phi <- -(phi + pi)
 
-  if (!term$plot.me) {
-    return(NULL)
-  } ## shouldn't or can't plot
   ## get basic plot data
   raw <- data[term$term]
   raw <- as.data.frame(.lolaxy(
@@ -194,7 +189,6 @@ get_data.sos.smooth <- function(
 
   return(list(
     X = X,
-    se = TRUE,
     raw = raw,
     ind = ind,
     xm = xm,

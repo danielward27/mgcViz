@@ -6,7 +6,6 @@ get_data.random.effect <- function(term, trans = identity, ...) {
     unconditional = FALSE,
     residuals = TRUE,
     res_den = "none",
-    se = TRUE,
     n = 100,
     n2 = NULL,
     ylim = NULL,
@@ -43,7 +42,6 @@ get_data.random.effect <- function(term, trans = identity, ...) {
 
   return(list(
     X = X,
-    se = FALSE,
     raw = raw
   ))
 }

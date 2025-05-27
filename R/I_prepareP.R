@@ -5,7 +5,6 @@ prepareP <- function(
     unconditional,
     residuals,
     res_den,
-    se,
     n,
     n2,
     ylim,
@@ -18,15 +17,13 @@ prepareP <- function(
     term = term,
     unconditional = unconditional,
     residuals = residuals,
-    res_den = res_den,
-    se = se
+    res_den = res_den
   )
-
   plot_data <- .get_fit_and_errors_plot_data(
-    term = term$gam_viz$smooth[[term$term_idx]],
+    term = term$gam_viz$smooth[[term$term_idx]], # TODO term also refers to term$gam_viz$smooth[[term$term_idx]]
     gam_viz = term$gam_viz,
     partial_resids = fit_and_errors$partial_resids,
-    se = fit_and_errors$se,
+    se = TRUE,
     n = n,
     n2 = n2,
     ylim = ylim,
