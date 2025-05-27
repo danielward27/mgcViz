@@ -20,10 +20,12 @@ prepareP <- function(
     res_den = res_den
   )
 
+
+
   plot_data <- .get_fit_and_errors_plot_data(
     term = term,
     partial_resids = fit_and_errors$partial_resids,
-    se = TRUE,
+    se = TRUE, # For now hardcoded but easy to change if needed
     n = n,
     n2 = n2,
     ylim = ylim,
@@ -37,5 +39,5 @@ prepareP <- function(
     ...
   )
 
-  return(plot_data) # TODO, I don't like the concat in plot data, we can concat after the fact?
+  plot_data # TODO, I don't like the concat in plot data, we can concat after the fact?
 }

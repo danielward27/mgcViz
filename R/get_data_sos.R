@@ -108,7 +108,7 @@ get_data.sos.smooth <- function(
 
 #' @noRd
 #' @export
-.get_plot_prediction_matrix_and_aux.sos.smooth <- function(
+.get_plot_predict_matrix_and_aux.sos.smooth <- function(
     mgcv_term,
     data,
     partial_resids = NULL,
@@ -124,7 +124,7 @@ get_data.sos.smooth <- function(
     ...) {
   ## plot method function for sos.smooth terms
   if (scheme == 1) {
-    return(.get_plot_prediction_matrix_and_aux_plot_smooth_2d(
+    return(.get_plot_predict_matrix_and_aux_plot_smooth_2d(
       mgcv_term = mgcv_term,
       data = data,
       n2 = n2,

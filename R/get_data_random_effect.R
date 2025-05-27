@@ -29,7 +29,7 @@ get_data.random.effect <- function(term, trans = identity, ...) {
 
 #' @noRd
 #' @export
-.get_plot_prediction_matrix_and_aux.random.effect <- function(
+.get_plot_predict_matrix_and_aux.random.effect <- function(
     mgcv_term,
     data = NULL,
     n = 100,

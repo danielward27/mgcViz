@@ -35,7 +35,7 @@ get_data.fs.interaction.1D <- function(
 
 #' @noRd
 #' @export
-.get_plot_prediction_matrix_and_aux.fs.interaction <- function(
+.get_plot_predict_matrix_and_aux.fs.interaction <- function(
     mgcv_term,
     data = NULL,
     n = 100,

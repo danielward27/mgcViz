@@ -196,7 +196,7 @@ get_data.mgcv.smooth.MD <- function(
 #' @description Default plot preparation method for smooth objects `x'
 #' inheriting from "mgcv.smooth".
 #' @export
-.get_plot_prediction_matrix_and_aux.mgcv.smooth <- function(
+.get_plot_predict_matrix_and_aux.mgcv.smooth <- function(
     mgcv_term,
     data = NULL,
     n = 100,
@@ -206,7 +206,7 @@ get_data.mgcv.smooth.MD <- function(
     too_far = 0.1,
     ...) {
   if (mgcv_term$dim == 1) {
-    out <- .get_plot_prediction_matrix_and_aux_plot_smooth_1d(
+    out <- .get_plot_predict_matrix_and_aux_plot_smooth_1d(
       mgcv_term = mgcv_term,
       data = data,
       n = n,
@@ -216,7 +216,7 @@ get_data.mgcv.smooth.MD <- function(
   }
 
   if (mgcv_term$dim == 2) {
-    out <- .get_plot_prediction_matrix_and_aux_plot_smooth_2d(
+    out <- .get_plot_predict_matrix_and_aux_plot_smooth_2d(
       mgcv_term = mgcv_term,
       data = data,
       n2 = n2,
@@ -228,7 +228,7 @@ get_data.mgcv.smooth.MD <- function(
   }
 
   if (mgcv_term$dim > 2) {
-    out <- .get_plot_prediction_matrix_and_aux_plot_smooth_md(
+    out <- .get_plot_predict_matrix_and_aux_plot_smooth_md(
       mgcv_term = mgcv_term,
       data = data,
       n2 = n2,
@@ -244,7 +244,7 @@ get_data.mgcv.smooth.MD <- function(
 
 
 # Internal function for preparing plot of one dimensional smooths
-.get_plot_prediction_matrix_and_aux_plot_smooth_1d <- function(
+.get_plot_predict_matrix_and_aux_plot_smooth_1d <- function(
     mgcv_term,
     data,
     n = 100,
@@ -280,7 +280,7 @@ get_data.mgcv.smooth.MD <- function(
 }
 
 # Internal function for preparing plot of two dimensional smooths
-.get_plot_prediction_matrix_and_aux_plot_smooth_2d <- function(
+.get_plot_predict_matrix_and_aux_plot_smooth_2d <- function(
     mgcv_term,
     data = NULL,
     n2 = 40,
@@ -337,7 +337,7 @@ get_data.mgcv.smooth.MD <- function(
 
 
 # Internal function for preparing plot of two dimensional smooths
-.get_plot_prediction_matrix_and_aux_plot_smooth_md <- function(
+.get_plot_predict_matrix_and_aux_plot_smooth_md <- function(
     mgcv_term,
     fix,
     data = NULL,

@@ -33,7 +33,7 @@ get_data.mrf.smooth <- function(
 
 #' @noRd
 #' @export
-.get_plot_prediction_matrix_and_aux.mrf.smooth <- function(
+.get_plot_predict_matrix_and_aux.mrf.smooth <- function(
     mgcv_term,
     data,
     ...) {
