@@ -1,6 +1,5 @@
 .get_fit_and_errors_plot_data <- function(
     term,
-    gam_viz,
     partial_resids,
     se,
     n,
@@ -14,12 +13,14 @@
     res_den,
     nsim,
     ...) {
-  first <- term$first.para
-  last <- term$last.para
-  attr(term, "coefficients") <- gam_viz$coefficients[first:last] # Relevant coeffs for i-th smooth
+  gam_viz <- term$gam_viz
+  mgcv_term <- term$gam_viz$smooth[[term$term_idx]]
+  first <- mgcv_term$first.para
+  last <- mgcv_term$last.para
+  attr(mgcv_term, "coefficients") <- gam_viz$coefficients[first:last] # Relevant coeffs for i-th smooth
 
   P <- .get_plot_prediction_matrix_and_aux(
-    term = term,
+    term = mgcv_term,
     data = gam_viz$model,
     n = n,
     n2 = n2,
@@ -31,7 +32,7 @@
   if (is.null(P)) {
     P <- list(plot.me = FALSE)
   } else {
-    P$smooth <- term
+    P$smooth <- mgcv_term
     if (is.null(P$fit)) {
       p <- gam_viz$coefficients[first:last] ## relevant coefficients
       offset <- attr(P$X, "offset") ## any term specific offset
@@ -48,12 +49,12 @@
         ## get standard errors for fit
 
         ## test whether mean variability to be added to variability (only for centred terms)
-        if (se_with_mean && attr(term, "nCons") > 0) {
+        if (se_with_mean && attr(mgcv_term, "nCons") > 0) {
           if (length(gam_viz$cmX) < ncol(gam_viz$Vp)) {
             gam_viz$cmX <- c(gam_viz$cmX, rep(0, ncol(gam_viz$Vp) - length(gam_viz$cmX)))
           }
           X1 <- matrix(gam_viz$cmX, nrow(P$X), ncol(gam_viz$Vp), byrow = TRUE)
-          meanL1 <- term$meanL1
+          meanL1 <- mgcv_term$meanL1
           if (!is.null(meanL1)) {
             X1 <- X1 / meanL1
           }
