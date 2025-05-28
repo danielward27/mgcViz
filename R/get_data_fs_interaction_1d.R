@@ -4,7 +4,7 @@
 get_data.fs.interaction.1D <- function(
     term,
     n = 100,
-    xlim = NULL,
+    lims = NULL,
     trans = identity,
     ...) {
   P <- prepareP(
@@ -13,8 +13,7 @@ get_data.fs.interaction.1D <- function(
     residuals = FALSE,
     n = n,
     n2 = NULL,
-    ylim = NULL,
-    xlim = xlim,
+    lims = lims,
     too_far = NULL,
     se_with_mean = FALSE
   )
@@ -30,16 +29,13 @@ get_data.fs.interaction.1D <- function(
   return(data)
 }
 
-
-
 #' @noRd
 #' @export
 .get_plot_predict_matrix_and_aux.fs.interaction <- function(
     mgcv_term,
     data = NULL,
     n = 100,
-    ylim = NULL,
-    xlim = NULL,
+    lims = NULL,
     ...) {
   if (mgcv_term$dim > 1) {
     stop("no method for base smooth dim > 1")
@@ -47,10 +43,10 @@ get_data.fs.interaction.1D <- function(
   raw <- data[mgcv_term$base$term][[1]]
 
   # Generate x sequence for prediction
-  if (is.null(xlim)) {
-    xlim <- range(raw)
+  if (is.null(lims)) {
+    lims <- range(raw)
   }
-  x_seq <- seq(xlim[1], xlim[2], length = n)
+  x_seq <- seq(lims[1], lims[2], length = n)
 
   nf <- length(mgcv_term$flev)
   fac <- rep(mgcv_term$flev, rep(n, nf))

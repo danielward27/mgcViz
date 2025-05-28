@@ -1,3 +1,4 @@
+# Note lims is c(lower, upper) for 1D and list(c(lower1, upper1), c(lower2, upper2)) in 2D/MD cases
 #' @export
 prepareP <- function(
     term,
@@ -5,8 +6,7 @@ prepareP <- function(
     residuals,
     n,
     n2,
-    ylim,
-    xlim,
+    lims,
     too_far,
     se_with_mean,
     nsim = 0,
@@ -26,8 +26,7 @@ prepareP <- function(
     data = term$gam_viz$model,
     n = n,
     n2 = n2,
-    ylim = ylim,
-    xlim = xlim,
+    lims = lims,
     too_far = too_far,
     ...
   )

@@ -3,8 +3,7 @@
 get_data.pterm_numeric <- function(
     term,
     n = 100,
-    xlim = NULL,
-    maxpo = 1e4,
+    lims = NULL,
     trans = identity,
     ...) {
   if (term$order > 1) {
@@ -22,11 +21,11 @@ get_data.pterm_numeric <- function(
     X <- X[rep(1:nrow(X), ceiling(n / nrow(X))), ]
   }
 
-  if (is.null(xlim)) {
-    xlim <- range(X[[term$varNam]])
+  if (is.null(lims)) {
+    lims <- range(X[[term$varNam]])
   }
 
-  x_seq <- seq(xlim[1], xlim[2], length = n)
+  x_seq <- seq(lims[1], lims[2], length = n)
   data <- X[1:n, ]
   data[[term$varNam]] <- x_seq
 
@@ -70,20 +69,6 @@ get_data.pterm_numeric <- function(
     data$res$y <- trans(
       .wr + gam_viz$store$termsFit[, which(colnames(gam_viz$store$termsFit) == term$nam)]
     )
-  }
-
-  # Exclude residuals falling outside boundaries
-  data$res <- data$res[
-    data$res$x >= xlim[1] & data$res$x <= xlim[2], ,
-    drop = FALSE
-  ]
-
-  # Sample if too many points (> maxpo)
-  nres <- nrow(data$res)
-  data$res$sub <- if (nres > maxpo) {
-    sample(c(rep(T, maxpo), rep(F, nres - maxpo)))
-  } else {
-    rep(T, nres)
   }
 
   data$misc <- list("trans" = trans)

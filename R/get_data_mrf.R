@@ -12,8 +12,7 @@ get_data.mrf.smooth <- function(
     residuals = TRUE,
     n = NULL,
     n2 = NULL,
-    ylim = NULL,
-    xlim = NULL,
+    lims = NULL,
     too_far = NULL,
     se_with_mean = se_with_mean
   )

@@ -3,7 +3,7 @@
 get_data.mgcv.smooth.1D <- function(
     term,
     n = 100,
-    xlim = NULL,
+    lims = NULL,
     maxpo = 1e4,
     trans = identity,
     unconditional = FALSE,
@@ -16,30 +16,20 @@ get_data.mgcv.smooth.1D <- function(
     residuals = TRUE,
     n = n,
     n2 = NULL,
-    ylim = NULL,
-    xlim = xlim,
+    lims = lims,
     too_far = NULL,
     se_with_mean = se_with_mean,
     nsim = nsim
   )
-  .dat <- list()
+  .dat <- list() # TODO I don't like .dat
   if (!is.null(P$aux$raw)) {
     # Construct data.frame of partial residuals
     res <- data.frame("x" = as.vector(P$aux$raw))
-    if (!is.null(P$p_resid) & length(P$p_resid)) {
-      res$y <- trans(P$p_resid)
+    if (!is.null(P$partial_resids) && length(P$partial_resids)) {
+      res$y <- trans(P$partial_resids)
     }
-
     # Exclude residuals falling outside boundaries
-    .dat$res <- res[res$x >= P$xlim[1] & res$x <= P$xlim[2], , drop = FALSE]
-
-    # Sample if too many points (> maxpo)
-    nres <- nrow(.dat$res)
-    .dat$res$sub <- if (nres > maxpo) {
-      sample(c(rep(T, maxpo), rep(F, nres - maxpo)))
-    } else {
-      rep(T, nres)
-    }
+    .dat$res <- res
   }
 
   .dat$fit <- data.frame(
@@ -69,9 +59,7 @@ get_data.mgcv.smooth.1D <- function(
 get_data.mgcv.smooth.2D <- function(
     term,
     n = 40,
-    xlim = NULL,
-    ylim = NULL,
-    maxpo = 1e4,
+    lims = NULL,
     too_far = 0.1,
     trans = identity,
     se_with_mean = FALSE,
@@ -84,14 +72,13 @@ get_data.mgcv.smooth.2D <- function(
     residuals = TRUE,
     n = NULL,
     n2 = n,
-    ylim = ylim,
-    xlim = xlim,
+    lims = lims,
     too_far = too_far,
     se_with_mean = se_with_mean
   )
 
   # 2) Produce output object
-  out <- .get_data_shared_2d(P = P, trans = trans, maxpo = maxpo)
+  out <- .get_data_shared_2d(P = P, trans = trans)
   return(out)
 }
 
@@ -99,7 +86,7 @@ get_data.mgcv.smooth.2D <- function(
 
 # Used by e.g MD and SOS
 #' @noRd
-.get_data_shared_2d <- function(P, trans, maxpo, flip = FALSE) {
+.get_data_shared_2d <- function(P, trans, flip = FALSE) {
   .dat <- list()
   # 1) Build dataset on fitted effect
   P$fit[P$aux$exclude] <- NA
@@ -111,31 +98,7 @@ get_data.mgcv.smooth.2D <- function(
     "se" = P$se
   )
 
-  # 2) Build dataset on residuals
-  if (!is.null(P$aux$raw)) {
-    # Exclude points too far from current slice (relevant only when called by plot.mgcv.smooth.MD)
-    if (!is.null(P$exclude2) && any(P$exclude2)) {
-      P$aux$raw <- P$aux$raw[!P$exclude2, ]
-    }
-
-    # Exclude residuals falling outside boundaries
-    .dat$res <- P$aux$raw[
-      P$aux$raw$x >= P$xlim[1] &
-        P$aux$raw$x <= P$xlim[2] &
-        P$aux$raw$y >= P$ylim[1] &
-        P$aux$raw$y <= P$ylim[2], ,
-      drop = FALSE
-    ]
-
-    # Sample if too many points (> maxpo)
-    nres <- nrow(.dat$res)
-    .dat$res$sub <- if (nres > maxpo) {
-      sample(c(rep(T, maxpo), rep(F, nres - maxpo)))
-    } else {
-      rep(T, nres)
-    }
-  }
-
+  .dat$res <- P$aux$raw
   .dat$misc <- list("trans" = trans)
 
   if (flip) {
@@ -159,9 +122,7 @@ get_data.mgcv.smooth.MD <- function(
     term,
     fix,
     n = 40,
-    xlim = NULL,
-    ylim = NULL,
-    maxpo = 1e4,
+    lims = NULL,
     too_far = c(0.1, NA),
     trans = identity,
     se_with_mean = FALSE,
@@ -177,14 +138,13 @@ get_data.mgcv.smooth.MD <- function(
     residuals = TRUE,
     n = NULL,
     n2 = n,
-    ylim = ylim,
-    xlim = xlim,
+    lims = lims,
     too_far = too_far,
     se_with_mean = se_with_mean,
     fix = fix
   )
 
-  out <- .get_data_shared_2d(P = P, trans = trans, maxpo = maxpo)
+  out <- .get_data_shared_2d(P = P, trans = trans)
   return(out)
 }
 
@@ -198,8 +158,7 @@ get_data.mgcv.smooth.MD <- function(
     data = NULL,
     n = 100,
     n2 = 40,
-    ylim = NULL,
-    xlim = NULL,
+    lims = NULL,
     too_far = 0.1,
     ...) {
   if (mgcv_term$dim == 1) {
@@ -207,7 +166,7 @@ get_data.mgcv.smooth.MD <- function(
       mgcv_term = mgcv_term,
       data = data,
       n = n,
-      xlim = xlim,
+      lims = lims,
       ...
     )
   }
@@ -217,8 +176,7 @@ get_data.mgcv.smooth.MD <- function(
       mgcv_term = mgcv_term,
       data = data,
       n2 = n2,
-      ylim = ylim,
-      xlim = xlim,
+      lims = lims,
       too_far = too_far,
       ...
     )
@@ -229,14 +187,12 @@ get_data.mgcv.smooth.MD <- function(
       mgcv_term = mgcv_term,
       data = data,
       n2 = n2,
-      ylim = ylim,
-      xlim = xlim,
+      lims = lims,
       too_far = too_far,
       ...
     )
   }
-
-  return(out)
+  out
 }
 
 
@@ -245,14 +201,14 @@ get_data.mgcv.smooth.MD <- function(
     mgcv_term,
     data,
     n = 100,
-    xlim = NULL,
+    lims = NULL,
     ...) {
   raw <- as.vector(data[mgcv_term$term][[1]])
-  if (is.null(xlim)) {
+  if (is.null(lims)) {
     # Generate x sequence for prediction
     x_seq <- seq(min(raw), max(raw), length = n)
   } else {
-    x_seq <- seq(xlim[1], xlim[2], length = n)
+    x_seq <- seq(lims[1], lims[2], length = n)
   }
   if (mgcv_term$by != "NA") {
     # Deal with any by variables
@@ -265,9 +221,6 @@ get_data.mgcv.smooth.MD <- function(
   } # Finished preparing prediction data.frame
   X <- PredictMat(mgcv_term, dat) # prediction matrix for this term
 
-  if (is.null(xlim)) {
-    xlim <- range(x_seq)
-  }
   out <- list(
     X = X,
     aux = list(x = x_seq, raw = raw)
@@ -280,8 +233,7 @@ get_data.mgcv.smooth.MD <- function(
     mgcv_term,
     data = NULL,
     n2 = 40,
-    ylim = NULL, # TODO name y is confusing!
-    xlim = NULL,
+    lims = NULL,
     too_far = 0.1,
     ...) {
   xterm <- mgcv_term$term[1]
@@ -290,25 +242,17 @@ get_data.mgcv.smooth.MD <- function(
     x = as.numeric(data[xterm][[1]]),
     y = as.numeric(data[yterm][[1]])
   )
+  if (is.null(lims)) {
+    lims <- list(c(min(raw$x), max(raw$x)), c(min(raw$y), max(raw$y)))
+  }
+  x1_lims <- lims[[1]]
+  x2_lims <- lims[[2]]
   n2 <- max(10, n2)
-
-
-  if (is.null(xlim)) {
-    xlim <- c(min(raw$x), max(raw$x))
-  }
-  if (is.null(ylim)) {
-    ylim <- c(min(raw$y), max(raw$y))
-  }
-
-  x_seq <- seq(xlim[1], xlim[2], length = n2)
-  y_seq <- seq(ylim[1], ylim[2], length = n2)
+  x_seq <- seq(x1_lims[1], x1_lims[2], length = n2)
+  y_seq <- seq(x2_lims[1], x2_lims[2], length = n2)
   x_rep <- rep(x_seq, n2)
   y_rep <- rep(y_seq, rep(n2, n2))
-  if (too_far > 0) {
-    exclude <- exclude.too.far(x_rep, y_rep, raw$x, raw$y, dist = too_far)
-  } else {
-    exclude <- rep(FALSE, n2 * n2)
-  }
+
   if (mgcv_term$by != "NA") {
     # deal with any by variables
     by <- rep(1, n2^2)
@@ -325,12 +269,10 @@ get_data.mgcv.smooth.MD <- function(
     aux = list(
       x = x_seq,
       y = y_seq,
-      raw = raw,
-      exclude = exclude
+      raw = raw
     )
   )
 }
-
 
 
 # Internal function for preparing plot of two dimensional smooths
@@ -339,57 +281,34 @@ get_data.mgcv.smooth.MD <- function(
     fix,
     data = NULL,
     n2 = 40,
-    ylim = NULL,
-    xlim = NULL,
+    lims = NULL,
     too_far = 0.1,
     ...) {
   ov <- names(fix)
   iv <- mgcv_term$term[!(mgcv_term$term %in% ov)]
   xterm <- iv[1]
-  yterm <- iv[2]
+  yterm <- iv[2] # TODO use x1, x2 naming convension?
   raw <- data.frame(
     x = as.numeric(data[xterm][[1]]),
     y = as.numeric(data[yterm][[1]])
   )
   n2 <- max(10, n2)
-  if (is.null(xlim)) {
-    x_seq <- seq(min(raw$x), max(raw$x), length = n2)
-  } else {
-    x_seq <- seq(xlim[1], xlim[2], length = n2)
-  }
-  if (is.null(ylim)) {
-    y_seq <- seq(min(raw$y), max(raw$y), length = n2)
-  } else {
-    y_seq <- seq(ylim[1], ylim[2], length = n2)
-  }
-  xx <- rep(x_seq, n2)
-  yy <- rep(y_seq, each = n2)
 
-  # Mark cells on X-Y grid are too far from any observation
-  if (too_far[1] > 0) {
-    exclude <- exclude.too.far(xx, yy, raw$x, raw$y, dist = too_far[1])
-  } else {
-    exclude <- rep(FALSE, n2 * n2)
+  if (is.null(lims)) {
+    lims <- list(c(min(raw$x), max(raw$x)), c(min(raw$y), max(raw$y)))
   }
+  x1_lims <- lims[[1]]
+  x2_lims <- lims[[2]]
+  x1_seq <- seq(x1_lims[1], x1_lims[2], length = n2)
+  x2_seq <- seq(x2_lims[1], x2_lims[2], length = n2)
 
-  # Mark covariate vectors (and corresponding residuals) that are too
-  # far from X-Y plane (the slice of interest)
-  if (is.na(too_far[2]) || too_far[2] > 0) {
-    tmp <- sapply(ov, function(.nm) as.numeric(data[.nm][[1]]))
-    tmp <- sqrt(mahalanobis(tmp, fix, diag(diag(cov(tmp)), ncol(tmp)))) # Euclidean distance
-    exclude2 <- tmp >
-      if (is.na(too_far[2])) {
-        quantile(tmp, 0.1)
-      } else {
-        too_far[2]
-      }
-  } else {
-    exclude2 <- FALSE
-  }
+  xx <- rep(x1_seq, n2)
+  yy <- rep(x2_seq, each = n2)
+
   if (mgcv_term$by != "NA") {
     # deal with any by variables
     by <- rep(1, n2^2)
-    dat <- data.frame(x = xx, y = yy, by = by)
+    dat <- data.frame(x = xx, y = yy, by = by) # TODO y is misleading
     colnames(dat) <- c(xterm, yterm, mgcv_term$by)
   } else {
     dat <- data.frame(x = xx, y = yy)
@@ -402,20 +321,12 @@ get_data.mgcv.smooth.MD <- function(
 
   X <- PredictMat(mgcv_term, dat) ## prediction matrix for this term
 
-  if (is.null(ylim)) {
-    ylim <- range(y_seq)
-  }
-  if (is.null(xlim)) {
-    xlim <- range(x_seq)
-  }
   list(
     X = X,
     aux = list(
-      x = x_seq,
-      y = y_seq,
-      raw = raw,
-      exclude = exclude,
-      exclude2 = exclude2
+      x = x1_seq,
+      y = x2_seq,
+      raw = raw
     )
   )
 }

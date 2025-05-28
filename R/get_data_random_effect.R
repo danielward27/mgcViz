@@ -7,8 +7,7 @@ get_data.random.effect <- function(term, trans = identity, ...) {
     residuals = TRUE,
     n = 100,
     n2 = NULL,
-    ylim = NULL,
-    xlim = NULL,
+    lims = NULL,
     too_far = NULL,
     se_with_mean = FALSE
   )
@@ -32,8 +31,6 @@ get_data.random.effect <- function(term, trans = identity, ...) {
     mgcv_term,
     data = NULL,
     n = 100,
-    ylim = NULL,
-    xlim = NULL,
     ...) {
   raw <- data[mgcv_term$term][[1]]
   p <- mgcv_term$last.para - mgcv_term$first.para + 1

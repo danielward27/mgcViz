@@ -7,8 +7,7 @@
     data = NULL,
     n = 100,
     n2 = 40,
-    ylim = NULL,
-    xlim = NULL,
+    lims = NULL,
     too_far = 0.1,
     ...) {
   if (mgcv_term$dim == 1) {
@@ -16,7 +15,7 @@
       mgcv_term = mgcv_term,
       data = data,
       n = n,
-      xlim = xlim,
+      lims = lims,
       ...
     )
   }
@@ -26,8 +25,7 @@
       mgcv_term = mgcv_term,
       data = data,
       n2 = n2,
-      ylim = ylim,
-      xlim = xlim,
+      lims = lims,
       too_far = too_far,
       ...
     )
@@ -38,12 +36,10 @@
       mgcv_term = mgcv_term,
       data = data,
       n2 = n2,
-      ylim = ylim,
-      xlim = xlim,
+      lims = lims,
       too_far = too_far,
       ...
     )
   }
-
-  return(out)
+  out
 }

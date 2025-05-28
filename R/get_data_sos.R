@@ -5,9 +5,7 @@
 get_data.sos.smooth <- function(
     term,
     n = 40,
-    xlim = NULL,
-    ylim = NULL,
-    maxpo = 1e4,
+    lims = NULL,
     too_far = 0.1,
     phi = 30,
     theta = 30,
@@ -21,8 +19,8 @@ get_data.sos.smooth <- function(
     warning("scheme should be a single number")
   }
 
-  if ((!is.null(xlim) || !is.null(ylim)) && scheme == 0) {
-    stop("xlim and ylim must be left to NULL when scheme==0")
+  if ((!is.null(lims)) && scheme == 0) {
+    stop("lims must be left to NULL when scheme==0")
   }
 
   # 1) Prepare data
@@ -32,8 +30,7 @@ get_data.sos.smooth <- function(
     residuals = TRUE,
     n = NULL,
     n2 = n,
-    ylim = ylim,
-    xlim = xlim,
+    lims = lims,
     too_far = too_far,
     se_with_mean = se_with_mean,
     scheme = scheme,
@@ -45,7 +42,7 @@ get_data.sos.smooth <- function(
   if (scheme == 0) {
     # plot on sphere
 
-    out <- .plot.sos.smooth(term = P$aux$smooth, P = P, trans = trans, maxpo = maxpo)
+    out <- .plot.sos.smooth(term = P$aux$smooth, P = P, trans = trans)
     out$type <- "sos0"
   } else {
     # standard 2D plot
@@ -53,7 +50,6 @@ get_data.sos.smooth <- function(
     out <- .get_data_shared_2d(
       P = P,
       trans = trans,
-      maxpo = maxpo,
       flip = TRUE
     )
     out$type <- "sos1"
@@ -64,7 +60,7 @@ get_data.sos.smooth <- function(
 
 ###########################
 # Internal function
-.plot.sos.smooth <- function(term, P, trans, maxpo) {
+.plot.sos.smooth <- function(term, P, trans) {
   .dat <- list()
 
   ### 1) Build dataset on fitted effect
@@ -90,14 +86,6 @@ get_data.sos.smooth <- function(
   ### 2) Build dataset on residuals
   if (!is.null(P$aux$raw)) {
     .dat$res <- P$aux$raw
-
-    # Sample if too many points (> maxpo)
-    nres <- nrow(.dat$res)
-    .dat$res$sub <- if (nres > maxpo) {
-      sample(c(rep(T, maxpo), rep(F, nres - maxpo)))
-    } else {
-      rep(T, nres)
-    }
   }
 
   .dat$misc <- list("trans" = trans)
@@ -112,8 +100,7 @@ get_data.sos.smooth <- function(
     data,
     n,
     n2,
-    ylim = NULL,
-    xlim = NULL,
+    lims = NULL,
     too_far,
     trans,
     phi,
@@ -126,9 +113,8 @@ get_data.sos.smooth <- function(
       mgcv_term = mgcv_term,
       data = data,
       n2 = n2,
-      ylim = ylim,
-      xlim = xlim,
-      too_far = too_far,
+      lims = lims,
+      too_far = too_far
     ))
   }
 

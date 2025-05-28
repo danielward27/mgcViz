@@ -1,6 +1,6 @@
 #' @description Get the data for plotting of logical parametric effects
 #' @export
-get_data.pterm_factor <- function(term, maxpo = 1e4, trans = identity, ...) {
+get_data.pterm_factor <- function(term, trans = identity, ...) {
   if (term$order > 1) {
     message("mgcViz does not know how to plot this effect. Returning NULL.")
     return(invisible(NULL))
@@ -59,13 +59,5 @@ get_data.pterm_factor <- function(term, maxpo = 1e4, trans = identity, ...) {
         gam_viz$store$termsFit[, which(colnames(gam_viz$store$termsFit) == term$nam)]
     )
   }
-
-  # Sample if too many points (> maxpo)
-  nres <- nrow(data$res)
-  data$res$sub <- if (nres > maxpo) {
-    sample(c(rep(T, maxpo), rep(F, nres - maxpo)))
-  } else {
-    rep(T, nres)
-  }
-  return(data)
+  data
 }
