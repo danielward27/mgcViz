@@ -20,17 +20,15 @@ get_data.mrf.smooth <- function(
   )
 
   data <- list()
-  .npb <- sapply(p$smooth$xt$polys, nrow)
-  data$fit <- as.data.frame(do.call("rbind", p$smooth$xt$polys))
+  .npb <- sapply(p$aux$smooth$xt$polys, nrow)
+  data$fit <- as.data.frame(do.call("rbind", p$aux$smooth$xt$polys))
   names(data$fit) <- c("x", "y")
   data$fit$z <- rep(p$fit, .npb)
   data$fit$tz <- trans(data$fit$z)
-  data$fit$id <- rep(p$raw, .npb)
+  data$fit$id <- rep(p$aux$raw, .npb)
   data$misc <- list("trans" = trans)
   return(data)
 }
-
-
 #' @noRd
 #' @export
 .get_plot_predict_matrix_and_aux.mrf.smooth <- function(
@@ -41,8 +39,8 @@ get_data.mrf.smooth <- function(
   dat <- data.frame(x = factor(names(mgcv_term$xt$polys), levels = levels(mgcv_term$knots)))
   names(dat) <- mgcv_term$term
   X <- PredictMat(mgcv_term, dat) # prediction matrix for this term
-  return(list(
+  list(
     X = X,
-    raw = raw
-  ))
+    aux = list(raw = raw, smooth = mgcv_term)
+  )
 }

@@ -46,7 +46,7 @@ get_data.sos.smooth <- function(
   if (scheme == 0) {
     # plot on sphere
 
-    out <- .plot.sos.smooth(term = P$smooth, P = P, trans = trans, maxpo = maxpo)
+    out <- .plot.sos.smooth(term = P$aux$smooth, P = P, trans = trans, maxpo = maxpo)
     out$type <- "sos0"
   } else {
     # standard 2D plot
@@ -89,8 +89,8 @@ get_data.sos.smooth <- function(
   )
 
   ### 2) Build dataset on residuals
-  if (!is.null(P$raw)) {
-    .dat$res <- P$raw
+  if (!is.null(P$aux$raw)) {
+    .dat$res <- P$aux$raw
 
     # Sample if too many points (> maxpo)
     nres <- nrow(.dat$res)
@@ -186,15 +186,17 @@ get_data.sos.smooth <- function(
   ii <- ii | (abs(dat[[1]]) > 80)
   lo[ii] <- NA
 
-  return(list(
+  list(
     X = X,
-    raw = raw,
-    ind = ind,
-    xm = xm,
-    ym = ym,
-    lo = lo,
-    la = dat[[1]]
-  ))
+    aux = list(
+      raw = raw,
+      ind = ind,
+      xm = xm,
+      ym = ym,
+      lo = lo,
+      la = dat[[1]]
+    )
+  )
 } ## end prepare.sos.smooth
 
 

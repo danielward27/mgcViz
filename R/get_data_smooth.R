@@ -24,9 +24,9 @@ get_data.mgcv.smooth.1D <- function(
     nsim = nsim
   )
   .dat <- list()
-  if (!is.null(P$raw)) {
+  if (!is.null(P$aux$raw)) {
     # Construct data.frame of partial residuals
-    res <- data.frame("x" = as.vector(P$raw))
+    res <- data.frame("x" = as.vector(P$aux$raw))
     if (!is.null(P$p_resid) & length(P$p_resid)) {
       res$y <- trans(P$p_resid)
     }
@@ -44,7 +44,7 @@ get_data.mgcv.smooth.1D <- function(
   }
 
   .dat$fit <- data.frame(
-    x = P$x, # x values
+    x = P$aux$x, # x values
     y = P$fit, # fitted values
     ty = trans(P$fit), # fitted values after trans
     se = P$se
@@ -53,7 +53,7 @@ get_data.mgcv.smooth.1D <- function(
   if (!is.null(P$sim_f)) {
     nsim <- ncol(P$sim_f)
     .dat$sim <- data.frame(
-      "x" = rep(P$x, nsim),
+      "x" = rep(P$aux$x, nsim),
       "ty" = trans(as.vector(P$sim_f)),
       "id" = as.factor(rep(1:nsim, each = nrow(P$sim_f)))
     )
@@ -104,28 +104,28 @@ get_data.mgcv.smooth.2D <- function(
 .get_data_shared_2d <- function(P, trans, maxpo, flip = FALSE) {
   .dat <- list()
   # 1) Build dataset on fitted effect
-  P$fit[P$exclude] <- NA
+  P$fit[P$aux$exclude] <- NA
   .dat$fit <- data.frame(
     "z" = drop(P$fit),
     "tz" = drop(trans(P$fit)),
-    "x" = rep(P$x, length(P$fit) / length(P$x)),
-    "y" = rep(P$y, each = length(P$fit) / length(P$x)),
+    "x" = rep(P$aux$x, length(P$fit) / length(P$aux$x)),
+    "y" = rep(P$aux$y, each = length(P$fit) / length(P$aux$x)),
     "se" = P$se
   )
 
   # 2) Build dataset on residuals
-  if (!is.null(P$raw)) {
+  if (!is.null(P$aux$raw)) {
     # Exclude points too far from current slice (relevant only when called by plot.mgcv.smooth.MD)
     if (!is.null(P$exclude2) && any(P$exclude2)) {
-      P$raw <- P$raw[!P$exclude2, ]
+      P$aux$raw <- P$aux$raw[!P$exclude2, ]
     }
 
     # Exclude residuals falling outside boundaries
-    .dat$res <- P$raw[
-      P$raw$x >= P$xlim[1] &
-        P$raw$x <= P$xlim[2] &
-        P$raw$y >= P$ylim[1] &
-        P$raw$y <= P$ylim[2], ,
+    .dat$res <- P$aux$raw[
+      P$aux$raw$x >= P$xlim[1] &
+        P$aux$raw$x <= P$xlim[2] &
+        P$aux$raw$y >= P$ylim[1] &
+        P$aux$raw$y <= P$ylim[2], ,
       drop = FALSE
     ]
 
@@ -273,8 +273,7 @@ get_data.mgcv.smooth.MD <- function(
   }
   out <- list(
     X = X,
-    x = x_seq,
-    raw = raw
+    aux = list(x = x_seq, raw = raw)
   )
   return(out)
 }
@@ -324,16 +323,17 @@ get_data.mgcv.smooth.MD <- function(
   } ## prediction data.frame complete
   X <- PredictMat(mgcv_term, dat) ## prediction matrix for this term
 
-  out <- list(
+  list(
     X = X,
-    x = x_seq,
-    y = y_seq,
-    raw = raw,
-    exclude = exclude
+    aux = list(
+      x = x_seq,
+      y = y_seq,
+      raw = raw,
+      exclude = exclude
+    )
   )
-
-  return(out)
 }
+
 
 
 # Internal function for preparing plot of two dimensional smooths
@@ -411,13 +411,14 @@ get_data.mgcv.smooth.MD <- function(
   if (is.null(xlim)) {
     xlim <- range(x_seq)
   }
-  out <- list(
+  list(
     X = X,
-    x = x_seq,
-    y = y_seq,
-    raw = raw,
-    exclude = exclude,
-    exclude2 = exclude2
+    aux = list(
+      x = x_seq,
+      y = y_seq,
+      raw = raw,
+      exclude = exclude,
+      exclude2 = exclude2
+    )
   )
-  return(out)
 }

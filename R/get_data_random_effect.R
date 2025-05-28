@@ -39,9 +39,8 @@ get_data.random.effect <- function(term, trans = identity, ...) {
   raw <- data[mgcv_term$term][[1]]
   p <- mgcv_term$last.para - mgcv_term$first.para + 1
   X <- diag(p) # prediction matrix for this term
-
-  return(list(
+  list(
     X = X,
-    raw = raw
-  ))
+    aux = list(raw = raw)
+  )
 }

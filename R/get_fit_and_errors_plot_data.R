@@ -1,4 +1,5 @@
 .get_fit_and_errors_plot_data <- function(
+    pred_matrix_and_aux,
     term,
     partial_resids,
     se,
@@ -19,31 +20,25 @@
   last <- mgcv_term$last.para
   attr(mgcv_term, "coefficients") <- gam_viz$coefficients[first:last] # Relevant coeffs for i-th smooth
 
-  predict_matrix_and_aux <- .get_plot_predict_matrix_and_aux(
-    mgcv_term = mgcv_term,
-    data = gam_viz$model,
-    n = n,
-    n2 = n2,
-    ylim = ylim,
-    xlim = xlim,
-    too_far = too_far,
-    ...
-  )
-  if (is.null(predict_matrix_and_aux)) {
+
+  pred_matrix <- pred_matrix_and_aux$X
+  aux <- pred_matrix_and_aux$aux
+
+  if (is.null(pred_matrix_and_aux)) {
     stop("Cannot plot this term type.")
   } else {
-    predict_matrix_and_aux$smooth <- mgcv_term
-    if (is.null(predict_matrix_and_aux$fit)) {
+    aux$smooth <- mgcv_term
+    if (is.null(aux$fit)) { # TODO is aux$fit ever not NULL?
       p <- gam_viz$coefficients[first:last] ## relevant coefficients
-      offset <- attr(predict_matrix_and_aux$X, "offset") ## any term specific offset
+      offset <- attr(pred_matrix, "offset") ## any term specific offset
       ## get fitted values ....
       if (is.null(offset)) {
-        predict_matrix_and_aux$fit <- predict_matrix_and_aux$X %*% p
+        pred_matrix_and_aux$fit <- pred_matrix %*% p
       } else {
-        predict_matrix_and_aux$fit <- predict_matrix_and_aux$X %*% p + offset
+        pred_matrix_and_aux$fit <- pred_matrix %*% p + offset
       }
-      if (!is.null(predict_matrix_and_aux$exclude)) {
-        predict_matrix_and_aux$fit[predict_matrix_and_aux$exclude] <- NA
+      if (!is.null(pred_matrix_and_aux$exclude)) {
+        pred_matrix_and_aux$fit[pred_matrix_and_aux$exclude] <- NA
       }
       if (se) {
         ## get standard errors for fit
@@ -53,22 +48,22 @@
           if (length(gam_viz$cmX) < ncol(gam_viz$Vp)) {
             gam_viz$cmX <- c(gam_viz$cmX, rep(0, ncol(gam_viz$Vp) - length(gam_viz$cmX)))
           }
-          X1 <- matrix(gam_viz$cmX, nrow(predict_matrix_and_aux$X), ncol(gam_viz$Vp), byrow = TRUE)
+          X1 <- matrix(gam_viz$cmX, nrow(pred_matrix), ncol(gam_viz$Vp), byrow = TRUE)
           meanL1 <- mgcv_term$meanL1
           if (!is.null(meanL1)) {
             X1 <- X1 / meanL1
           }
-          X1[, first:last] <- predict_matrix_and_aux$X
+          X1[, first:last] <- pred_matrix
           if (nsim > 0) {
-            predict_matrix_and_aux$simF <- drop(predict_matrix_and_aux$fit) +
+            pred_matrix_and_aux$simF <- drop(pred_matrix_and_aux$fit) +
               X1 %*% t(rmvn(nsim, numeric(ncol(gam_viz$Vp)), gam_viz$Vp))
           }
           se.fit <- sqrt(pmax(0, rowSums((X1 %*% gam_viz$Vp) * X1)))
         } else {
           ## se in centred (or anyway unconstrained) space only
           if (nsim > 0) {
-            predict_matrix_and_aux$simF <- drop(predict_matrix_and_aux$fit) +
-              predict_matrix_and_aux$X %*%
+            pred_matrix_and_aux$simF <- drop(pred_matrix_and_aux$fit) +
+              pred_matrix %*%
               t(rmvn(
                 nsim,
                 numeric(length(p)),
@@ -77,27 +72,26 @@
           }
           se.fit <- sqrt(pmax(
             0,
-            rowSums((predict_matrix_and_aux$X %*% gam_viz$Vp[first:last, first:last, drop = FALSE]) * predict_matrix_and_aux$X)
+            rowSums((pred_matrix %*% gam_viz$Vp[first:last, first:last, drop = FALSE]) * pred_matrix)
           ))
         }
-        if (!is.null(predict_matrix_and_aux$exclude)) {
-          predict_matrix_and_aux$se.fit[predict_matrix_and_aux$exclude] <- NA
+        if (!is.null(pred_matrix_and_aux$exclude)) {
+          pred_matrix_and_aux$se.fit[pred_matrix_and_aux$exclude] <- NA
         }
       } ## standard errors for fit completed
       if (partial_resids || (res_den != "none")) {
-        predict_matrix_and_aux$p.resid <- fit_smooth + w_resid
+        pred_matrix_and_aux$p.resid <- fit_smooth + w_resid
       }
       if (se) {
-        predict_matrix_and_aux$se <- se.fit
+        pred_matrix_and_aux$se <- se.fit
       }
-      predict_matrix_and_aux$X <- NULL
+      pred_matrix <- NULL
     } else {
       ## P$fit created directly
       if (partial_resids || (res_den != "none")) {
-        predict_matrix_and_aux$p.resid <- fit_smooth + w_resid
+        pred_matrix_and_aux$p.resid <- fit_smooth + w_resid
       }
     }
-    predict_matrix_and_aux$plot.me <- TRUE
   }
-  return(predict_matrix_and_aux)
+  pred_matrix_and_aux
 }

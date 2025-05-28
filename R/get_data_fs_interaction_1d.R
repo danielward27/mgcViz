@@ -22,10 +22,10 @@ get_data.fs.interaction.1D <- function(
 
   data <- list()
   data$fit <- data.frame(
-    "x" = rep(P$x, P$nf),
+    "x" = rep(P$aux$x, P$aux$nf),
     "y" = P$fit,
     "ty" = trans(P$fit),
-    "id" = as.factor(rep(P$smooth$flev, each = P$n))
+    "id" = as.factor(rep(P$aux$smooth$flev, each = P$aux$n))
   )
   data$misc <- list("trans" = trans)
   return(data)
@@ -58,11 +58,8 @@ get_data.fs.interaction.1D <- function(
   dat <- data.frame(as.factor(fac), x_seq)
   names(dat) <- c(mgcv_term$fterm, mgcv_term$base$term)
   X <- PredictMat(mgcv_term, dat)
-  return(list(
+  list(
     X = X,
-    raw = raw,
-    x = x_seq,
-    n = n,
-    nf = nf
-  ))
+    aux = list(raw = raw, x = x_seq, n = n, nf = nf, smooth = mgcv_term)
+  )
 }
