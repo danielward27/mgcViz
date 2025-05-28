@@ -1,10 +1,8 @@
-# Prepares P list, smooth (sm) and
 #' @export
 prepareP <- function(
     term,
     unconditional,
     residuals,
-    res_den,
     n,
     n2,
     ylim,
@@ -13,6 +11,16 @@ prepareP <- function(
     se_with_mean,
     nsim = 0,
     ...) {
+  covariance_and_errors <- .get_covariance_and_errors(
+    term = term,
+    unconditional = unconditional
+  )
+
+  # TODO unused...
+  term_fit <- term$gam_viz$store$termsFit[
+    , term$gam_viz$store$np + term$term_idx
+  ]
+
   pred_matrix_and_aux <- .get_plot_predict_matrix_and_aux(
     mgcv_term = term$gam_viz$smooth[[term$term_idx]],
     data = term$gam_viz$model,
@@ -24,38 +32,23 @@ prepareP <- function(
     ...
   )
 
-  fit_and_errors <- .get_fit_and_errors_dataset(
-    term = term,
-    unconditional = unconditional,
-    residuals = residuals,
-    res_den = res_den
-  )
-
-  # TODO the appending to the list is not pretty in the function below :)
   plot_data <- .get_fit_and_errors_plot_data(
     pred_matrix_and_aux = pred_matrix_and_aux,
     term = term,
-    partial_resids = fit_and_errors$partial_resids,
-    se = TRUE, # For now hardcoded but easy to change if needed
-    n = n,
-    n2 = n2,
-    ylim = ylim,
-    xlim = xlim,
-    too_far = too_far,
+    compute_partial_resids = TRUE, # For now hardcoded
+    compute_se = TRUE, # For now hardcoded
     se_with_mean = se_with_mean,
-    fit_smooth = fit_and_errors$fv_terms,
-    w_resid = fit_and_errors$w_resid,
-    res_den = res_den,
-    nsim = nsim,
-    ...
+    term_fit = term_fit, # TODO inconsistent naming
+    w_resid = covariance_and_errors$w_resid,
+    nsim = nsim
   )
 
   list(
-    aux = pred_matrix_and_aux$aux,
     fit = plot_data$fit,
     se.fit = plot_data$se.fit,
-    p.resid = plot_data$p.resid,
-    se = plot_data$se
+    partial_resids = plot_data$partial_resids,
+    se = plot_data$se,
+    aux = pred_matrix_and_aux$aux
   )
 }
 

@@ -30,7 +30,6 @@ get_data.sos.smooth <- function(
     term = term,
     unconditional = unconditional,
     residuals = TRUE,
-    res_den = "none",
     n = NULL,
     n2 = n,
     ylim = ylim,
@@ -111,7 +110,6 @@ get_data.sos.smooth <- function(
 .get_plot_predict_matrix_and_aux.sos.smooth <- function(
     mgcv_term,
     data,
-    partial_resids = NULL,
     n,
     n2,
     ylim = NULL,

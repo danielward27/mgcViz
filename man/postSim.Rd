@@ -54,7 +54,7 @@ Gaussian posterior approximation of a gamObject.
 \examples{
 library(mgcViz)
 library(MASS)
-b <- gam(accel~s(times, k=20), data=mcycle)
+b <- gam(accel ~ s(times, k = 20), data = mcycle)
 
 # Simulate list of 10 vectors of responses from posterior, taking into
 # account smoothing parameters uncertainty (see ?vcov.gam)

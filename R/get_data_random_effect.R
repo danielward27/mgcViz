@@ -5,7 +5,6 @@ get_data.random.effect <- function(term, trans = identity, ...) {
     term = term,
     unconditional = FALSE,
     residuals = TRUE,
-    res_den = "none",
     n = 100,
     n2 = NULL,
     ylim = NULL,

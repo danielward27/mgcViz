@@ -11,7 +11,6 @@ get_data.fs.interaction.1D <- function(
     term = term,
     unconditional = FALSE,
     residuals = FALSE,
-    res_den = "none",
     n = n,
     n2 = NULL,
     ylim = NULL,

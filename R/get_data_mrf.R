@@ -10,7 +10,6 @@ get_data.mrf.smooth <- function(
     term = term,
     unconditional = unconditional,
     residuals = TRUE,
-    res_den = "none",
     n = NULL,
     n2 = NULL,
     ylim = NULL,

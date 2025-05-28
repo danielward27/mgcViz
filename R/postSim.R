@@ -26,7 +26,7 @@
 #' @examples
 #' library(mgcViz)
 #' library(MASS)
-#' b <- gam(accel~s(times, k=20), data=mcycle)
+#' b <- gam(accel ~ s(times, k = 20), data = mcycle)
 #'
 #' # Simulate list of 10 vectors of responses from posterior, taking into
 #' # account smoothing parameters uncertainty (see ?vcov.gam)
@@ -50,16 +50,15 @@
 #' @export postSim
 #'
 postSim <- function(
-  o,
-  nsim,
-  newdata,
-  trans = NULL,
-  method = "auto",
-  w = NULL,
-  offset = NULL,
-  savePar = FALSE,
-  ...
-) {
+    o,
+    nsim,
+    newdata,
+    trans = NULL,
+    method = "auto",
+    w = NULL,
+    offset = NULL,
+    savePar = FALSE,
+    ...) {
   if (is.null(o$sig2)) {
     o$sig2 <- summary(o)$dispersion
   }
@@ -74,7 +73,7 @@ postSim <- function(
 
   # Get coefficients and their covariance matrix
   cf <- coef(o)
-  V <- vcov(o, ...)
+  covariance <- vcov(o, ...)
 
   if (is.null(w)) {
     if (missing(newdata)) {
@@ -91,7 +90,7 @@ postSim <- function(
       o = o,
       X = X,
       cf = cf,
-      V = V,
+      covariance = covariance,
       n = n,
       muHat = muHat,
       nsim = nsim,
@@ -108,7 +107,7 @@ postSim <- function(
       o = o,
       X = X,
       cf = cf,
-      V = V,
+      covariance = covariance,
       n = n,
       muHat = muHat,
       nsim = nsim,
@@ -140,20 +139,19 @@ postSim <- function(
 ######### Internal function for single linear predictor case
 #
 .postSim1LP <- function(
-  o,
-  X,
-  cf,
-  V,
-  n,
-  muHat,
-  nsim,
-  w,
-  method,
-  trans,
-  offset,
-  newdata,
-  savePar
-) {
+    o,
+    X,
+    cf,
+    covariance,
+    n,
+    muHat,
+    nsim,
+    w,
+    method,
+    trans,
+    offset,
+    newdata,
+    savePar) {
   lnki <- o$family$linkinv # Get inverse link function
 
   # Deal with the offset
@@ -176,7 +174,7 @@ postSim <- function(
 
   simBeta <- NULL
   if (savePar) {
-    simBeta <- as.matrix(mgcv::rmvn(nsim, cf, V))
+    simBeta <- as.matrix(mgcv::rmvn(nsim, cf, covariance))
     if (nsim > 1) {
       simBeta <- t(simBeta)
     }
@@ -187,7 +185,7 @@ postSim <- function(
     beta <- if (savePar) {
       simBeta[, ii, drop = TRUE]
     } else {
-      rmvn(1, cf, V)
+      rmvn(1, cf, covariance)
     }
     mu <- lnki(X %*% beta + offI)
     # Simulated and transform
@@ -210,20 +208,19 @@ postSim <- function(
 ######### Internal function for multiple linear predictors case
 #
 .postSimMLP <- function(
-  o,
-  X,
-  cf,
-  V,
-  n,
-  muHat,
-  nsim,
-  w,
-  method,
-  trans,
-  offset,
-  newdata,
-  savePar
-) {
+    o,
+    X,
+    cf,
+    covariance,
+    n,
+    muHat,
+    nsim,
+    w,
+    method,
+    trans,
+    offset,
+    newdata,
+    savePar) {
   lpi <- attr(X, "lpi")
   nte <- length(lpi)
   lnki <- lapply(o$family$linfo, "[[", "linkinv") # Get inverse link function
@@ -252,7 +249,7 @@ postSim <- function(
 
   simBeta <- NULL
   if (savePar) {
-    simBeta <- rmvn(nsim, cf, V)
+    simBeta <- rmvn(nsim, cf, covariance)
   }
 
   # Simulate a vector of responses for each vector of coefficients, and transform it using trans()
@@ -260,7 +257,7 @@ postSim <- function(
     beta <- if (savePar) {
       simBeta[ii, , drop = TRUE]
     } else {
-      rmvn(1, cf, V)
+      rmvn(1, cf, covariance)
     }
     mu <- t(laply(
       1:nte, # Need to do it term by term
