@@ -19,12 +19,12 @@ prepareP <- function(
 
   # TODO unused...
   term_fit <- fitted_terms[
-    , number_parametric(term$gam_viz) + term$term_idx
+    , number_parametric(term$gam) + term$term_idx
   ]
 
   pred_matrix_and_aux <- .get_plot_predict_matrix_and_aux(
-    mgcv_term = term$gam_viz$smooth[[term$term_idx]],
-    data = term$gam_viz$model,
+    mgcv_term = term$gam$smooth[[term$term_idx]],
+    data = term$gam$model,
     n = n,
     n2 = n2,
     lims = lims,

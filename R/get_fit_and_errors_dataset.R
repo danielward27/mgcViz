@@ -4,10 +4,10 @@
   # Use Bayesian cov matrix including smoothing parameter uncertainty?
   covariance <- NULL
   if (unconditional) {
-    if (is.null(term$gam_viz$Vc)) {
+    if (is.null(term$gam$Vc)) {
       warning("Smoothness uncertainty corrected covariance not available")
     } else {
-      covariance <- term$gam_viz$Vc
+      covariance <- term$gam$Vc
     }
   }
 
@@ -15,13 +15,13 @@
   # not absolute.
 
   # produce working residuals if info available
-  if (is.null(term$gam_viz$residuals) || is.null(term$gam_viz$weights)) {
+  if (is.null(term$gam$residuals) || is.null(term$gam$weights)) {
     stop("Cannot compute working residuals.")
   }
-  wr <- sqrt(abs(term$gam_viz$weights))
-  w_resid <- term$gam_viz$residuals * wr
+  wr <- sqrt(abs(term$gam$weights))
+  w_resid <- term$gam$residuals * wr
   # Check that variances are actually available
-  if (term$gam_viz$Vp[1, 1] < 0) {
+  if (term$gam$Vp[1, 1] < 0) {
     stop("No variance estimates available")
   }
   list(

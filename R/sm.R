@@ -12,10 +12,6 @@
 #' @rdname sm
 #' @export sm
 sm <- function(o, select) {
-  if (!inherits(o, "gamViz")) {
-    stop("Argument 'o' should be of class 'gamViz'. See ?getViz")
-  }
-
   m <- length(o$smooth) # number of smooth effects
 
   if (length(select) > 1) {
@@ -29,7 +25,7 @@ sm <- function(o, select) {
     ))
   }
 
-  out <- list(term_idx = select, gam_viz = o)
+  out <- list(term_idx = select, gam = o)
 
   cl <- class(o$smooth[[select]])
 
@@ -50,5 +46,5 @@ sm <- function(o, select) {
     )
   }
   class(out) <- cl
-  return(out)
-}
+  out
+} # TODO order not maintained compared to specification by user!

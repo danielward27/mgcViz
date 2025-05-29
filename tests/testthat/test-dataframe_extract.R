@@ -10,7 +10,7 @@ test_that("1D", {
 
   fitted_terms <- gam_to_fitted_terms(fit)
   data <- get_data(
-    sm(gam_to_gam_viz(fit), 1),
+    sm(fit, 1),
     fitted_terms,
   )
   expect_true(is.data.frame(data$fit))
@@ -24,7 +24,7 @@ test_that("2D", {
   fit <- gam(y ~ s(x, z), data = dat)
   fitted_terms <- gam_to_fitted_terms(fit)
   data <- get_data(
-    sm(gam_to_gam_viz(fit), 1),
+    sm(fit, 1),
     fitted_terms = fitted_terms,
   )
   expect_true(is.data.frame(data$fit))
@@ -42,7 +42,7 @@ test_that("MD", {
   fit <- gam(y ~ s(x, y, z))
   fitted_terms <- gam_to_fitted_terms(fit)
   data <- get_data(
-    sm(gam_to_gam_viz(fit), 1),
+    sm(fit, 1),
     fix = c("z" = 0),
     fitted_terms = fitted_terms,
   )
@@ -61,7 +61,7 @@ test_that("MRF", {
   )
   fitted_terms <- gam_to_fitted_terms(fit)
   data <- get_data(
-    sm(gam_to_gam_viz(fit), 1),
+    sm(fit, 1),
     fitted_terms = fitted_terms,
   )
   expect_true(is.data.frame(data$fit))
@@ -82,7 +82,7 @@ test_that("FS Interaction 1D", {
   )
   fitted_terms <- gam_to_fitted_terms(fit)
   data <- get_data(
-    sm(gam_to_gam_viz(fit), 1),
+    sm(fit, 1),
     fitted_terms = fitted_terms,
   )
   expect_true(is.data.frame(data$fit))
@@ -109,14 +109,14 @@ test_that("SOS", {
   dat <- data.frame(la = la * 180 / pi, lo = lo * 180 / pi, y = y)
   fit <- gam(y ~ s(la, lo, bs = "sos", k = 60), data = dat)
   fitted_terms <- gam_to_fitted_terms(fit)
-  data <- get_data(sm(gam_to_gam_viz(fit), 1), fitted_terms = fitted_terms)
+  data <- get_data(sm(fit, 1), fitted_terms = fitted_terms)
 
   expect_true(is.data.frame(data$fit))
   expect_true(is.data.frame(data$res))
 
   # Test scheme1
   data <- get_data(
-    sm(gam_to_gam_viz(fit), 1),
+    sm(fit, 1),
     scheme = 1,
     fitted_terms = fitted_terms
   )
@@ -132,7 +132,7 @@ test_that("P Term Factor", {
   fit <- gam(y ~ fac, data = dat)
   fitted_terms <- gam_to_fitted_terms(fit)
   data <- get_data(
-    pterm(gam_to_gam_viz(fit), 1),
+    pterm(fit, 1),
     fitted_terms = fitted_terms
   )
   expect_true(is.data.frame(data$fit))
@@ -147,7 +147,7 @@ test_that("P Term Logical", {
   fit <- gam(y ~ logical, data = dat)
   fitted_terms <- gam_to_fitted_terms(fit)
   data <- get_data(
-    pterm(gam_to_gam_viz(fit), 1),
+    pterm(fit, 1),
     fitted_terms = fitted_terms
   )
   expect_true(is.data.frame(data$fit))
@@ -162,7 +162,7 @@ test_that("P Term Numeric", {
   fit <- gam(y ~ numeric, data = dat)
   fitted_terms <- gam_to_fitted_terms(fit)
   data <- get_data(
-    pterm(gam_to_gam_viz(fit), 1),
+    pterm(fit, 1),
     fitted_terms = fitted_terms,
   )
   expect_true(is.data.frame(data$fit))
@@ -175,7 +175,7 @@ test_that("Random effect", {
   fit <- gam(travel ~ s(Rail, bs = "re"), data = Rail, method = "REML")
   fitted_terms <- gam_to_fitted_terms(fit)
   data <- get_data(
-    sm(gam_to_gam_viz(fit), 1),
+    sm(fit, 1),
     fitted_terms = fitted_terms,
   )
   expect_true(is.data.frame(data$fit))

@@ -5,10 +5,6 @@
 #'              class \code{gamViz}.
 #' @export
 pterm <- function(o, select) {
-  if (!inherits(o, "gamViz")) {
-    stop("Argument 'o' should be of class 'gamViz'. See ?getViz")
-  }
-
   terms <- o$pterms
   if (!is.list(terms)) {
     terms <- list(terms)
@@ -70,14 +66,11 @@ pterm <- function(o, select) {
     varName = vNam,
     class = cls,
     order = ord,
-    gam_viz = o
+    gam = o
   )
-
   cl <- paste0("pterm_", .mapVarClass(cls))
-
   class(out) <- cl
-
-  return(out)
+  out
 }
 
 
