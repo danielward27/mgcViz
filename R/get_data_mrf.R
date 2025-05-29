@@ -3,6 +3,7 @@
 get_data.mrf.smooth <- function(
     term,
     fitted_terms,
+    gam = gam,
     trans = identity,
     se_with_mean = FALSE,
     unconditional = FALSE,
@@ -10,6 +11,7 @@ get_data.mrf.smooth <- function(
   p <- prepareP(
     term = term,
     fitted_terms,
+    gam = gam,
     unconditional = unconditional,
     residuals = TRUE,
     n = NULL,

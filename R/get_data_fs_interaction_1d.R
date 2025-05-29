@@ -4,6 +4,7 @@
 get_data.fs.interaction.1D <- function(
     term,
     fitted_terms,
+    gam = gam,
     n = 100,
     lims = NULL,
     trans = identity,
@@ -11,6 +12,7 @@ get_data.fs.interaction.1D <- function(
   P <- prepareP(
     term = term,
     fitted_terms = fitted_terms,
+    gam = gam,
     unconditional = FALSE,
     residuals = FALSE,
     n = n,

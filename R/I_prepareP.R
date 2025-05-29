@@ -3,6 +3,7 @@
 prepareP <- function(
     term,
     fitted_terms,
+    gam,
     unconditional,
     residuals,
     n,
@@ -14,17 +15,18 @@ prepareP <- function(
     ...) {
   covariance_and_errors <- .get_covariance_and_errors(
     term = term,
+    gam = gam,
     unconditional = unconditional
   )
 
   # TODO unused...
   term_fit <- fitted_terms[
-    , number_parametric(term$gam) + term$term_idx
+    , number_parametric(gam) + term$term_idx
   ]
 
   pred_matrix_and_aux <- .get_plot_predict_matrix_and_aux(
-    mgcv_term = term$gam$smooth[[term$term_idx]],
-    data = term$gam$model,
+    mgcv_term = gam$smooth[[term$term_idx]],
+    data = gam$model,
     n = n,
     n2 = n2,
     lims = lims,
@@ -35,6 +37,7 @@ prepareP <- function(
   plot_data <- .get_fit_and_errors_plot_data(
     pred_matrix_and_aux = pred_matrix_and_aux,
     term = term,
+    gam = gam,
     compute_partial_resids = TRUE, # For now hardcoded
     compute_se = TRUE, # For now hardcoded
     se_with_mean = se_with_mean,

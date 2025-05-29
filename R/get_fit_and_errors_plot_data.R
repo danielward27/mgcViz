@@ -1,14 +1,15 @@
 .get_fit_and_errors_plot_data <- function(
     pred_matrix_and_aux,
     term,
+    gam,
     compute_partial_resids,
     compute_se,
     se_with_mean,
     term_fit,
     w_resid,
     nsim) {
-  gam <- term$gam
-  mgcv_term <- term$gam$smooth[[term$term_idx]]
+  gam <- gam
+  mgcv_term <- gam$smooth[[term$term_idx]]
   first <- mgcv_term$first.para
   last <- mgcv_term$last.para
   attr(mgcv_term, "coefficients") <- gam$coefficients[first:last] # Relevant coeffs for i-th smooth

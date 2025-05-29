@@ -65,8 +65,7 @@ pterm <- function(o, select) {
     name = nam,
     varName = vNam,
     class = cls,
-    order = ord,
-    gam = o
+    order = ord
   )
   cl <- paste0("pterm_", .mapVarClass(cls))
   class(out) <- cl

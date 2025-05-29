@@ -1,12 +1,10 @@
 #' @description Get the data for plotting of logical parametric effects
 #' @export
-get_data.pterm_factor <- function(term, fitted_terms, trans = identity, ...) {
+get_data.pterm_factor <- function(term, fitted_terms, gam, trans = identity, ...) {
   if (term$order > 1) {
     message("mgcViz does not know how to plot this effect. Returning NULL.")
     return(invisible(NULL))
   }
-
-  gam <- term$gam
 
   # 1) Do prediction
   X <- gam$model

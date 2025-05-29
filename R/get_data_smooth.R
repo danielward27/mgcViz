@@ -3,6 +3,7 @@
 get_data.mgcv.smooth.1D <- function(
     term,
     fitted_terms,
+    gam,
     n = 100,
     lims = NULL,
     maxpo = 1e4,
@@ -14,6 +15,7 @@ get_data.mgcv.smooth.1D <- function(
   P <- prepareP(
     term = term,
     fitted_terms = fitted_terms,
+    gam = gam,
     unconditional = unconditional,
     residuals = TRUE,
     n = n,
@@ -60,6 +62,7 @@ get_data.mgcv.smooth.1D <- function(
 #' @export
 get_data.mgcv.smooth.2D <- function(
     term,
+    gam,
     fitted_terms,
     n = 40,
     lims = NULL,
@@ -72,6 +75,7 @@ get_data.mgcv.smooth.2D <- function(
   P <- prepareP(
     term = term,
     fitted_terms = fitted_terms,
+    gam = gam,
     unconditional = unconditional,
     residuals = TRUE,
     n = NULL,
@@ -124,6 +128,7 @@ get_data.mgcv.smooth.2D <- function(
 #'
 get_data.mgcv.smooth.MD <- function(
     term,
+    gam,
     fitted_terms,
     fix,
     n = 40,
@@ -140,6 +145,7 @@ get_data.mgcv.smooth.MD <- function(
   P <- prepareP(
     term = term,
     fitted_terms = fitted_terms,
+    gam = gam,
     unconditional = unconditional,
     residuals = TRUE,
     n = NULL,

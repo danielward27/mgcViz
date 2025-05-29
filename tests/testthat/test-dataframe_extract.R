@@ -12,6 +12,7 @@ test_that("1D", {
   data <- get_data(
     sm(fit, 1),
     fitted_terms,
+    gam = fit,
   )
   expect_true(is.data.frame(data$fit))
   expect_true(is.data.frame(data$res))
@@ -26,6 +27,7 @@ test_that("2D", {
   data <- get_data(
     sm(fit, 1),
     fitted_terms = fitted_terms,
+    gam = fit,
   )
   expect_true(is.data.frame(data$fit))
   expect_true(is.data.frame(data$res))
@@ -45,6 +47,7 @@ test_that("MD", {
     sm(fit, 1),
     fix = c("z" = 0),
     fitted_terms = fitted_terms,
+    gam = fit,
   )
   expect_true(is.data.frame(data$fit))
   expect_true(is.data.frame(data$res))
@@ -63,6 +66,7 @@ test_that("MRF", {
   data <- get_data(
     sm(fit, 1),
     fitted_terms = fitted_terms,
+    gam = fit
   )
   expect_true(is.data.frame(data$fit))
   # TODO no residuals in mrf. To be expected?
@@ -84,6 +88,7 @@ test_that("FS Interaction 1D", {
   data <- get_data(
     sm(fit, 1),
     fitted_terms = fitted_terms,
+    gam = fit,
   )
   expect_true(is.data.frame(data$fit))
   # TODO No residuals in FS interaction 1D. To be expected?
@@ -109,7 +114,11 @@ test_that("SOS", {
   dat <- data.frame(la = la * 180 / pi, lo = lo * 180 / pi, y = y)
   fit <- gam(y ~ s(la, lo, bs = "sos", k = 60), data = dat)
   fitted_terms <- gam_to_fitted_terms(fit)
-  data <- get_data(sm(fit, 1), fitted_terms = fitted_terms)
+  data <- get_data(
+    sm(fit, 1),
+    fitted_terms = fitted_terms,
+    gam = fit,
+  )
 
   expect_true(is.data.frame(data$fit))
   expect_true(is.data.frame(data$res))
@@ -118,7 +127,8 @@ test_that("SOS", {
   data <- get_data(
     sm(fit, 1),
     scheme = 1,
-    fitted_terms = fitted_terms
+    fitted_terms = fitted_terms,
+    gam = fit
   )
   expect_true(is.data.frame(data$fit))
   expect_true(is.data.frame(data$res))
@@ -133,7 +143,8 @@ test_that("P Term Factor", {
   fitted_terms <- gam_to_fitted_terms(fit)
   data <- get_data(
     pterm(fit, 1),
-    fitted_terms = fitted_terms
+    fitted_terms = fitted_terms,
+    gam = fit,
   )
   expect_true(is.data.frame(data$fit))
   expect_true(is.data.frame(data$res))
@@ -148,7 +159,8 @@ test_that("P Term Logical", {
   fitted_terms <- gam_to_fitted_terms(fit)
   data <- get_data(
     pterm(fit, 1),
-    fitted_terms = fitted_terms
+    fitted_terms = fitted_terms,
+    gam = fit
   )
   expect_true(is.data.frame(data$fit))
   expect_true(is.data.frame(data$res))
@@ -164,6 +176,7 @@ test_that("P Term Numeric", {
   data <- get_data(
     pterm(fit, 1),
     fitted_terms = fitted_terms,
+    gam = fit,
   )
   expect_true(is.data.frame(data$fit))
   expect_true(is.data.frame(data$res))
@@ -177,6 +190,7 @@ test_that("Random effect", {
   data <- get_data(
     sm(fit, 1),
     fitted_terms = fitted_terms,
+    gam = fit,
   )
   expect_true(is.data.frame(data$fit))
   # TODO No residuals for random effects. Expected?

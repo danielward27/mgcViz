@@ -25,7 +25,7 @@ sm <- function(o, select) {
     ))
   }
 
-  out <- list(term_idx = select, gam = o)
+  out <- list(term_idx = select)
 
   cl <- class(o$smooth[[select]])
 

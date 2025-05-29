@@ -3,6 +3,7 @@
 get_data.pterm_numeric <- function(
     term,
     fitted_terms,
+    gam,
     n = 100,
     lims = NULL,
     trans = identity,
@@ -11,8 +12,6 @@ get_data.pterm_numeric <- function(
     message("mgcViz does not know how to plot this effect. Returning NULL.")
     return(invisible(NULL))
   }
-
-  gam <- term$gam
 
   # 1) Do prediction
   X <- gam$model
