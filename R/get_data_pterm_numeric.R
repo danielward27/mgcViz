@@ -2,6 +2,7 @@
 #' @export
 get_data.pterm_numeric <- function(
     term,
+    fitted_terms,
     n = 100,
     lims = NULL,
     trans = identity,
@@ -67,7 +68,7 @@ get_data.pterm_numeric <- function(
     .wr <- sqrt(gam_viz$weights)
     .wr <- gam_viz$residuals * .wr / mean(.wr) # weighted working residuals
     data$res$y <- trans(
-      .wr + gam_viz$store$termsFit[, which(colnames(gam_viz$store$termsFit) == term$nam)]
+      .wr + fitted_terms[, which(colnames(fitted_terms) == term$nam)]
     )
   }
 

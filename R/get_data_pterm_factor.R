@@ -1,6 +1,6 @@
 #' @description Get the data for plotting of logical parametric effects
 #' @export
-get_data.pterm_factor <- function(term, trans = identity, ...) {
+get_data.pterm_factor <- function(term, fitted_terms, trans = identity, ...) {
   if (term$order > 1) {
     message("mgcViz does not know how to plot this effect. Returning NULL.")
     return(invisible(NULL))
@@ -56,7 +56,7 @@ get_data.pterm_factor <- function(term, trans = identity, ...) {
     .wr <- gam_viz$residuals * .wr / mean(.wr) # weighted working residuals
     data$res$y <- trans(
       .wr +
-        gam_viz$store$termsFit[, which(colnames(gam_viz$store$termsFit) == term$nam)]
+        fitted_terms[, which(colnames(fitted_terms) == term$nam)]
     )
   }
   data

@@ -2,6 +2,7 @@
 #' @export
 prepareP <- function(
     term,
+    fitted_terms,
     unconditional,
     residuals,
     n,
@@ -17,8 +18,8 @@ prepareP <- function(
   )
 
   # TODO unused...
-  term_fit <- term$gam_viz$store$termsFit[
-    , term$gam_viz$store$np + term$term_idx
+  term_fit <- fitted_terms[
+    , number_parametric(term$gam_viz) + term$term_idx
   ]
 
   pred_matrix_and_aux <- .get_plot_predict_matrix_and_aux(

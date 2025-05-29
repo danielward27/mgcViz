@@ -2,6 +2,7 @@
 #' @export
 get_data.mgcv.smooth.1D <- function(
     term,
+    fitted_terms,
     n = 100,
     lims = NULL,
     maxpo = 1e4,
@@ -12,6 +13,7 @@ get_data.mgcv.smooth.1D <- function(
     ...) {
   P <- prepareP(
     term = term,
+    fitted_terms = fitted_terms,
     unconditional = unconditional,
     residuals = TRUE,
     n = n,
@@ -58,6 +60,7 @@ get_data.mgcv.smooth.1D <- function(
 #' @export
 get_data.mgcv.smooth.2D <- function(
     term,
+    fitted_terms,
     n = 40,
     lims = NULL,
     too_far = 0.1,
@@ -68,6 +71,7 @@ get_data.mgcv.smooth.2D <- function(
   # 1) Prepare data
   P <- prepareP(
     term = term,
+    fitted_terms = fitted_terms,
     unconditional = unconditional,
     residuals = TRUE,
     n = NULL,
@@ -120,6 +124,7 @@ get_data.mgcv.smooth.2D <- function(
 #'
 get_data.mgcv.smooth.MD <- function(
     term,
+    fitted_terms,
     fix,
     n = 40,
     lims = NULL,
@@ -134,6 +139,7 @@ get_data.mgcv.smooth.MD <- function(
 
   P <- prepareP(
     term = term,
+    fitted_terms = fitted_terms,
     unconditional = unconditional,
     residuals = TRUE,
     n = NULL,
@@ -144,8 +150,7 @@ get_data.mgcv.smooth.MD <- function(
     fix = fix
   )
 
-  out <- .get_data_shared_2d(P = P, trans = trans)
-  return(out)
+  .get_data_shared_2d(P = P, trans = trans)
 }
 
 

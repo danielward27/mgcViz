@@ -1,11 +1,18 @@
 library(testthat)
 
+
+
 test_that("1D", {
   library(mgcViz)
   set.seed(2) ## simulate some data...
   dat <- gamSim(1, n = 200, verbose = FALSE)
   fit <- gam(y ~ s(x0), data = dat)
-  data <- get_data(sm(gam_to_gam_viz(fit), 1))
+
+  fitted_terms <- gam_to_fitted_terms(fit)
+  data <- get_data(
+    sm(gam_to_gam_viz(fit), 1),
+    fitted_terms,
+  )
   expect_true(is.data.frame(data$fit))
   expect_true(is.data.frame(data$res))
 })
@@ -15,7 +22,11 @@ test_that("2D", {
   set.seed(2) ## simulate some data...
   dat <- gamSim(2, n = 200, verbose = FALSE)$data
   fit <- gam(y ~ s(x, z), data = dat)
-  data <- get_data(sm(gam_to_gam_viz(fit), 1))
+  fitted_terms <- gam_to_fitted_terms(fit)
+  data <- get_data(
+    sm(gam_to_gam_viz(fit), 1),
+    fitted_terms = fitted_terms,
+  )
   expect_true(is.data.frame(data$fit))
   expect_true(is.data.frame(data$res))
 })
@@ -29,7 +40,12 @@ test_that("MD", {
   z <- rnorm(n)
   y <- (x - z)^2 + (y - z)^2 + rnorm(n)
   fit <- gam(y ~ s(x, y, z))
-  data <- get_data(sm(gam_to_gam_viz(fit), 1), fix = c("z" = 0))
+  fitted_terms <- gam_to_fitted_terms(fit)
+  data <- get_data(
+    sm(gam_to_gam_viz(fit), 1),
+    fix = c("z" = 0),
+    fitted_terms = fitted_terms,
+  )
   expect_true(is.data.frame(data$fit))
   expect_true(is.data.frame(data$res))
 })
@@ -43,11 +59,14 @@ test_that("MRF", {
     crime ~ s(district, bs = "mrf", xt = xt),
     data = columb,
   )
-  data <- get_data(sm(gam_to_gam_viz(fit), 1))
+  fitted_terms <- gam_to_fitted_terms(fit)
+  data <- get_data(
+    sm(gam_to_gam_viz(fit), 1),
+    fitted_terms = fitted_terms,
+  )
   expect_true(is.data.frame(data$fit))
   # TODO no residuals in mrf. To be expected?
 })
-
 
 
 test_that("FS Interaction 1D", {
@@ -61,10 +80,13 @@ test_that("FS Interaction 1D", {
     y ~ s(x, group, bs = "fs", k = 5),
     data = data.frame(y, x, group),
   )
-  data <- get_data(sm(gam_to_gam_viz(fit), 1))
+  fitted_terms <- gam_to_fitted_terms(fit)
+  data <- get_data(
+    sm(gam_to_gam_viz(fit), 1),
+    fitted_terms = fitted_terms,
+  )
   expect_true(is.data.frame(data$fit))
   # TODO No residuals in FS interaction 1D. To be expected?
-  # TODO. I don't think this calls get_data.fs.interaction.1D
 })
 
 test_that("SOS", {
@@ -86,13 +108,18 @@ test_that("SOS", {
 
   dat <- data.frame(la = la * 180 / pi, lo = lo * 180 / pi, y = y)
   fit <- gam(y ~ s(la, lo, bs = "sos", k = 60), data = dat)
-  data <- get_data(sm(gam_to_gam_viz(fit), 1))
+  fitted_terms <- gam_to_fitted_terms(fit)
+  data <- get_data(sm(gam_to_gam_viz(fit), 1), fitted_terms = fitted_terms)
 
   expect_true(is.data.frame(data$fit))
   expect_true(is.data.frame(data$res))
 
   # Test scheme1
-  data <- get_data(sm(gam_to_gam_viz(fit), 1), scheme = 1)
+  data <- get_data(
+    sm(gam_to_gam_viz(fit), 1),
+    scheme = 1,
+    fitted_terms = fitted_terms
+  )
   expect_true(is.data.frame(data$fit))
   expect_true(is.data.frame(data$res))
 })
@@ -103,7 +130,11 @@ test_that("P Term Factor", {
   dat <- gamSim(1, n = 200, dist = "normal", scale = 10, verbose = FALSE)
   dat$fac <- as.factor(sample(c("A1", "A2", "A3"), nrow(dat), replace = TRUE))
   fit <- gam(y ~ fac, data = dat)
-  data <- get_data(pterm(gam_to_gam_viz(fit), 1)) # Note parametric terms have to use pterm.
+  fitted_terms <- gam_to_fitted_terms(fit)
+  data <- get_data(
+    pterm(gam_to_gam_viz(fit), 1),
+    fitted_terms = fitted_terms
+  )
   expect_true(is.data.frame(data$fit))
   expect_true(is.data.frame(data$res))
 })
@@ -114,7 +145,11 @@ test_that("P Term Logical", {
   dat <- gamSim(1, n = 200, dist = "normal", scale = 10, verbose = FALSE)
   dat$logical <- as.logical(sample(c(TRUE, FALSE), nrow(dat), replace = TRUE))
   fit <- gam(y ~ logical, data = dat)
-  data <- get_data(pterm(gam_to_gam_viz(fit), 1)) # Note parametric terms have to use pterm.
+  fitted_terms <- gam_to_fitted_terms(fit)
+  data <- get_data(
+    pterm(gam_to_gam_viz(fit), 1),
+    fitted_terms = fitted_terms
+  )
   expect_true(is.data.frame(data$fit))
   expect_true(is.data.frame(data$res))
 })
@@ -125,7 +160,11 @@ test_that("P Term Numeric", {
   dat <- gamSim(1, n = 200, dist = "normal", scale = 10, verbose = FALSE)
   dat$numeric <- rnorm(200)
   fit <- gam(y ~ numeric, data = dat)
-  data <- get_data(pterm(gam_to_gam_viz(fit), 1)) # Note parametric terms have to use pterm.
+  fitted_terms <- gam_to_fitted_terms(fit)
+  data <- get_data(
+    pterm(gam_to_gam_viz(fit), 1),
+    fitted_terms = fitted_terms,
+  )
   expect_true(is.data.frame(data$fit))
   expect_true(is.data.frame(data$res))
 })
@@ -134,8 +173,11 @@ test_that("Random effect", {
   library(mgcViz)
   set.seed(2)
   fit <- gam(travel ~ s(Rail, bs = "re"), data = Rail, method = "REML")
-
-  data <- get_data(sm(gam_to_gam_viz(fit), 1))
+  fitted_terms <- gam_to_fitted_terms(fit)
+  data <- get_data(
+    sm(gam_to_gam_viz(fit), 1),
+    fitted_terms = fitted_terms,
+  )
   expect_true(is.data.frame(data$fit))
   # TODO No residuals for random effects. Expected?
 })

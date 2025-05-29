@@ -2,12 +2,14 @@
 #' @export
 get_data.mrf.smooth <- function(
     term,
+    fitted_terms,
     trans = identity,
     se_with_mean = FALSE,
     unconditional = FALSE,
     ...) {
   p <- prepareP(
     term = term,
+    fitted_terms,
     unconditional = unconditional,
     residuals = TRUE,
     n = NULL,

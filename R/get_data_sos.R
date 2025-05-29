@@ -4,6 +4,7 @@
 #'
 get_data.sos.smooth <- function(
     term,
+    fitted_terms,
     n = 40,
     lims = NULL,
     too_far = 0.1,
@@ -26,6 +27,7 @@ get_data.sos.smooth <- function(
   # 1) Prepare data
   P <- prepareP(
     term = term,
+    fitted_terms = fitted_terms,
     unconditional = unconditional,
     residuals = TRUE,
     n = NULL,
