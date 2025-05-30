@@ -33,6 +33,5 @@ fix_family_cdf <- function(fam) {
       }
     )
   }
-
-  return(fam)
+  fam
 }

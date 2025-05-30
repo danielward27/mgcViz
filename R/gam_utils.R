@@ -43,3 +43,12 @@ gam_to_fitted_terms <- function(gam, newdata = NULL) {
   }
   terms
 }
+
+get_working_residuals <- function(gam) {
+  if (is.null(gam$residuals) || is.null(gam$weights)) {
+    stop("Cannot compute working residuals.")
+  }
+  wr <- sqrt(abs(gam$weights))
+  w_resid <- gam$residuals * wr
+  w_resid
+}

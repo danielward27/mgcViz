@@ -13,13 +13,8 @@ prepareP <- function(
     se_with_mean,
     nsim = 0,
     ...) {
-  covariance_and_errors <- .get_covariance_and_errors(
-    term = term,
-    gam = gam,
-    unconditional = unconditional
-  )
+  working_residuals <- get_working_residuals(gam)
 
-  # TODO unused...
   term_fit <- fitted_terms[
     , number_parametric(gam) + term$term_idx
   ]
@@ -34,25 +29,25 @@ prepareP <- function(
     ...
   )
 
-  plot_data <- .get_fit_and_errors_plot_data(
-    pred_matrix_and_aux = pred_matrix_and_aux,
-    term = term,
-    gam = gam,
-    compute_partial_resids = TRUE, # For now hardcoded
-    compute_se = TRUE, # For now hardcoded
-    se_with_mean = se_with_mean,
-    term_fit = term_fit, # TODO inconsistent naming
-    w_resid = covariance_and_errors$w_resid,
-    nsim = nsim
+  fit <- .get_fit_plot_data(
+    pred_matrix_and_aux,
+    term,
+    gam
   )
 
+  se_fit <- .get_errors_plot_data(
+    gam = gam,
+    mgcv_term = gam$smooth[[term$term_idx]],
+    pred_and_aux = pred_matrix_and_aux,
+    se_with_mean
+  )
+
+  partial_resids <- term_fit + working_residuals
+
   list(
-    fit = plot_data$fit,
-    se.fit = plot_data$se.fit,
-    partial_resids = plot_data$partial_resids,
-    se = plot_data$se,
+    fit = fit,
+    se_fit = se_fit,
+    partial_resids = partial_resids,
     aux = pred_matrix_and_aux$aux
   )
 }
-
-# TODO maybe index and gamviz object is nicer than passing term which implicitly contains gamviz?

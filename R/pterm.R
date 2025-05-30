@@ -87,5 +87,5 @@ pterm <- function(o, select) {
   if ("factor" %in% .cl || "character" %in% .cl) {
     return("factor")
   }
-  return(.cl) # Not covered by mgcViz
+  .cl # Not covered by mgcViz
 }
