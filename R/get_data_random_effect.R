@@ -10,7 +10,6 @@ get_data.random.effect <- function(term, fitted_terms, gam, trans = identity, ..
     n = 100,
     n2 = NULL,
     lims = NULL,
-    too_far = NULL,
     se_with_mean = FALSE
   )
   dat <- list()
@@ -34,11 +33,10 @@ get_data.random.effect <- function(term, fitted_terms, gam, trans = identity, ..
     data = NULL,
     n = 100,
     ...) {
-  raw <- data[mgcv_term$term][[1]]
   p <- mgcv_term$last.para - mgcv_term$first.para + 1
   X <- diag(p) # prediction matrix for this term
   list(
     X = X,
-    aux = list(raw = raw)
+    aux = list()
   )
 }

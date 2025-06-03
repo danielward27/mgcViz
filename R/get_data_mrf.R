@@ -17,7 +17,6 @@ get_data.mrf.smooth <- function(
     n = NULL,
     n2 = NULL,
     lims = NULL,
-    too_far = NULL,
     se_with_mean = se_with_mean
   )
 
@@ -27,7 +26,7 @@ get_data.mrf.smooth <- function(
   names(data$fit) <- c("x", "y")
   data$fit$z <- rep(p$fit, .npb)
   data$fit$tz <- trans(data$fit$z)
-  data$fit$id <- rep(p$aux$raw, .npb)
+  data$fit$id <- rep(p$x_raw, .npb)
   data$misc <- list("trans" = trans)
   return(data)
 }
@@ -37,12 +36,11 @@ get_data.mrf.smooth <- function(
     mgcv_term,
     data,
     ...) {
-  raw <- data[mgcv_term$term][[1]]
   dat <- data.frame(x = factor(names(mgcv_term$xt$polys), levels = levels(mgcv_term$knots)))
   names(dat) <- mgcv_term$term
   X <- PredictMat(mgcv_term, dat) # prediction matrix for this term
   list(
     X = X,
-    aux = list(raw = raw, smooth = mgcv_term)
+    aux = list()
   )
 }

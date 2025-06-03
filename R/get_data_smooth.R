@@ -21,18 +21,16 @@ get_data.mgcv.smooth.1D <- function(
     n = n,
     n2 = NULL,
     lims = lims,
-    too_far = NULL,
     se_with_mean = se_with_mean,
     nsim = nsim
   )
   .dat <- list() # TODO I don't like .dat
-  if (!is.null(P$aux$raw)) {
+  if (!is.null(P$x_raw)) {
     # Construct data.frame of partial residuals
-    res <- data.frame("x" = as.vector(P$aux$raw))
+    res <- data.frame("x" = as.vector(P$x_raw))
     if (!is.null(P$partial_resids) && length(P$partial_resids)) {
       res$y <- trans(P$partial_resids)
     }
-    # Exclude residuals falling outside boundaries
     .dat$res <- res
   }
 
@@ -66,7 +64,6 @@ get_data.mgcv.smooth.2D <- function(
     fitted_terms,
     n = 40,
     lims = NULL,
-    too_far = 0.1,
     trans = identity,
     se_with_mean = FALSE,
     unconditional = FALSE,
@@ -81,7 +78,6 @@ get_data.mgcv.smooth.2D <- function(
     n = NULL,
     n2 = n,
     lims = lims,
-    too_far = too_far,
     se_with_mean = se_with_mean
   )
 
@@ -106,7 +102,7 @@ get_data.mgcv.smooth.2D <- function(
     "se" = P$se
   )
 
-  .dat$res <- P$aux$raw
+  .dat$res <- P$x_raw
   .dat$misc <- list("trans" = trans)
 
   if (flip) {
@@ -133,14 +129,10 @@ get_data.mgcv.smooth.MD <- function(
     fix,
     n = 40,
     lims = NULL,
-    too_far = c(0.1, NA),
     trans = identity,
     se_with_mean = FALSE,
     unconditional = FALSE,
     ...) {
-  if (length(too_far) == 1) {
-    too_far <- c(too_far, NA)
-  }
 
   P <- prepareP(
     term = term,
@@ -151,7 +143,6 @@ get_data.mgcv.smooth.MD <- function(
     n = NULL,
     n2 = n,
     lims = lims,
-    too_far = too_far,
     se_with_mean = se_with_mean,
     fix = fix
   )
@@ -170,7 +161,6 @@ get_data.mgcv.smooth.MD <- function(
     n = 100,
     n2 = 40,
     lims = NULL,
-    too_far = 0.1,
     ...) {
   if (mgcv_term$dim == 1) {
     out <- .get_plot_predict_matrix_and_aux_plot_smooth_1d(
@@ -188,7 +178,6 @@ get_data.mgcv.smooth.MD <- function(
       data = data,
       n2 = n2,
       lims = lims,
-      too_far = too_far,
       ...
     )
   }
@@ -199,7 +188,6 @@ get_data.mgcv.smooth.MD <- function(
       data = data,
       n2 = n2,
       lims = lims,
-      too_far = too_far,
       ...
     )
   }
@@ -234,7 +222,7 @@ get_data.mgcv.smooth.MD <- function(
 
   out <- list(
     X = X,
-    aux = list(x = x_seq, raw = raw)
+    aux = list(x = x_seq)
   )
   return(out)
 }
@@ -245,7 +233,6 @@ get_data.mgcv.smooth.MD <- function(
     data = NULL,
     n2 = 40,
     lims = NULL,
-    too_far = 0.1,
     ...) {
   xterm <- mgcv_term$term[1]
   yterm <- mgcv_term$term[2]
@@ -293,7 +280,6 @@ get_data.mgcv.smooth.MD <- function(
     data = NULL,
     n2 = 40,
     lims = NULL,
-    too_far = 0.1,
     ...) {
   ov <- names(fix)
   iv <- mgcv_term$term[!(mgcv_term$term %in% ov)]
@@ -336,8 +322,7 @@ get_data.mgcv.smooth.MD <- function(
     X = X,
     aux = list(
       x = x1_seq,
-      y = x2_seq,
-      raw = raw
+      y = x2_seq
     )
   )
 }

@@ -9,7 +9,6 @@ prepareP <- function(
     n,
     n2,
     lims,
-    too_far,
     se_with_mean,
     nsim = 0,
     ...) {
@@ -25,7 +24,6 @@ prepareP <- function(
     n = n,
     n2 = n2,
     lims = lims,
-    too_far = too_far,
     ...
   )
 
@@ -43,11 +41,12 @@ prepareP <- function(
   )
 
   partial_resids <- term_fit + working_residuals
-
+  x_raw <- gam$model[gam$smooth[[term$term_idx]]$term][[1]]
   list(
     fit = fit,
     se_fit = se_fit,
     partial_resids = partial_resids,
-    aux = pred_matrix_and_aux$aux
+    aux = pred_matrix_and_aux$aux,
+    x_raw = x_raw
   )
 }

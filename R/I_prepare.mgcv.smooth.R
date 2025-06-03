@@ -8,7 +8,6 @@
     n = 100,
     n2 = 40,
     lims = NULL,
-    too_far = 0.1,
     ...) {
   if (mgcv_term$dim == 1) {
     out <- .get_plot_predict_matrix_and_aux_plot_smooth_1d(
@@ -26,7 +25,6 @@
       data = data,
       n2 = n2,
       lims = lims,
-      too_far = too_far,
       ...
     )
   }
@@ -37,7 +35,6 @@
       data = data,
       n2 = n2,
       lims = lims,
-      too_far = too_far,
       ...
     )
   }

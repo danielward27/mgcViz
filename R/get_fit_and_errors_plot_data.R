@@ -32,7 +32,7 @@
 
   if (se_with_mean && attr(mgcv_term, "nCons") > 0) {
     if (length(gam$cmX) < ncol(gam$Vp)) {
-      gam$cmX <- c(gam$cmX, rep(0, ncol(gam$Vp) - length(gam$cmX)))
+      gam$cmX <- c(gam$cmX, rep(0, ncol(gam$Vp) - length(gam$cmX))) # TODO does the mutation persist?
     }
     X1 <- matrix(gam$cmX, nrow(pred_and_aux$X), ncol(gam$Vp), byrow = TRUE)
     meanL1 <- mgcv_term$meanL1

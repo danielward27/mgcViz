@@ -8,7 +8,6 @@ get_data.sos.smooth <- function(
     gam = gam,
     n = 40,
     lims = NULL,
-    too_far = 0.1,
     phi = 30,
     theta = 30,
     trans = identity,
@@ -35,7 +34,6 @@ get_data.sos.smooth <- function(
     n = NULL,
     n2 = n,
     lims = lims,
-    too_far = too_far,
     se_with_mean = se_with_mean,
     scheme = scheme,
     phi = phi,
@@ -88,8 +86,8 @@ get_data.sos.smooth <- function(
   )
 
   ### 2) Build dataset on residuals
-  if (!is.null(P$aux$raw)) {
-    .dat$res <- P$aux$raw
+  if (!is.null(P$x_raw)) {
+    .dat$res <- P$x_raw
   }
 
   .dat$misc <- list("trans" = trans)
@@ -105,7 +103,6 @@ get_data.sos.smooth <- function(
     n,
     n2,
     lims = NULL,
-    too_far,
     trans,
     phi,
     theta,
@@ -118,7 +115,6 @@ get_data.sos.smooth <- function(
       data = data,
       n2 = n2,
       lims = lims,
-      too_far = too_far
     ))
   }
 

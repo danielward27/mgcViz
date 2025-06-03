@@ -18,7 +18,6 @@ get_data.fs.interaction.1D <- function(
     n = n,
     n2 = NULL,
     lims = lims,
-    too_far = NULL,
     se_with_mean = FALSE
   )
 
@@ -59,6 +58,6 @@ get_data.fs.interaction.1D <- function(
   X <- PredictMat(mgcv_term, dat)
   list(
     X = X,
-    aux = list(raw = raw, x = x_seq, n = n, nf = nf, smooth = mgcv_term)
+    aux = list(x = x_seq, n = n, nf = nf, smooth = mgcv_term)
   )
 }

@@ -7,7 +7,7 @@
 sm(o, select)
 }
 \arguments{
-\item{o}{an object of class \code{gamViz}, the output of a \link{getViz} call.}
+\item{o}{A mgcv gam.}
 
 \item{select}{index of the selected smooth or random effect.}
 }
@@ -16,8 +16,5 @@ An object representing a smooth effect.
 }
 \description{
 This function can be used to extract a smooth or random effect from an object of
-class \code{gamViz}.
-}
-\seealso{
-See \link{getViz} for examples.
+class gam.
 }
