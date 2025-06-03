@@ -2,20 +2,15 @@
 #' Extracting a smooth effect from a GAM model
 #'
 #' @description This function can be used to extract a smooth or random effect from an object of
-#'              class \code{gamViz}.
+#'              class gam.
 #'
-#' @param o an object of class \code{gamViz}, the output of a [getViz] call.
+#' @param o A mgcv gam.
 #' @param select index of the selected smooth or random effect.
 #' @return An object representing a smooth effect.
-#' @seealso See [getViz] for examples.
 #' @name sm
 #' @rdname sm
 #' @export sm
 sm <- function(o, select) {
-  if (!inherits(o, "gamViz")) {
-    stop("Argument 'o' should be of class 'gamViz'. See ?getViz")
-  }
-
   m <- length(o$smooth) # number of smooth effects
 
   if (length(select) > 1) {
@@ -29,7 +24,7 @@ sm <- function(o, select) {
     ))
   }
 
-  out <- list(term_idx = select, gam_viz = o)
+  out <- list(term_idx = select)
 
   cl <- class(o$smooth[[select]])
 
@@ -50,5 +45,5 @@ sm <- function(o, select) {
     )
   }
   class(out) <- cl
-  return(out)
-}
+  out
+} # TODO order not maintained compared to specification by user!

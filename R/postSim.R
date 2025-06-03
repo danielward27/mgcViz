@@ -201,7 +201,7 @@ postSim <- function(
     )))
   })
 
-  return(list("simY" = unname(simY), "simBeta" = unname(simBeta)))
+  list("simY" = unname(simY), "simBeta" = unname(simBeta))
 }
 
 
@@ -280,5 +280,5 @@ postSim <- function(
     )))
   })
 
-  return(list("simY" = unname(simY), "simBeta" = unname(simBeta)))
+  list("simY" = unname(simY), "simBeta" = unname(simBeta))
 }

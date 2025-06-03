@@ -58,5 +58,5 @@ residuals.gamViz <- function(object, type = "deviance", ...) {
     y <- residuals.gam(o, type = type, ...)
   }
 
-  return(y)
+  y
 }

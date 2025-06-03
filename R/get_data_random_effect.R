@@ -1,8 +1,10 @@
 #' @description This is the plotting method for random effects (simple random intercepts).
 #' @export
-get_data.random.effect <- function(term, trans = identity, ...) {
+get_data.random.effect <- function(term, fitted_terms, gam, trans = identity, ...) {
   P <- prepareP(
     term = term,
+    fitted_terms = fitted_terms,
+    gam = gam,
     unconditional = FALSE,
     residuals = TRUE,
     n = 100,

@@ -2,6 +2,8 @@
 #' @export
 get_data.pterm_numeric <- function(
     term,
+    fitted_terms,
+    gam,
     n = 100,
     lims = NULL,
     trans = identity,
@@ -11,10 +13,8 @@ get_data.pterm_numeric <- function(
     return(invisible(NULL))
   }
 
-  gam_viz <- term$gam_viz
-
   # 1) Do prediction
-  X <- gam_viz$model
+  X <- gam$model
 
   if (n > nrow(X)) {
     # Model matrix too short, we make it longer
@@ -32,7 +32,7 @@ get_data.pterm_numeric <- function(
   # Suppressing spurious warnings from predict.gam
   .pred <- withCallingHandlers(
     predict.gam(
-      gam_viz,
+      gam,
       type = "terms",
       se.fit = TRUE,
       terms = term$nam,
@@ -40,7 +40,7 @@ get_data.pterm_numeric <- function(
     ),
     warning = function(w) {
       if (
-        is.list(gam_viz$formula) &&
+        is.list(gam$formula) &&
           any(grepl("is absent, its contrast will be ignored", w))
       ) {
         invokeRestart("muffleWarning")
@@ -58,16 +58,16 @@ get_data.pterm_numeric <- function(
   )
 
   # 3) Get partial residuals
-  data$res <- data.frame("x" = as.vector(gam_viz$model[[term$varNam]]))
+  data$res <- data.frame("x" = as.vector(gam$model[[term$varNam]]))
 
   # Check if partial residuals are defined: for instance the are not for gamlss models
-  if (is.null(gam_viz$residuals) || is.null(gam_viz$weights)) {
+  if (is.null(gam$residuals) || is.null(gam$weights)) {
     data$res$y <- NULL
   } else {
-    .wr <- sqrt(gam_viz$weights)
-    .wr <- gam_viz$residuals * .wr / mean(.wr) # weighted working residuals
+    .wr <- sqrt(gam$weights)
+    .wr <- gam$residuals * .wr / mean(.wr) # weighted working residuals
     data$res$y <- trans(
-      .wr + gam_viz$store$termsFit[, which(colnames(gam_viz$store$termsFit) == term$nam)]
+      .wr + fitted_terms[, which(colnames(fitted_terms) == term$nam)]
     )
   }
 

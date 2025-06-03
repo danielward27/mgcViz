@@ -30,8 +30,8 @@
 #' library(mgcViz)
 #'
 #' set.seed(2) ## simulate some data...
-#' dat <- gamSim(1,n=400,dist="normal",scale=2)
-#' b <- gam(y~s(x0)+s(x1)+s(x2)+s(x3),data=dat)
+#' dat <- gamSim(1, n = 400, dist = "normal", scale = 2)
+#' b <- gam(y ~ s(x0) + s(x1) + s(x2) + s(x3), data = dat)
 #'
 #' # Simulate three vectors of responses
 #' matplot(simulate(b, nsim = 3), pch = 19, col = c(1, 3, 4))
@@ -41,17 +41,16 @@
 #' @export
 #'
 simulate.gam <- function(
-  object,
-  nsim = 1,
-  seed = NULL,
-  method = "auto",
-  newdata,
-  u = NULL,
-  w = NULL,
-  offset = NULL,
-  trans = NULL,
-  ...
-) {
+    object,
+    nsim = 1,
+    seed = NULL,
+    method = "auto",
+    newdata,
+    u = NULL,
+    w = NULL,
+    offset = NULL,
+    trans = NULL,
+    ...) {
   o <- object
   method <- match.arg(method, c("auto", "rd", "qf"))
   if (is.null(o$sig2)) {
@@ -158,7 +157,7 @@ simulate.gam <- function(
     fam <- fix.family.rd(fam)
     if (is.null(fam$rd)) {
       fam <- fix.family.qf(fam)
-      method <- 'qf'
+      method <- "qf"
     } else {
       method <- "rd"
     }
@@ -206,5 +205,5 @@ simulate.gam <- function(
     }
   }
 
-  return(sim)
+  sim
 }

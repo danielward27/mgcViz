@@ -1,15 +1,13 @@
 #' @description Get the data for plotting of logical parametric effects
 #' @export
-get_data.pterm_factor <- function(term, trans = identity, ...) {
+get_data.pterm_factor <- function(term, fitted_terms, gam, trans = identity, ...) {
   if (term$order > 1) {
     message("mgcViz does not know how to plot this effect. Returning NULL.")
     return(invisible(NULL))
   }
 
-  gam_viz <- term$gam_viz
-
   # 1) Do prediction
-  X <- gam_viz$model
+  X <- gam$model
 
   vr <- as.factor(X[[term$varNam]])
   xx <- as.factor(levels(vr))
@@ -19,7 +17,7 @@ get_data.pterm_factor <- function(term, trans = identity, ...) {
   # Suppressing spurious warnings from predict.gam
   .pred <- withCallingHandlers(
     predict.gam(
-      gam_viz,
+      gam,
       type = "terms",
       se.fit = TRUE,
       terms = term$nam,
@@ -27,7 +25,7 @@ get_data.pterm_factor <- function(term, trans = identity, ...) {
     ),
     warning = function(w) {
       if (
-        is.list(gam_viz$formula) &&
+        is.list(gam$formula) &&
           any(grepl("is absent, its contrast will be ignored", w))
       ) {
         invokeRestart("muffleWarning")
@@ -46,17 +44,17 @@ get_data.pterm_factor <- function(term, trans = identity, ...) {
   data$misc <- list("trans" = trans)
 
   # 3) Get partial residuals
-  data$res <- data.frame("x" = as.factor(gam_viz$model[[term$varNam]]))
+  data$res <- data.frame("x" = as.factor(gam$model[[term$varNam]]))
 
   # Check if partial residuals are defined: for instance the are not for gamlss models
-  if (is.null(gam_viz$residuals) || is.null(gam_viz$weights)) {
+  if (is.null(gam$residuals) || is.null(gam$weights)) {
     data$res$y <- NULL
   } else {
-    .wr <- sqrt(gam_viz$weights)
-    .wr <- gam_viz$residuals * .wr / mean(.wr) # weighted working residuals
+    .wr <- sqrt(gam$weights)
+    .wr <- gam$residuals * .wr / mean(.wr) # weighted working residuals
     data$res$y <- trans(
       .wr +
-        gam_viz$store$termsFit[, which(colnames(gam_viz$store$termsFit) == term$nam)]
+        fitted_terms[, which(colnames(fitted_terms) == term$nam)]
     )
   }
   data
