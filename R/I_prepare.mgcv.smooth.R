@@ -6,7 +6,6 @@
     mgcv_term,
     data = NULL,
     n = 100,
-    n2 = 40,
     lims = NULL,
     ...) {
   if (mgcv_term$dim == 1) {
@@ -23,7 +22,7 @@
     out <- .get_plot_predict_matrix_and_aux_plot_smooth_2d(
       mgcv_term = mgcv_term,
       data = data,
-      n2 = n2,
+      n = n,
       lims = lims,
       ...
     )
@@ -33,7 +32,7 @@
     out <- .get_plot_predict_matrix_and_aux_plot_smooth_md(
       mgcv_term = mgcv_term,
       data = data,
-      n2 = n2,
+      n = n,
       lims = lims,
       ...
     )

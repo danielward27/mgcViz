@@ -1,14 +1,12 @@
 #' @description This is the plotting method for random effects (simple random intercepts).
 #' @export
-get_data.random.effect <- function(term, fitted_terms, gam, trans = identity, ...) {
+get_data.random.effect <- function(term, fitted_terms, gam, ...) {
   P <- prepareP(
     term = term,
     fitted_terms = fitted_terms,
     gam = gam,
     unconditional = FALSE,
-    residuals = TRUE,
     n = 100,
-    n2 = NULL,
     lims = NULL,
     se_with_mean = FALSE
   )
@@ -17,12 +15,9 @@ get_data.random.effect <- function(term, fitted_terms, gam, trans = identity, ..
   .n <- length(P$fit)
   dat$fit <- data.frame(
     x = qnorm(ppoints(.n)),
-    y = sort(P$fit),
-    ty = trans(sort(P$fit))
+    y = sort(P$fit)
   )
-
-  dat$misc <- list("trans" = trans)
-  return(dat)
+  dat
 }
 
 

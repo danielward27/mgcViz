@@ -49,15 +49,11 @@ simulate.gam <- function(
     u = NULL,
     w = NULL,
     offset = NULL,
-    trans = NULL,
     ...) {
   o <- object
   method <- match.arg(method, c("auto", "rd", "qf"))
   if (is.null(o$sig2)) {
     o$sig2 <- summary(o)$dispersion
-  }
-  if (is.null(trans)) {
-    trans <- identity
   }
 
   # Either (a) use data in GAM object or (b) predict using new data
@@ -135,7 +131,6 @@ simulate.gam <- function(
     fam = o$family,
     nsim = nsim,
     u = u,
-    trans = trans
   )
 
   # We want nsim rows and number of columns depending on trans()
@@ -151,7 +146,7 @@ simulate.gam <- function(
 
 # Internal function to simulate observations for given family
 #
-.simulate.gam <- function(mu, w, sig, method, fam, nsim, u, trans) {
+.simulate.gam <- function(mu, w, sig, method, fam, nsim, u) {
   # Try method == 'rd', if that does not work 'qf', if that is not good either throw an error
   if (method == "auto") {
     fam <- fix.family.rd(fam)
@@ -173,9 +168,7 @@ simulate.gam <- function(
     if (is.null(fam$rd)) {
       stop("fam$rd unavailable, try using method = `qf`")
     }
-    sim <- raply(nsim, {
-      trans(fam$rd(mu, w, sig))
-    })
+    sim <- raply(nsim, {fam$rd(mu, w, sig)})
   }
 
   if (method == "qf") {
@@ -188,15 +181,13 @@ simulate.gam <- function(
 
     nobs <- length(mu)
     sim <- if (is.null(u)) {
-      raply(nsim, {
-        trans(fam$qf(runif(nobs), mu, w, sig))
-      })
+      raply(nsim, {fam$qf(runif(nobs), mu, w, sig)})
     } else {
       aaply(
         u,
         1,
         function(.u) {
-          trans(fam$qf(.u))
+          fam$qf(.u)
         },
         mu = mu,
         wt = w,

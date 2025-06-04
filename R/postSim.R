@@ -53,7 +53,6 @@ postSim <- function(
     o,
     nsim,
     newdata,
-    trans = NULL,
     method = "auto",
     w = NULL,
     offset = NULL,
@@ -61,9 +60,6 @@ postSim <- function(
     ...) {
   if (is.null(o$sig2)) {
     o$sig2 <- summary(o)$dispersion
-  }
-  if (is.null(trans)) {
-    trans <- identity
   }
 
   # Get mean linear predictor
@@ -96,7 +92,6 @@ postSim <- function(
       nsim = nsim,
       w = w,
       method = method,
-      trans = trans,
       offset = offset,
       newdata = newdata,
       savePar = savePar
@@ -148,7 +143,6 @@ postSim <- function(
     nsim,
     w,
     method,
-    trans,
     offset,
     newdata,
     savePar) {
@@ -197,7 +191,6 @@ postSim <- function(
       fam = o$family,
       nsim = 1,
       u = NULL,
-      trans = trans
     )))
   })
 
@@ -217,7 +210,6 @@ postSim <- function(
     nsim,
     w,
     method,
-    trans,
     offset,
     newdata,
     savePar) {
@@ -276,7 +268,6 @@ postSim <- function(
       fam = o$family,
       nsim = 1,
       u = NULL,
-      trans = trans
     )))
   })
 

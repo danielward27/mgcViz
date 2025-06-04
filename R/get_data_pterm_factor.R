@@ -34,28 +34,23 @@ get_data.pterm_factor <- function(term, fitted_terms, gam, trans = identity, ...
   )
 
   # 2) Build dataset on fitted effect
-  data <- list()
-  data$fit <- data.frame(
-    "x" = xx,
-    "y" = unname(.pred$fit),
-    "ty" = trans(unname(.pred$fit)),
-    "se" = unname(.pred$se)
+  fit <- data.frame(
+    x = xx,
+    y = unname(.pred$fit),
+    se = unname(.pred$se)
   )
-  data$misc <- list("trans" = trans)
 
   # 3) Get partial residuals
-  data$res <- data.frame("x" = as.factor(gam$model[[term$varNam]]))
+  res <- data.frame(x = as.factor(gam$model[[term$varNam]]))
 
   # Check if partial residuals are defined: for instance the are not for gamlss models
   if (is.null(gam$residuals) || is.null(gam$weights)) {
-    data$res$y <- NULL
+    res$y <- NULL
   } else {
     .wr <- sqrt(gam$weights)
     .wr <- gam$residuals * .wr / mean(.wr) # weighted working residuals
-    data$res$y <- trans(
-      .wr +
-        fitted_terms[, which(colnames(fitted_terms) == term$nam)]
-    )
+
+    res$y <- .wr + fitted_terms[, which(colnames(fitted_terms) == term$nam)]
   }
-  data
+  list(fit=fit, res=res)
 }

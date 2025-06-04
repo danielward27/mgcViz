@@ -8,7 +8,6 @@ postSim(
   o,
   nsim,
   newdata,
-  trans = NULL,
   method = "auto",
   w = NULL,
   offset = NULL,
@@ -23,11 +22,6 @@ postSim(
 
 \item{newdata}{Optional new data frame used to perform the simulations. To be passed to \link[mgcv]{predict.gam}.}
 
-\item{trans}{function used to transform or summarize each vector of simulated responses.
-It must take a vector as argument, but it can output a vector or a scalar.
-Potentially useful for saving storage (e.g. by transforming each simulated vector
-to a scalar). If left to \code{NULL} then \code{trans = identity} will be used.}
-
 \item{method}{the method used for the simulation of responses. See \link{simulate.gam}.}
 
 \item{w}{vector of prior weights of each response. See \link{simulate.gam}.}
@@ -40,6 +34,11 @@ offsets used during model fitting, unless offset is explicitly provided.}
 \item{savePar}{if \code{TRUE} than also the simulated parameters will be returned.}
 
 \item{...}{arguments to be passed to \link[mgcv]{vcov.gam}.}
+
+\item{trans}{function used to transform or summarize each vector of simulated responses.
+It must take a vector as argument, but it can output a vector or a scalar.
+Potentially useful for saving storage (e.g. by transforming each simulated vector
+to a scalar). If left to \code{NULL} then \code{trans = identity} will be used.}
 }
 \value{
 If \code{savePar == FALSE} the function will return a matrix where each column is a vector of

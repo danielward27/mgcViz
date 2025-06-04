@@ -13,7 +13,6 @@
   u = NULL,
   w = NULL,
   offset = NULL,
-  trans = NULL,
   ...
 )
 }
@@ -42,12 +41,12 @@ must be a list of vectors. NB: if \code{newdata!=NULL} the offsets will be assum
 unless their are explicitly provided. If \code{newdata==NULL} then simulations will use the
 offsets used during model fitting, and \code{offset} argument will be ignored.}
 
+\item{...}{extra arguments passed to \code{predict.gam}.}
+
 \item{trans}{function used to transform or summarize each vector of simulated responses.
 It must take a vector as argument, but it can output a vector or a scalar.
 Potentially useful for saving storage (e.g. by transforming each simulated vector
 to a scalar). If left to \code{NULL} then \code{trans = identity} will be used.}
-
-\item{...}{extra arguments passed to \code{predict.gam}.}
 }
 \value{
 A matrix where each column is a vector of simulated responses. The number of rows

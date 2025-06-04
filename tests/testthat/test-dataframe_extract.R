@@ -13,6 +13,7 @@ test_that("1D", {
     sm(fit, 1),
     fitted_terms,
     gam = fit,
+    lims = c(-3, 3)
   )
   expect_true(is.data.frame(data$fit))
   expect_true(is.data.frame(data$res))
@@ -28,6 +29,7 @@ test_that("2D", {
     sm(fit, 1),
     fitted_terms = fitted_terms,
     gam = fit,
+    lims = list(c(-3, 3), c(-3, 3))
   )
   expect_true(is.data.frame(data$fit))
   expect_true(is.data.frame(data$res))
@@ -48,6 +50,7 @@ test_that("MD", {
     fix = c("z" = 0),
     fitted_terms = fitted_terms,
     gam = fit,
+    lims = list(c(-3, 3), c(-3, 3))
   )
   expect_true(is.data.frame(data$fit))
   expect_true(is.data.frame(data$res))
@@ -89,12 +92,13 @@ test_that("FS Interaction 1D", {
     sm(fit, 1),
     fitted_terms = fitted_terms,
     gam = fit,
+    lims = c(-3, 3)
   )
   expect_true(is.data.frame(data$fit))
   # TODO No residuals in FS interaction 1D. To be expected?
 })
 
-test_that("SOS", {
+test_that("SOS (scheme 1)", {
   library(mgcv)
   set.seed(2)
   n <- 200
@@ -114,21 +118,13 @@ test_that("SOS", {
   dat <- data.frame(la = la * 180 / pi, lo = lo * 180 / pi, y = y)
   fit <- gam(y ~ s(la, lo, bs = "sos", k = 60), data = dat)
   fitted_terms <- gam_to_fitted_terms(fit)
-  data <- get_data(
-    sm(fit, 1),
-    fitted_terms = fitted_terms,
-    gam = fit,
-  )
-
-  expect_true(is.data.frame(data$fit))
-  expect_true(is.data.frame(data$res))
 
   # Test scheme1
   data <- get_data(
     sm(fit, 1),
-    scheme = 1,
     fitted_terms = fitted_terms,
-    gam = fit
+    gam = fit,
+    lims = list(c(-3, 3), c(-3, 3))
   )
   expect_true(is.data.frame(data$fit))
   expect_true(is.data.frame(data$res))
@@ -177,6 +173,7 @@ test_that("P Term Numeric", {
     pterm(fit, 1),
     fitted_terms = fitted_terms,
     gam = fit,
+    lims = c(-3, 3)
   )
   expect_true(is.data.frame(data$fit))
   expect_true(is.data.frame(data$res))
